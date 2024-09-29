@@ -1,11 +1,17 @@
 from django.contrib import admin
-from .models import Connection
+from .models import Connection, UserConnection
 from roles.models import Role 
 
+
+class UserConnectionInline(admin.TabularInline):
+    model = UserConnection  
+    extra = 1  # number of empty forms to display
+    autocomplete_fields = ['user']  # search for users
 
 class ConnectionAdmin(admin.ModelAdmin):
     list_display = ('first_name', 'last_name', 'location', 'get_current_position', 'get_current_company', 'connection_strength', 'url')
     search_fields = ('first_name', 'last_name', 'location')
+    inlines = [UserConnectionInline]
 
     def get_current_position(self, obj):
         # Fetch the main role for this connection
