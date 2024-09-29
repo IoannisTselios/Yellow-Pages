@@ -1,6 +1,6 @@
 from django.db import models
 from django.core.exceptions import ValidationError
-from django.contrib.auth.models import User 
+from django.conf import settings 
 
 from .utils import strength_metric_calculation
 
@@ -12,7 +12,7 @@ class Connection(models.Model):
     url = models.URLField(max_length=200)
     location = models.CharField(max_length=100)
     # many-to-many relation to app users
-    connections = models.ManyToManyField(User, related_name='connections', through='UserConnection', blank=False)
+    connections = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='connections', through='UserConnection', blank=False)
 
     @property
     def connection_strength(self):
@@ -23,7 +23,7 @@ class Connection(models.Model):
     
 
 class UserConnection(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE, null=False, blank=False) 
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, null=False, blank=False) 
     connection = models.ForeignKey(Connection, on_delete=models.CASCADE)
     connected_on = models.DateTimeField(auto_now_add=True)
 
