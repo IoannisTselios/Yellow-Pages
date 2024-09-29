@@ -4,7 +4,7 @@ from roles.models import Role
 
 
 class ConnectionAdmin(admin.ModelAdmin):
-    list_display = ('first_name', 'last_name', 'location', 'get_current_position', 'get_current_company', 'url')
+    list_display = ('first_name', 'last_name', 'location', 'get_current_position', 'get_current_company', 'connection_strength', 'url')
     search_fields = ('first_name', 'last_name', 'location')
 
     def get_current_position(self, obj):
