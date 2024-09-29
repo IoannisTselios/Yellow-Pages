@@ -7,6 +7,4 @@ class CompanyAdmin(admin.ModelAdmin):
     search_fields = ('name', 'industry', 'company_type')
     list_filter = ('company_type', 'industry', 'year_founded')
 
-    readonly_fields = [field.name for field in Company._meta.fields]
-
 admin.site.register(Company, CompanyAdmin)
