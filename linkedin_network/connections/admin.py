@@ -1,22 +1,28 @@
 from django.contrib import admin
 from .models import Connection
+from roles.models import Role 
 
-from django.utils.html import format_html
-from django.urls import reverse
 
 class ConnectionAdmin(admin.ModelAdmin):
-    list_display = ('first_name', 'last_name', 'current_company', 'current_position', 'current_location')
-    search_fields = ('first_name', 'last_name', 'current_company', 'current_position', 'current_location')
-    list_filter = ('current_company', 'current_location')
+    list_display = ('first_name', 'last_name', 'location', 'get_current_position', 'get_current_company', 'url')
+    search_fields = ('first_name', 'last_name', 'location')
 
+    def get_current_position(self, obj):
+        # Fetch the main role for this connection
+        role = Role.objects.filter(connection=obj, main_role=True).first()
+        if not role:  # Fallback
+            return 'No Role Assigned'
+        return role.position if role else 'No Role Assigned'
 
-    def current_company_link(self, obj):
-        if obj.current_company:
-            url = reverse('admin:companies_company_change', args=[obj.current_company.id])
-            return format_html('<a href="{}">{}</a>', url, obj.current_company.name)
-        return '-'
-    
-    current_company_link.short_description = 'Current Company'
-    current_company_link.admin_order_field = 'current_company'
+    get_current_position.short_description = 'Main Position'  # Column name in admin
+
+    def get_current_company(self, obj):
+        # Fetch main role for this connection
+        role = Role.objects.filter(connection=obj, main_role=True).first()
+        if not role:  # Fallback 
+            return 'No Company Assigned'
+        return role.company.name if role else 'No Company Assigned'
+
+    get_current_company.short_description = 'Main Company'  # Column name in admin
 
 admin.site.register(Connection, ConnectionAdmin)
