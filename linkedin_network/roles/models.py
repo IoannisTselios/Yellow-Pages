@@ -12,6 +12,7 @@ class Role(models.Model):
     start_date = models.DateField()  # Store the start date as a DateTimeField
     end_date = models.DateField(blank=True, null=True)  # Allow null for ongoing roles
     main_role = models.BooleanField(default=False)
+    location = models.CharField(max_length=100)
 
     def clean(self):
         # Ensure start_date is the first of the month
