@@ -4,13 +4,13 @@ from .models import User
 
 class UserAdmin(BaseUserAdmin):
     # Fields to be used in displaying the User model.
-    list_display = ('email', 'first_name', 'last_name', 'possition', 'is_staff', 'is_superuser')
+    list_display = ('email', 'first_name', 'last_name', 'position', 'is_staff', 'is_superuser')
     list_filter = ('is_staff', 'is_superuser', 'is_active')
 
     # Fieldsets for creating and updating users
     fieldsets = (
         (None, {'fields': ('email', 'password')}),
-        ('Personal info', {'fields': ('first_name', 'last_name', 'possition', 'url')}),
+        ('Personal info', {'fields': ('first_name', 'last_name', 'position', 'url')}),
         ('Permissions', {'fields': ('is_staff', 'is_superuser', 'is_active')}),
     )
     
@@ -18,11 +18,11 @@ class UserAdmin(BaseUserAdmin):
     add_fieldsets = (
         (None, {
             'classes': ('wide',),
-            'fields': ('email', 'password1', 'password2', 'first_name', 'last_name', 'possition', 'url', 'is_staff', 'is_superuser'),
+            'fields': ('email', 'password1', 'password2', 'first_name', 'last_name', 'position', 'url', 'is_staff', 'is_superuser'),
         }),
     )
 
-    search_fields = ('email', 'first_name', 'last_name', 'possition')
+    search_fields = ('email', 'first_name', 'last_name', 'position')
     ordering = ('email',)
     filter_horizontal = ()
 

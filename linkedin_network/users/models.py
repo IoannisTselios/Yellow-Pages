@@ -35,7 +35,7 @@ class UserManager(BaseUserManager):
 class User(AbstractUser):
     first_name = models.CharField(max_length=50)
     last_name = models.CharField(max_length=50)
-    possition = models.CharField(max_length=50)
+    position = models.CharField(max_length=50)
     url = models.URLField(max_length=200)
     email=models.CharField(max_length=50, unique=True)
     password=models.CharField(max_length=50)
