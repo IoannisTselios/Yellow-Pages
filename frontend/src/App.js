@@ -3,8 +3,8 @@ import LoginScreen from './Pages/LoginScreen';
 
 function App() {
   return (
-    <div className="App">
-      <LoginScreen></LoginScreen>   
+    <div>
+      <LoginScreen />
     </div>
   );
 }
