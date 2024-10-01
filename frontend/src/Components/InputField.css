@@ -1,0 +1,26 @@
+.inputWrapper{
+    margin-top: 40px;
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+}
+
+.inputContainer{
+    display: flex;
+    align-items: center;
+    margin: auto;
+    width: 400px;
+    height: 50px;
+    border-radius: 6px;
+}
+
+.inputContainer input{
+    height: 50px;
+    width: 400px;
+    border: none;
+    outline: none;
+    color: #797979;
+    font-size: 19px;
+    padding-left: 20px;
+    border-radius: 40px;
+}
