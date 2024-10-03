@@ -11,7 +11,6 @@ export default function LoginScreen() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
-
   const handleLogin = async (e) => {
     e.preventDefault();
 
@@ -52,7 +51,7 @@ export default function LoginScreen() {
     } catch (error) {
       console.error('Error during login:', error);
     }
-    
+
   };
 
   if (redirect) {

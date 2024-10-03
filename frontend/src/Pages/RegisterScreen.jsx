@@ -65,12 +65,12 @@ export const RegisterScreen = () => {
 
       console.log('Login successful:', data);
 
+      setRedirect(true);
       
     } catch (error) {
       console.error('Error during login:', error);
     }
 
-    setRedirect(true);
   }
 
   if (redirect) {
