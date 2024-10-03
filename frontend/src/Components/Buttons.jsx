@@ -4,8 +4,8 @@ import './Buttons.css';
 // Submit Button
 export const SubmitButton = ({ label, onClick }) => {
   return (
-    <div className="submitButton" onClick={onClick}>
+    <button type='submit' className="submitButton" onClick={onClick}>
       {label}
-    </div>
+    </button>
   );
 };
