@@ -4,6 +4,8 @@ import InputField from '../Components/InputField';
 import { SubmitButton } from '../Components/Buttons';
 import { Link } from 'react-router-dom';
 import { Navigate } from 'react-router-dom';
+import Button from '@mui/material/Button';
+import TextField from '@mui/material/TextField';
 
 export default function LoginScreen() {
   const [redirect, setRedirect] = useState(false);
@@ -66,12 +68,19 @@ export default function LoginScreen() {
               <div className="underline"></div>
           </div>
           <form onSubmit={handleLogin}>
+            <TextField id="outlined-basic" label="Email" type="email"/>
+            <TextField
+                id="outlined-password-input"
+                label="Password"
+                type="password"
+                autoComplete="current-password"
+            />
             <InputField type="email" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} /> 
             <InputField type="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} />
             <div className="submitContainer">  
-              <SubmitButton label="Login"/>
-            </div>
-          </form>
+              <Button type='submit' variant="contained" color='primary' size='large'>Login</Button>
+            </div>            
+          </form>          
           <div className="noAccount">Don't have an account yet? <span><Link to="/register"> Register </Link></span></div>
       </div> 
     </div>   
