@@ -1,25 +1,21 @@
-import React, { useState } from 'react'
-import './LoginScreen.css'
+import React, { useState } from 'react';
+import './LoginScreen.css';
 import InputField from '../Components/InputField'; 
-import { SubmitButton } from '../Components/Buttons';
-import { Link } from 'react-router-dom';
-import { Navigate } from 'react-router-dom';
+import { Link, Navigate } from 'react-router-dom';
 import Button from '@mui/material/Button';
-import TextField from '@mui/material/TextField';
 
 export default function LoginScreen() {
   const [redirect, setRedirect] = useState(false);
-
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
   const handleLogin = async (e) => {
-    e.preventDefault();
+    e.preventDefault();  // Prevent the default form submission
 
     console.log({
       email,
       password
-    })
+    });
 
     try {
       // Send POST request to the backend
@@ -43,9 +39,6 @@ export default function LoginScreen() {
       const data = await response.json();
 
       // Store the token or update UI
-      // localStorage.setItem('accessToken', data.access);
-      // localStorage.setItem('refreshToken', data.refresh);
-
       console.log('Login successful:', data);
 
       setRedirect(true);
@@ -53,7 +46,6 @@ export default function LoginScreen() {
     } catch (error) {
       console.error('Error during login:', error);
     }
-
   };
 
   if (redirect) {
@@ -63,27 +55,41 @@ export default function LoginScreen() {
   return (
     <div className="wrapper">
       <div className="container">
-          <div className="header">
-              <div className="text">Yellow Pages</div>
-              <div className="underline"></div>
-          </div>
-          <form onSubmit={handleLogin}>
-            <TextField id="outlined-basic" label="Email" type="email"/>
-            <TextField
-                id="outlined-password-input"
-                label="Password"
-                type="password"
-                autoComplete="current-password"
-            />
-            <InputField type="email" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} /> 
-            <InputField type="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} />
-            <div className="submitContainer">  
-              <Button type='submit' variant="contained" color='primary' size='large'>Login</Button>
-            </div>            
-          </form>          
-          <div className="noAccount">Don't have an account yet? <span><Link to="/register"> Register </Link></span></div>
+        <div className="header">
+          <div className="text">Yellow Pages</div>
+          <div className="underline"></div>
+        </div>        
+        <form onSubmit={handleLogin}>
+          <InputField
+            type="email"
+            placeholder="Email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            autoComplete="email"
+          />
+          <InputField
+            type="password"
+            placeholder="Password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            autoComplete="current-password"
+          />  
+          <div className="submitContainer">  
+            <Button type='submit' variant="contained" color='primary' size='large'>Login</Button>
+          </div> 
+        </form> 
+        <div className="noAccount">Don't have an account yet? <span><Link to="/register"> Register </Link></span></div>
       </div> 
     </div>   
-  )
+  );
 }
 
+
+
+          //   <form onSubmit={handleLogin}>            
+          //   <InputField type="email" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} /> 
+          //   <InputField type="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} />
+          //   <div className="submitContainer">  
+          //     <Button type='submit' variant="contained" color='primary' size='large'>Login</Button>
+          //   </div>            
+          // </form>     

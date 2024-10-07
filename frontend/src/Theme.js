@@ -8,10 +8,10 @@ const Theme = createTheme({
     },
   },
   components: {
-    MuiButton: {
+    MuiButton: {        //Buttons
       styleOverrides: {
         root: {
-          borderRadius: 20,  // Global border radius for buttons
+          borderRadius: 20,  
         },
       },
     },
