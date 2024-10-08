@@ -22,7 +22,7 @@ export default function InputField({ type, placeholder, value, onChange, autoCom
           onChange={onChange}
           autoComplete={autoComplete || 'current-password'}
           fullWidth
-          slotProps={{
+          InputProps={{
             endAdornment: (
               <InputAdornment position="end">
                 <IconButton

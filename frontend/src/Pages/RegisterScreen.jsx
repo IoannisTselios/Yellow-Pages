@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import './RegisterScreen.css'; 
+import styles from './RegisterScreen.module.css';
 import InputField from '../Components/InputField'; 
 import { SubmitButton } from '../Components/Buttons';
 import { Link } from 'react-router-dom';
@@ -78,30 +78,32 @@ export const RegisterScreen = () => {
   }
 
   return (
-    <div className="wrapper">
-      <div className="container">
-          <div className="header">
-              <div className="text">Yellow Pages</div>
-              <div className="underline"></div>
+    <div className={styles.wrapper}> 
+      <div className={styles.container}> 
+          <div className={styles.header}> 
+              <div className={styles.text}>Yellow Pages</div>
+              <div className={styles.underline}></div> 
           </div>
           <form onSubmit={handleRegister}>
             <InputField type="text" placeholder="First Name" value={firstName} onChange={(e) => setFirstName(e.target.value)} /> 
             <InputField type="text" placeholder="Last Name" value={lastName} onChange={(e) => setLastName(e.target.value)} /> 
             <InputField placeholder="Current Position" value={position} onChange={(e) => setPosition(e.target.value)} /> 
-            <InputField type="url" placeholder="Linkedin URL" value={linkedinUrl} onChange={(e) => setLinkedinUrl(e.target.value)} /> 
+            <InputField type="url" placeholder="LinkedIn URL" value={linkedinUrl} onChange={(e) => setLinkedinUrl(e.target.value)} /> 
 
             <InputField type="email" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} /> 
             <InputField type="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} />
             <InputField type="password" placeholder="Retype Password" value={rePassword} onChange={(e) => setRePassword(e.target.value)} />
 
-            <InputField type="file" accept=".csv" onChange={(e) => setSelectedFile(e.target.files[0])}></InputField>
+            <InputField type="file" accept=".csv" onChange={(e) => setSelectedFile(e.target.files[0])} />
 
-            <div className="submitContainer">  
+            <div className={styles.submitContainer}> 
               <SubmitButton label="Register" />
             </div>
           </form>
 
-          <div className="noAccount">Already have an account? <span><Link to="/login"> Login </Link></span></div>
+          <div className={styles.noAccount}> 
+            Already have an account? <span><Link to="/login"> Login </Link></span>
+          </div>
       </div> 
     </div>
   );

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import './LoginScreen.css';
+import styles from './LoginScreen.module.css';
 import InputField from '../Components/InputField'; 
 import { Link, Navigate } from 'react-router-dom';
 import Button from '@mui/material/Button';
@@ -53,34 +53,42 @@ export default function LoginScreen() {
   }
 
   return (
-    <div className="wrapper">
-      <div className="container">
-        <div className="header">
-          <div className="text">Yellow Pages</div>
-          <div className="underline"></div>
-        </div>        
-        <form onSubmit={handleLogin}>
-          <InputField
-            type="email"
-            placeholder="Email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            autoComplete="email"
-          />
-          <InputField
-            type="password"
-            placeholder="Password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            autoComplete="current-password"
-          />  
-          <div className="submitContainer">  
-            <Button type='submit' variant="contained" color='primary' size='large'>Login</Button>
-          </div> 
-        </form> 
-        <div className="noAccount">Don't have an account yet? <span><Link to="/register"> Register </Link></span></div>
-      </div> 
-    </div>   
+    <div className={styles.wrapper}>
+      <div className={styles.leftSide}> 
+        <div className={styles.appName}>Yellow Pages</div>
+        <div className={styles.motto}>Our motto goes here</div>
+      </div>
+      <div className={styles.rightSide}> 
+        <div className={styles.container}>
+          <div className={styles.header}>
+            <div className={styles.text}>Welcome back</div>
+            <div className={styles.underline}></div>
+          </div>
+          <form onSubmit={handleLogin}>
+            <InputField
+              type="email"
+              placeholder="Email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              autoComplete="email"
+            />
+            <InputField
+              type="password"
+              placeholder="Password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              autoComplete="current-password"
+            />  
+            <div className={styles.submitContainer}>  
+              <Button type='submit' variant="contained" color='primary' size='large'>Login</Button>
+            </div> 
+          </form> 
+          <div className={styles.noAccount}> 
+            Don't have an account yet? <span><Link to="/register"> Register </Link></span>
+          </div>
+        </div> 
+      </div>
+    </div>
   );
 }
 
