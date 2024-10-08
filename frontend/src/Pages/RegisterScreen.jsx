@@ -1,22 +1,18 @@
 import React, { useState } from 'react';
 import styles from './RegisterScreen.module.css';
 import InputField from '../Components/InputField'; 
-import { SubmitButton } from '../Components/Buttons';
-import { Link } from 'react-router-dom';
-import { Navigate } from 'react-router-dom';
+import Button from '@mui/material/Button';
+import { Link, Navigate } from 'react-router-dom';
 
 export const RegisterScreen = () => {
   const [redirect, setRedirect] = useState(false);
-
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [position, setPosition] = useState('');
   const [linkedinUrl, setLinkedinUrl] = useState('');
-  
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [rePassword, setRePassword] = useState('');
-
   const [selectedFile, setSelectedFile] = useState(null);
 
   const handleRegister = async (e) => {
@@ -29,14 +25,13 @@ export const RegisterScreen = () => {
       linkedinUrl,
       email,
       password
-    })
+    });
 
-    console.log({
-      file: selectedFile.name
-    })
+    if (selectedFile) {
+      console.log({ file: selectedFile.name });
+    }
 
     try {
-      // Send POST request to the backend
       const response = await fetch('http://localhost:8000/api/register', {
         method: 'POST',
         headers: {
@@ -45,10 +40,10 @@ export const RegisterScreen = () => {
         body: JSON.stringify({
           first_name: firstName,
           last_name: lastName,
-          position: position,
+          position,
           url: linkedinUrl,
-          email: email,
-          password: password,
+          email,
+          password,
         }),
       });
 
@@ -56,55 +51,111 @@ export const RegisterScreen = () => {
         throw new Error('Register failed');
       }
 
-      // If login is successful, handle response (e.g., redirect, save token)
       const data = await response.json();
-
-      // Store the token or update UI
-      // localStorage.setItem('accessToken', data.access);
-      // localStorage.setItem('refreshToken', data.refresh);
-
-      console.log('Login successful:', data);
-
+      console.log('Registration successful:', data);
       setRedirect(true);
       
     } catch (error) {
-      console.error('Error during login:', error);
+      console.error('Error during registration:', error);
     }
-
-  }
+  };
 
   if (redirect) {
     return <Navigate to='/login' replace />;
   }
 
   return (
-    <div className={styles.wrapper}> 
-      <div className={styles.container}> 
+    <div className={styles.wrapper}>
+
+      <div className={styles.leftSide}> 
+        <div className={styles.appName}>Yellow Pages</div>
+        <div className={styles.motto}>Our motto goes here</div>
+      </div>
+
+      <div className={styles.rightSide}> 
+        <div className={styles.container}>
+
           <div className={styles.header}> 
-              <div className={styles.text}>Yellow Pages</div>
+              <div className={styles.text}>Create account</div>
               <div className={styles.underline}></div> 
           </div>
+
           <form onSubmit={handleRegister}>
-            <InputField type="text" placeholder="First Name" value={firstName} onChange={(e) => setFirstName(e.target.value)} /> 
-            <InputField type="text" placeholder="Last Name" value={lastName} onChange={(e) => setLastName(e.target.value)} /> 
-            <InputField placeholder="Current Position" value={position} onChange={(e) => setPosition(e.target.value)} /> 
-            <InputField type="url" placeholder="LinkedIn URL" value={linkedinUrl} onChange={(e) => setLinkedinUrl(e.target.value)} /> 
-
-            <InputField type="email" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} /> 
-            <InputField type="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} />
-            <InputField type="password" placeholder="Retype Password" value={rePassword} onChange={(e) => setRePassword(e.target.value)} />
-
-            <InputField type="file" accept=".csv" onChange={(e) => setSelectedFile(e.target.files[0])} />
-
+            <div className={styles.formGrid}>
+              <InputField 
+                type="text" 
+                placeholder="First Name" 
+                value={firstName} 
+                onChange={(e) => setFirstName(e.target.value)} 
+                autoComplete="given-name"
+                required
+              /> 
+              <InputField 
+                type="text" 
+                placeholder="Last Name" 
+                value={lastName} 
+                onChange={(e) => setLastName(e.target.value)} 
+                autoComplete="family-name" 
+                required
+              /> 
+              <InputField 
+                type="text"
+                placeholder="Current Position" 
+                value={position} 
+                onChange={(e) => setPosition(e.target.value)} 
+                autoComplete="off" 
+                required
+              /> 
+              <InputField 
+                type="url" 
+                placeholder="LinkedIn URL" 
+                value={linkedinUrl} 
+                onChange={(e) => setLinkedinUrl(e.target.value)} 
+                autoComplete="off" 
+                required
+              /> 
+              <InputField 
+                type="email" 
+                placeholder="Email" 
+                value={email} 
+                onChange={(e) => setEmail(e.target.value)} 
+                autoComplete="email" 
+                required
+              /> 
+              <InputField 
+                type="password" 
+                placeholder="Password" 
+                value={password} 
+                onChange={(e) => setPassword(e.target.value)} 
+                autoComplete="new-password" 
+                required
+              />
+              <InputField 
+                type="password" 
+                placeholder="Retype Password" 
+                value={rePassword} 
+                onChange={(e) => setRePassword(e.target.value)} 
+                autoComplete="new-password" 
+                required
+              />
+              <InputField 
+                type="file" 
+                placeholder="Upload CSV" 
+                accept=".csv" 
+                onChange={(e) => setSelectedFile(e.target.files[0])} 
+              />
+            </div>
             <div className={styles.submitContainer}> 
-              <SubmitButton label="Register" />
+              <Button type='submit' variant="contained" color='primary' size='large'>Register</Button>
             </div>
           </form>
 
           <div className={styles.noAccount}> 
             Already have an account? <span><Link to="/login"> Login </Link></span>
           </div>
-      </div> 
+          
+        </div> 
+      </div>
     </div>
   );
 }

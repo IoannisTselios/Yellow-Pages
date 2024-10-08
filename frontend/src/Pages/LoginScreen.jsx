@@ -54,16 +54,20 @@ export default function LoginScreen() {
 
   return (
     <div className={styles.wrapper}>
+
       <div className={styles.leftSide}> 
         <div className={styles.appName}>Yellow Pages</div>
         <div className={styles.motto}>Our motto goes here</div>
       </div>
+
       <div className={styles.rightSide}> 
         <div className={styles.container}>
+
           <div className={styles.header}>
             <div className={styles.text}>Welcome back</div>
             <div className={styles.underline}></div>
           </div>
+
           <form onSubmit={handleLogin}>
             <InputField
               type="email"
@@ -83,9 +87,11 @@ export default function LoginScreen() {
               <Button type='submit' variant="contained" color='primary' size='large'>Login</Button>
             </div> 
           </form> 
+
           <div className={styles.noAccount}> 
             Don't have an account yet? <span><Link to="/register"> Register </Link></span>
           </div>
+          
         </div> 
       </div>
     </div>
