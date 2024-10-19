@@ -39,7 +39,7 @@ export default function InputField({ type, placeholder, value, onChange, autoCom
       ) : type === 'file' ? (
         <TextField
           variant="outlined"
-          label={placeholder} 
+          // label={placeholder} 
           type={type}
           onChange={onChange}
           fullWidth

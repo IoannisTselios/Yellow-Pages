@@ -29,6 +29,15 @@ export const RegisterScreen = () => {
 
     if (selectedFile) {
       console.log({ file: selectedFile.name });
+
+      const isCSV = selectedFile.name.endsWith('.csv') || selectedFile.type === 'text/csv' || selectedFile.type === 'text/comma-separated-values';
+      if (!isCSV) {
+        console.log('The uploaded file is not a csv!')
+        setSelectedFile(null);
+        return;
+      }
+
+      setSelectedFile(selectedFile);
     }
 
     try {
