@@ -44,6 +44,8 @@ export default function InputField({ type, placeholder, value, onChange, autoCom
           // label={placeholder} 
           type={type}
           onChange={onChange}
+          error={error}
+          helperText={error ? helperText : ''}
           fullWidth
           inputProps={{ accept }}
         />
