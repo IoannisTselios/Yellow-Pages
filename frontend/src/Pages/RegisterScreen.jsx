@@ -141,6 +141,16 @@ export const RegisterScreen = () => {
                 helperText={errors.lastName ? "This field is required." : ""} 
               /> 
               <InputField 
+                type="email" 
+                placeholder="Email" 
+                value={email} 
+                onChange={(e) => setEmail(e.target.value)} 
+                autoComplete="email" 
+                required
+                error={errors.email} 
+                helperText={errors.email ? "This field is required." : ""} 
+              /> 
+              <InputField 
                 type="text"
                 placeholder="Current Position" 
                 value={position} 
@@ -159,17 +169,15 @@ export const RegisterScreen = () => {
                 required
                 error={errors.linkedinUrl} 
                 helperText={errors.linkedinUrl ? "This field is required." : ""} 
-              /> 
+              />       
               <InputField 
-                type="email" 
-                placeholder="Email" 
-                value={email} 
-                onChange={(e) => setEmail(e.target.value)} 
-                autoComplete="email" 
-                required
-                error={errors.email} 
-                helperText={errors.email ? "This field is required." : ""} 
-              /> 
+                type="file" 
+                placeholder="Upload CSV" 
+                accept=".csv" 
+                onChange={(e) => setSelectedFile(e.target.files[0])} 
+                error={errors.file} 
+                helperText={errors.file ? "A CSV file is required." : ""} 
+              />
               <InputField 
                 type="password" 
                 placeholder="Password" 
@@ -189,14 +197,6 @@ export const RegisterScreen = () => {
                 required
                 error={errors.rePassword} 
                 helperText={errors.rePassword ? "Passwords do not match." : ""} 
-              />
-              <InputField 
-                type="file" 
-                placeholder="Upload CSV" 
-                accept=".csv" 
-                onChange={(e) => setSelectedFile(e.target.files[0])} 
-                error={errors.file} 
-                helperText={errors.file ? "A CSV file is required." : ""} 
               />
             </div>
             <div className={styles.submitContainer}> 
