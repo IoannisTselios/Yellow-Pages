@@ -84,8 +84,15 @@
 }
 
 .noAccount span {
-    color: #000000;
     font-weight: bold;
     cursor: pointer;
     padding-left: 0.5rem;
+}
+
+a {
+    color: #000;
+}
+
+a:hover {
+    color: #fdb73e;
 }

@@ -276,6 +276,19 @@ export const RegisterScreen = () => {
       file: selectedFile ? selectedFile.name : null,
     });
 
+    if (selectedFile) {
+      console.log({ file: selectedFile.name });
+
+      const isCSV = selectedFile.name.endsWith('.csv') || selectedFile.type === 'text/csv' || selectedFile.type === 'text/comma-separated-values';
+      if (!isCSV) {
+        console.log('The uploaded file is not a csv!')
+        setSelectedFile(null);
+        return;
+      }
+
+      setSelectedFile(selectedFile);
+    }
+
     try {
       const response = await fetch('http://localhost:8000/api/register', {
         method: 'POST',
