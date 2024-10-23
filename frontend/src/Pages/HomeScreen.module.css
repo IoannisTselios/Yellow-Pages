@@ -1,0 +1,33 @@
+.header {
+    display: flex;
+    justify-content: space-between;
+    padding: 12px;
+}
+
+.logoWrapper {
+    display: flex;
+    align-items: center;
+}
+
+.logoWrapper img {
+    height: 36px;
+    padding-right: 8px;
+}
+
+.text {
+    color: #fdb73e;
+    font-size: 1.2rem;
+    font-weight: 300;
+}
+
+.underline {
+    margin-left: 12px;
+    margin-right: 12px;
+    height: 1px;
+    background: #fdb73e;
+    border-radius: 9px;
+}
+
+.mainContent {
+    margin: 12px;
+}
