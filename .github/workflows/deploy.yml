@@ -27,7 +27,6 @@ jobs:
         run: |
           ssh -o StrictHostKeyChecking=no ${{ secrets.AWS_USER }}@${{ secrets.AWS_HOST }} << 'EOF'
             cd /home/ec2-user/downloads/linkedin_network/
-            cp .env.prod .env
 
             # Update server packages
             sudo yum update -y
@@ -49,7 +48,5 @@ jobs:
             fi
 
             # Build and start the services defined in docker-compose.yml
-            /usr/local/bin/docker-compose up -d --build
-
-            rm .env
+            /usr/local/bin/docker-compose --env-file /home/ec2-user/downloads/linkedin_network/.env.prod up -d --build
           EOF
