@@ -47,6 +47,8 @@ jobs:
               sudo chmod +x /usr/local/bin/docker-compose
             fi
 
+            echo "ENV=prod" > .env.dev
+
             # Build and start the services defined in docker-compose.yml
-            /usr/local/bin/docker-compose --env-file /home/ec2-user/downloads/linkedin_network/.env.prod up -d --build
+            /usr/local/bin/docker-compose up -d --build
           EOF
