@@ -21,7 +21,7 @@ jobs:
       - name: Sync linkedin_network to AWS server
         run: |
           rsync -avz -e "ssh -o StrictHostKeyChecking=no" \
-          ./linkedin_network ${{ secrets.AWS_USER }}@${{ secrets.AWS_HOST }}:/home/ec2-user/downloads
+          ./linkedin_network ${{ secrets.AWS_USER }}@${{ secrets.AWS_HOST }}:/home/ec2-user/downloads/
 
       - name: SSH into AWS server and deploy with Docker Compose
         run: |
