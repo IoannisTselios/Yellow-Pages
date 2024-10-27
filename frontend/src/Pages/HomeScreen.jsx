@@ -2,6 +2,9 @@ import React, { useEffect, useState } from "react";
 import styles from './HomeScreen.module.css';
 import { Navigate } from 'react-router-dom';
 import { Button } from "@mui/material";
+import IconButton from '@mui/material/IconButton';
+import Tooltip from '@mui/material/Tooltip';
+import ExitToAppRoundedIcon from '@mui/icons-material/ExitToAppRounded';
 import { DataGrid, GridRowsProp, GridColDef } from '@mui/x-data-grid';
 
 export const HomeScreen = () => {
@@ -112,7 +115,10 @@ export const HomeScreen = () => {
           <img src="Assets\image.png" alt="Logo" />
           <div className={styles.text}>Yellow Pages</div>
         </div>
-        <Button variant="contained" color='secondary' size='large' onClick={handleLogout}> Logout </Button>
+        <Tooltip title="Logout" placement="left">
+          <IconButton color="secondary" onClick={handleLogout}><ExitToAppRoundedIcon /></IconButton>
+        </Tooltip>
+        {/* <Button variant="outlined" color='secondary' size='small' onClick={handleLogout} endIcon={<ExitToAppRoundedIcon />}> Logout </Button> */}
       </div>
       <div className={styles.underline}></div>
       <div className={styles.mainContent}>
@@ -124,6 +130,5 @@ export const HomeScreen = () => {
 
       </div>
     </div>
-    //     <Button variant="contained" color='primary' size='large' onClick={handleLogout}> Logout </Button>
   );
 }

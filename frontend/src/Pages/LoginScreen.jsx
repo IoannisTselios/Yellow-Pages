@@ -84,7 +84,7 @@ export default function LoginScreen() {
               autoComplete="current-password"
             />  
             <div className={styles.submitContainer}>  
-              <Button type='submit' variant="contained" color='primary' size='large'>Login</Button>
+              <Button type='submit' variant="contained" color='primary' size='large'>LOGIN</Button>
             </div> 
           </form> 
 
