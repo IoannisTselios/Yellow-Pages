@@ -47,7 +47,7 @@ jobs:
               sudo chmod +x /usr/local/bin/docker-compose
             fi
 
-            echo "ENV=prod" > .env.dev
+            echo "ENV=prod" > .env
 
             # Build and start the services defined in docker-compose.yml
             /usr/local/bin/docker-compose up -d --build
