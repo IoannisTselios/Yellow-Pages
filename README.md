@@ -35,4 +35,4 @@ and fill in your user's credentials
 ### Set-up
 If the containers are already build then just run `docker-compose up`.
 
-To shut down the project (while not distruing the build) run `docker-compose down`.
+To shut down the project (while not distruing the build) run `docker-compose down`. 
