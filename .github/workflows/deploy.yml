@@ -21,12 +21,12 @@ jobs:
       - name: Sync linkedin_network to AWS server
         run: |
           rsync -avz -e "ssh -o StrictHostKeyChecking=no" \
-          ./linkedin_network ${{ secrets.AWS_USER }}@${{ secrets.AWS_HOST }}:/home/ec2-user/linkedin_network
+          ./linkedin_network ${{ secrets.AWS_USER }}@${{ secrets.AWS_HOST }}:/home/ec2-user/downloads
 
       - name: SSH into AWS server and deploy with Docker Compose
         run: |
           ssh -o StrictHostKeyChecking=no ${{ secrets.AWS_USER }}@${{ secrets.AWS_HOST }} << 'EOF'
-            cd /home/ec2-user/downloads/
+            cd /home/ec2-user/downloads/linkedin_network
 
             # Update server packages
             sudo yum update -y
@@ -45,6 +45,6 @@ jobs:
             fi
 
             # Build and start the services defined in docker-compose.yml
-            docker compose build
-            docker compose up
+            docker-compose -d build
+            docker-compose up
           EOF
