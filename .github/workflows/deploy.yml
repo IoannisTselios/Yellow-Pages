@@ -45,6 +45,5 @@ jobs:
             fi
 
             # Build and start the services defined in docker-compose.yml
-            docker-compose -d build
-            docker-compose up
+            docker-compose up -d --build
           EOF
