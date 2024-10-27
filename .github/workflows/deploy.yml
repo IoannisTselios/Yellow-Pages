@@ -1,0 +1,33 @@
+name: Deploy to AWS on Merge
+
+on:
+  push:
+    branches:
+      - main  # Trigger on push to the main branch
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Set up SSH agent and add key
+        uses: webfactory/ssh-agent@v0.10.3
+        with:
+          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+
+      - name: Sync linkedin_network to AWS server
+        run: |
+          rsync -avz -e "ssh -o StrictHostKeyChecking=no" \
+          ./linkedin_network ${{ secrets.AWS_USER }}@${{ secrets.AWS_HOST }}:/home/ec2-user/linkedin_network
+
+      - name: SSH into AWS server and deploy with Docker Compose
+        run: |
+          ssh -o StrictHostKeyChecking=no ${{ secrets.AWS_USER }}@${{ secrets.AWS_HOST }} << 'EOF'
+            cd /home/ec2-user/linkedin_network
+
+            # Build and start the services defined in docker-compose.yml
+            docker-compose up -d --build
+          EOF
