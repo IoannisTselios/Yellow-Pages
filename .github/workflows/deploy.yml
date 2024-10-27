@@ -26,7 +26,7 @@ jobs:
       - name: SSH into AWS server and deploy with Docker Compose
         run: |
           ssh -o StrictHostKeyChecking=no ${{ secrets.AWS_USER }}@${{ secrets.AWS_HOST }} << 'EOF'
-            cd /home/ec2-user/downloads/linkedin_network
+            cd /home/ec2-user/downloads/linkedin_network/
 
             # Update server packages
             sudo yum update -y
