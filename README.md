@@ -13,15 +13,7 @@ cd digital-media/linkedin_network
 ```
 4. Run one of the following depending on your computer architecture and django version
 ```
-docker-compose -d build
-----
-docker compose build
-```
-4. If you don't see any errors run one of the following
-```
-docker-compose up
-----
-docker compose up
+docker compose --env-file .env.dev up -d --build
 ```
 5. From the Docker plugin find the web service, right click it and attach shell
 6. In the web service shell run
