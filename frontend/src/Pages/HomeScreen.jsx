@@ -9,6 +9,7 @@ import { DataGrid, GridRowsProp, GridColDef } from '@mui/x-data-grid';
 
 export const HomeScreen = () => {
   const [redirect, setRedirect] = useState(false);
+  const [selectedRow, setSelectedRow] = useState(null);
 
   const [name, setName] = useState('')
 
@@ -91,22 +92,44 @@ export const HomeScreen = () => {
   } 
 
   const rows = [
-    { id: 1, col1: 'Bety Boo', col2: 'Jack, Henry, Mary', col3: 'Student', col4: 'Developer', col5: 'Junior', col6: 'Novo Nordisk', col7: 'Pharmaceutical' },
-    { id: 2, col1: 'John Hex', col2: 'Henry, Mary', col3: 'Data Analyst', col4: 'Data Science', col5: 'Mid', col6: 'Hexagon', col7: 'Sales' },
-    { id: 3, col1: 'Arthur Peterson', col2: 'Henry', col3: 'Change Management', col4: 'Communication', col5: 'Junior', col6: 'Novo Nordisk', col7: 'Pharmaceutical' },
-    { id: 4, col1: 'Moby Dick', col2: 'Mary', col3: 'Product Owner', col4: 'Management', col5: 'CEO', col6: 'DontKnow', col7: 'Pharmaceutical' },
+    { id: 1, col1: 'Bety Boo', linkedinUrl: 'https://www.linkedin.com/in/georgia-tsoukala-5144a4245/', col2: 'Jack, Henry, Mary', col3: 3, col4: 'Student', col5: 'Developer', col6: 'Junior', col7: 'Novo Nordisk', col8: 'Pharmaceutical' },
+    { id: 2, col1: 'John Hex', linkedinUrl: 'https://www.linkedin.com/in/georgia-tsoukala-5144a4245/', col2: 'Henry, Mary', col3: 4, col4: 'Data Analyst', col5: 'Data Science', col6: 'Mid', col7: 'Hexagon', col8: 'Sales' },
+    { id: 3, col1: 'Arthur Peterson', linkedinUrl: 'https://www.linkedin.com/in/georgia-tsoukala-5144a4245/', col2: 'Henry', col3: 2, col4: 'Change Management', col5: 'Communication', col6: 'Junior', col7: 'Novo Nordisk', col8: 'Pharmaceutical' },
+    { id: 4, col1: 'Moby Dick', linkedinUrl: 'https://www.linkedin.com/in/georgia-tsoukala-5144a4245/', col2: 'Mary', col3: 5, col4: 'Product Owner', col5: 'Management', col6: 'CEO', col7: 'DontKnow', col8: 'Pharmaceutical' },
   ];
-
+  
   const columns = [
     { field: "id", headerName: '#', hide: true, width: 50 },
-    { field: 'col1', headerName: 'Name', width: 150},
+    { 
+      field: 'col1', 
+      headerName: 'Name', 
+      width: 150, 
+      renderCell: (params) => (
+        <div>
+          <div>{params.value}</div>
+          <a 
+            href={params.row.linkedinUrl} 
+            target="_blank" 
+            rel="noopener noreferrer" 
+            style={{ fontSize: '0.8em', color: '#0073b1' }}
+          >
+            View LinkedIn
+          </a>
+        </div>
+      ),
+    },
     { field: 'col2', headerName: 'Connections', width: 150 },
-    { field: 'col3', headerName: 'Position', width: 150 },
-    { field: 'col4', headerName: 'Function', width: 150 },
-    { field: 'col5', headerName: 'Seniority', width: 150 },
-    { field: 'col6', headerName: 'Company', width: 150 },
-    { field: 'col7', headerName: 'Industry', width: 150 },
+    { field: 'col3', headerName: 'Connection Strength', width: 150 }, 
+    { field: 'col4', headerName: 'Position', width: 150 },
+    { field: 'col5', headerName: 'Function', width: 150 },
+    { field: 'col6', headerName: 'Seniority', width: 150 },
+    { field: 'col7', headerName: 'Company', width: 150 },
+    { field: 'col8', headerName: 'Industry', width: 150 },
   ];
+ 
+  const handleRowClick = (params) => {
+    setSelectedRow(params.row); 
+  };
 
   return (
     <div>
@@ -123,11 +146,24 @@ export const HomeScreen = () => {
       <div className={styles.underline}></div>
       <div className={styles.mainContent}>
   
-        <DataGrid style={{ borderRadius: '10px', background: '#fff'}} rows={rows} columns={columns} checkboxSelection disableRowSelectionOnClick/>
+        <DataGrid 
+          style={{ borderRadius: '10px', background: '#fff'}} 
+          rows={rows} 
+          columns={columns} 
+          checkboxSelection 
+          disableRowSelectionOnClick
+          getRowHeight={() => 'auto'}
+          onRowClick={handleRowClick}
+        />
 
-        
-
-
+        {/* Conditionally render the detail box */}
+        {selectedRow && (
+          <div className={styles.detailBox}>
+            <h2>Details</h2>
+            <p><strong>Name:</strong> {selectedRow.col1}</p>
+            {/* Add more fields if needed */}
+          </div>
+        )}
       </div>
     </div>
   );

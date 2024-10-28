@@ -31,3 +31,12 @@
 .mainContent {
     margin: 12px;
 }
+
+.detailBox {
+    background-color: rgba(255, 255, 255, 0.9); /* Slightly transparent white background */
+    border-radius: 8px; /* Rounded corners */
+    padding: 16px; /* Padding inside the box */
+    margin-top: 16px; /* Space above the box */
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2); /* Subtle shadow for depth */
+    color: #333; /* Dark text color for readability */
+}
