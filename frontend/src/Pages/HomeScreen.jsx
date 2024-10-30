@@ -99,10 +99,126 @@ export const HomeScreen = () => {
   };
 
   const rows = [
-    { id: 1, col1: 'Bety Boo', linkedinUrl: 'https://www.linkedin.com/in/georgia-tsoukala-5144a4245/', col2: 'Jack, Henry, Mary', col3: 3, col4: 'Student', col5: 'Developer', col6: 'Junior', col7: 'Novo Nordisk', col8: 'Pharmaceutical' },
-    { id: 2, col1: 'John Hex', linkedinUrl: 'https://www.linkedin.com/in/georgia-tsoukala-5144a4245/', col2: 'Henry, Mary', col3: 4, col4: 'Data Analyst', col5: 'Data Science', col6: 'Mid', col7: 'Hexagon', col8: 'Sales' },
-    { id: 3, col1: 'Arthur Peterson', linkedinUrl: 'https://www.linkedin.com/in/georgia-tsoukala-5144a4245/', col2: 'Henry', col3: 2, col4: 'Change Management', col5: 'Communication', col6: 'Junior', col7: 'Novo Nordisk', col8: 'Pharmaceutical' },
-    { id: 4, col1: 'Moby Dick', linkedinUrl: 'https://www.linkedin.com/in/georgia-tsoukala-5144a4245/', col2: 'Mary', col3: 5, col4: 'Product Owner', col5: 'Management', col6: 'CEO', col7: 'DontKnow', col8: 'Pharmaceutical' },
+    { 
+      id: 1, 
+      col1: 'Bety Boo', 
+      linkedinUrl: 'https://www.linkedin.com/in/georgia-tsoukala-5144a4245/', 
+      col2: 'Jack, Henry, Mary', 
+      col3: 3, 
+      col4: 'Student', 
+      col5: 'Developer', 
+      col6: 'Junior', 
+      col7: 'Novo Nordisk', 
+      col8: 'Pharmaceutical',
+      location: 'Copenhagen', 
+      bio: 'A passionate learner with a knack for technology.', 
+      summary: 'Currently focused on building skills in full-stack development.'
+    },
+    { 
+      id: 2, 
+      col1: 'John Hex', 
+      linkedinUrl: 'https://www.linkedin.com/in/georgia-tsoukala-5144a4245/', 
+      col2: 'Henry, Mary', 
+      col3: 4, 
+      col4: 'Data Analyst', 
+      col5: 'Data Science', 
+      col6: 'Mid', 
+      col7: 'Hexagon', 
+      col8: 'Sales',
+      location: 'Berlin', 
+      bio: 'Experienced data analyst with a strong background in sales.', 
+      summary: 'Enjoys uncovering insights that drive business growth.'
+    },
+    { 
+      id: 3, 
+      col1: 'Arthur Peterson', 
+      linkedinUrl: 'https://www.linkedin.com/in/georgia-tsoukala-5144a4245/', 
+      col2: 'Henry', 
+      col3: 2, 
+      col4: 'Change Management', 
+      col5: 'Communication', 
+      col6: 'Junior', 
+      col7: 'Novo Nordisk', 
+      col8: 'Pharmaceutical',
+      location: 'Amsterdam', 
+      bio: 'Communication specialist passionate about change management.', 
+      summary: 'Strives to facilitate smooth transitions in complex projects.'
+    },
+    { 
+      id: 4, 
+      col1: 'Moby Dick', 
+      linkedinUrl: 'https://www.linkedin.com/in/georgia-tsoukala-5144a4245/', 
+      col2: 'Mary', 
+      col3: 5, 
+      col4: 'Product Owner', 
+      col5: 'Management', 
+      col6: 'CEO', 
+      col7: 'DontKnow', 
+      col8: 'Pharmaceutical',
+      location: 'Stockholm', 
+      bio: 'Innovative product owner with a vision for business growth.', 
+      summary: 'Focuses on aligning products with customer needs and business goals.'
+    },
+    { 
+      id: 5, 
+      col1: 'Alice Wonderland', 
+      linkedinUrl: 'https://www.linkedin.com/in/alice-wonderland', 
+      col2: 'Bob, Charlie', 
+      col3: 3, 
+      col4: 'Marketing Specialist', 
+      col5: 'Marketing', 
+      col6: 'Senior', 
+      col7: 'Wonder Corp', 
+      col8: 'Entertainment',
+      location: 'Paris', 
+      bio: 'Creative marketer with a flair for storytelling.', 
+      summary: 'Passionate about creating campaigns that resonate with audiences.'
+    },
+    { 
+      id: 6, 
+      col1: 'Charlie Brown', 
+      linkedinUrl: 'https://www.linkedin.com/in/charlie-brown', 
+      col2: 'Alice, David', 
+      col3: 4, 
+      col4: 'Financial Analyst', 
+      col5: 'Finance', 
+      col6: 'Mid', 
+      col7: 'Peanuts Inc', 
+      col8: 'Finance',
+      location: 'New York', 
+      bio: 'Finance enthusiast with a keen eye for detail.', 
+      summary: 'Skilled in identifying financial trends and improving efficiency.'
+    },
+    { 
+      id: 7, 
+      col1: 'David Gray', 
+      linkedinUrl: 'https://www.linkedin.com/in/david-gray', 
+      col2: 'Charlie, Eve', 
+      col3: 5, 
+      col4: 'UX Designer', 
+      col5: 'Design', 
+      col6: 'Junior', 
+      col7: 'Gray Matter', 
+      col8: 'Tech',
+      location: 'London', 
+      bio: 'User-centric designer with a passion for simplicity.', 
+      summary: 'Focuses on creating intuitive and accessible designs.'
+    },
+    { 
+      id: 8, 
+      col1: 'Eve White', 
+      linkedinUrl: 'https://www.linkedin.com/in/eve-white', 
+      col2: 'Alice, Charlie, David', 
+      col3: 4, 
+      col4: 'HR Manager', 
+      col5: 'Human Resources', 
+      col6: 'Senior', 
+      col7: 'WhiteCo', 
+      col8: 'Retail',
+      location: 'San Francisco', 
+      bio: 'Dedicated HR professional fostering positive workplaces.', 
+      summary: 'Specializes in team building and talent acquisition strategies.'
+    },
   ];
 
   const columns = [
@@ -153,21 +269,40 @@ export const HomeScreen = () => {
       <div className={styles.underline}></div>
       {/* <button onClick={getData}>Get the connections</button> */}
       <div className={styles.mainContent}>
-        <DataGrid 
-          style={{ borderRadius: '10px', background: '#fff'}} 
-          rows={rows} 
-          columns={columns} 
-          checkboxSelection 
-          disableRowSelectionOnClick
-          getRowHeight={() => 'auto'}
-          onRowClick={handleRowClick}
-        />
-        {/* Conditionally render the detail box */}
+        <div className={styles.dataGridContainer}>
+          <DataGrid 
+            style={{ borderRadius: '10px', background: '#fff'}} 
+            rows={rows} 
+            columns={columns} 
+            checkboxSelection 
+            disableRowSelectionOnClick
+            getRowHeight={() => 'auto'}
+            onRowClick={handleRowClick}
+            sx={{
+              "& .MuiDataGrid-columnHeaderTitle": {
+                fontWeight: 'bold',
+              }
+            }}
+          />
+        </div>
+
+        {/* Conditionally render the details container below the table */}
         {selectedRow && (
-          <div className={styles.detailBox}>
-            <h2>Details</h2>
-            <p><strong>Name:</strong> {selectedRow.col1}</p>        
-          {/* Add more fields if needed */}
+          <div className={styles.detailsContainer}>
+            <div className={styles.personalDetails}>
+              <h2>{selectedRow.col1}</h2>
+              <p><strong>Location:</strong> {selectedRow.location}</p>
+              <p><strong>Bio:</strong> {selectedRow.bio}</p>
+              <p><strong>Summary:</strong> {selectedRow.summary}</p>
+            </div>
+            
+            <div className={styles.companyDetails}>
+              <h2>Company info</h2>
+              <p><strong>Company:</strong> {selectedRow.col7}</p>
+              <p><strong>Headquarters: Athens</strong></p>
+              <p><strong>Size: 200</strong></p>
+              <p><strong>Year Founded: 2015</strong> </p>
+            </div>
           </div>
         )}
       </div>
