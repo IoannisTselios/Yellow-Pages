@@ -9,7 +9,7 @@ services:
     ports:
       - "80:8000" # Expose port 8000 to access the Django app in a browser
     env_file:
-      - .env.${ENV} # Load environment variables from the .env.dev file
+      - .env.prod # Load environment variables from the .env.dev file
     depends_on:
       - db # Ensure the database starts before the web service
 
