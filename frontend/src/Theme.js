@@ -23,7 +23,7 @@ const Theme = createTheme({
       styleOverrides: {
         root: {
           '&:hover': {
-            backgroundColor: 'rgba(253, 183, 62, 0.2)',  // Default color with 0.04 transparency
+            backgroundColor: 'rgba(253, 183, 62, 0.2)',  
           },
         },
       },

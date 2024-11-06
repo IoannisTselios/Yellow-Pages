@@ -33,7 +33,7 @@
     flex-direction: column;
     /* margin: 12px; */
     /* height: calc(100vh - 80px);  */
-    background-color: rgb(93, 122, 94);
+    /* background-color: rgb(93, 122, 94); */
 }
 
 .dataGridContainer {
@@ -72,4 +72,37 @@
 .companyDetails h2 {
     margin-bottom: 8px;
     color: #000000;
+}
+
+.drawerContainer{
+    margin: 12px;
+}
+
+.profile{
+    padding-bottom: 16px;
+}
+
+.connections{
+    padding-top: 16px;
+    padding-bottom: 16px;
+    display: flex;
+    gap: 12px;
+}
+
+.bioSummary{
+    padding-top: 16px;
+    padding-bottom: 16px;
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+}
+
+.currentPositions{
+    padding-top: 16px;
+    padding-bottom: 16px;
+}
+
+.pastPositions{
+    padding-top: 16px;
+    padding-bottom: 16px;
 }

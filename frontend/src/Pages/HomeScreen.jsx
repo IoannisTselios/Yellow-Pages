@@ -1,16 +1,26 @@
 import React, { useEffect, useState } from "react";
 import styles from './HomeScreen.module.css';
 import { Navigate, useNavigate } from 'react-router-dom';
-import { Button } from "@mui/material";
+import { Button, Chip, Divider, ListItemText } from "@mui/material";
+import Drawer from '@mui/material/Drawer';
 import IconButton from '@mui/material/IconButton';
 import Tooltip from '@mui/material/Tooltip';
 import ExitToAppRoundedIcon from '@mui/icons-material/ExitToAppRounded';
 import { DataGrid, GridRowsProp, GridColDef } from '@mui/x-data-grid';
 
+import Box from '@mui/material/Box';
+import List from '@mui/material/List';
+import ListItem from '@mui/material/ListItem';
+import ListItemButton from '@mui/material/ListItemButton';
+import ListItemIcon from '@mui/material/ListItemIcon';
+import InboxIcon from '@mui/icons-material/MoveToInbox';
+import MailIcon from '@mui/icons-material/Mail';
+
 export const HomeScreen = () => {
   const [redirect, setRedirect] = useState(false);
   const [loading, setLoading] = useState(true); // Loading state for conditional rendering
   const [selectedRow, setSelectedRow] = useState(null);
+  const [openDrawer, setOpenDrawer] = useState(false);
   const [name, setName] = useState('');
   const navigate = useNavigate();
 
@@ -249,9 +259,57 @@ export const HomeScreen = () => {
     { field: 'col7', headerName: 'Company', width: 150 },
     { field: 'col8', headerName: 'Industry', width: 150 },
   ];
+
+  const DrawerInfo = ({ selectedRow }) => (
+    <Box sx={{ width: 700, color: '#fff' }} role="presentation">
+      <div className={styles.drawerContainer}>
+
+        <div className={styles.profile}>
+          <h3 style={{ margin: 0 }}>{selectedRow.col1}</h3>
+          <p style={{ margin: 0 }}>{selectedRow.location}</p>
+          <a 
+            href={selectedRow.linkedinUrl} 
+            target="_blank" 
+            rel="noopener noreferrer" 
+            style={{ fontSize: '0.8em', color: '#B3B3B3' }}
+            >
+            LinkedIn Profile
+          </a>
+        </div>       
+
+        <Divider sx={{ bgcolor: '#404040' }}/>
+
+        <div className={styles.connections}>
+          <Chip label="Markus" variant="outlined" color="secondary"/>
+          <Chip label="Konstantina" variant="outlined" color="secondary"/>
+        </div>    
+
+        <Divider sx={{ bgcolor: '#404040' }}/>
+
+        <div className={styles.bioSummary}>
+            <p style={{ margin: 0 }}><strong>Bio:</strong> {selectedRow.bio}</p>
+            <p style={{ margin: 0 }}><strong>Summary:</strong> {selectedRow.summary}</p>
+        </div>
+
+        <Divider sx={{ bgcolor: '#404040' }}/>
+
+        <div className={styles.currentPositions}>
+          <h4 style={{ margin: 0 }}>Current Positions</h4>
+        </div>        
+
+        <Divider sx={{ bgcolor: '#404040' }}/>
+
+        <div className={styles.pastPositions}>
+          <h4 style={{ margin: 0 }}>Current Positions</h4>
+        </div> 
+
+      </div> 
+    </Box>
+  );
  
   const handleRowClick = (params) => {
     setSelectedRow(params.row); 
+    setOpenDrawer(true);
   };
 
   return (
@@ -263,8 +321,7 @@ export const HomeScreen = () => {
         </div>
         <Tooltip title="Logout" placement="left">
           <IconButton color="secondary" onClick={handleLogout}><ExitToAppRoundedIcon /></IconButton>
-        </Tooltip>
-         {/* <Button variant="outlined" color='secondary' size='small' onClick={handleLogout} endIcon={<ExitToAppRoundedIcon />}> Logout </Button> */}
+        </Tooltip>         
       </div>
       <div className={styles.underline}></div>
       {/* <button onClick={getData}>Get the connections</button> */}
@@ -286,7 +343,7 @@ export const HomeScreen = () => {
           />
         </div>
 
-        {/* Conditionally render the details container below the table */}
+        {/* Conditionally render the details container below the table
         {selectedRow && (
           <div className={styles.detailsContainer}>
             <div className={styles.personalDetails}>
@@ -304,7 +361,22 @@ export const HomeScreen = () => {
               <p><strong>Year Founded: 2015</strong> </p>
             </div>
           </div>
-        )}
+        )} */}
+
+      </div>
+      <div>      
+        <Drawer 
+          open={openDrawer} 
+          onClose={() => setOpenDrawer(false)} 
+          anchor={'right'}
+          sx={{ 
+            "& .MuiDrawer-paper": { 
+              backgroundColor: "#181818" 
+            }
+          }}
+        >
+          <DrawerInfo selectedRow={selectedRow} />
+        </Drawer>
       </div>
     </div>
   );
