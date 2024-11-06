@@ -2,12 +2,13 @@ import { createTheme } from '@mui/material/styles';
 
 const Theme = createTheme({
   palette: {
-    primary: {
-      main: '#000000',  // Primary color for buttons (black in this case)
-      dark: '#fdb73e',  // Dark version of your primary color
+    mode: 'dark',
+    primary: {      
+      main: '#fdb73e',  // Primary color for buttons (black in this case)
+      dark: '#00FF00',  // Dark version of your primary color
     },
     secondary: {
-      main: '#fdb73e', // Secondary color 
+      main: '#FF0000', // Secondary color 00FF00
     },
   },
   components: {

@@ -7,7 +7,6 @@ import IconButton from '@mui/material/IconButton';
 import Tooltip from '@mui/material/Tooltip';
 import ExitToAppRoundedIcon from '@mui/icons-material/ExitToAppRounded';
 import { DataGrid, GridRowsProp, GridColDef } from '@mui/x-data-grid';
-
 import Box from '@mui/material/Box';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
@@ -270,8 +269,9 @@ export const HomeScreen = () => {
         </div>
       ),
     },
+    { field: 'location', headerName: 'Location', width: 150 },
     { field: 'col2', headerName: 'Connections', width: 150 },
-    { field: 'col3', headerName: 'Connection Strength', width: 150 }, 
+    { field: 'col3', headerName: 'Connection Strength', width: 120 }, 
     { field: 'col4', headerName: 'Position', width: 150 },
     { field: 'col5', headerName: 'Function', width: 150 },
     { field: 'col6', headerName: 'Seniority', width: 150 },
@@ -306,8 +306,14 @@ export const HomeScreen = () => {
         <Divider sx={{ bgcolor: '#404040' }}/>
 
         <div className={styles.bioSummary}>
-            <p style={{ margin: 0 }}><strong>Bio:</strong> {selectedRow.bio}</p>
-            <p style={{ margin: 0 }}><strong>Summary:</strong> {selectedRow.summary}</p>
+          <div style={{ flex: 1 }}>
+            <h4 style={{ margin: 0 }}>Bio</h4>
+            <p style={{ margin: 0, paddingTop: 5 }}>{selectedRow.bio}</p>
+          </div>
+          <div style={{ flex: 1 }}>
+            <h4 style={{ margin: 0 }}>Summary</h4>
+            <p style={{ margin: 0, paddingTop: 5 }}>{selectedRow.summary}</p>
+          </div>
         </div>
 
         <Divider sx={{ bgcolor: '#404040' }}/>
@@ -468,16 +474,28 @@ export const HomeScreen = () => {
 
         <div className={styles.dataGridContainer}>
           <DataGrid 
-            style={{ borderRadius: '10px'}} 
+            style={{ borderRadius: '10px'}} //, background: '#fff'
             rows={rows} 
             columns={columns} 
             checkboxSelection 
             disableRowSelectionOnClick
+            disableSelectionOnClick
             getRowHeight={() => 'auto'}
             onRowClick={handleRowClick}
             sx={{
               "& .MuiDataGrid-columnHeaderTitle": {
                 fontWeight: 'bold',
+                whiteSpace: "normal", // Allows text to wrap
+                lineHeight: 1.2,
+              },
+              "& .MuiDataGrid-columnHeader": {
+                height: "auto",        // Allows the header row height to adjust automatically
+              },
+              "& .MuiDataGrid-cell:focus": {
+                outline: "none", // Removes the border outline when a cell is focused
+              },
+              "& .MuiDataGrid-cell:focus-within": {
+                outline: "none", // Removes the border outline when a cell is clicked or focused
               }
             }}
           />
