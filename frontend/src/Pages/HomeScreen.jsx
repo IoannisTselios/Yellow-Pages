@@ -1,19 +1,19 @@
 import React, { useEffect, useState } from "react";
 import styles from './HomeScreen.module.css';
+import DrawerInfo from '../Components/DrawerInfo'; 
+
 import { Navigate, useNavigate } from 'react-router-dom';
-import { Button, Chip, Divider, ListItemText } from "@mui/material";
-import Drawer from '@mui/material/Drawer';
-import IconButton from '@mui/material/IconButton';
-import Tooltip from '@mui/material/Tooltip';
-import ExitToAppRoundedIcon from '@mui/icons-material/ExitToAppRounded';
 import { DataGrid, GridRowsProp, GridColDef } from '@mui/x-data-grid';
-import Box from '@mui/material/Box';
+
+import { Box, Drawer, IconButton, Tooltip } from '@mui/material';
+
+import ExitToAppRoundedIcon from '@mui/icons-material/ExitToAppRounded'; 
+import PersonIcon from '@mui/icons-material/Person';
+import BusinessIcon from '@mui/icons-material/Business';
+import HubIcon from '@mui/icons-material/Hub'; 
 
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
-import PersonIcon from '@mui/icons-material/Person';
-import BusinessIcon from '@mui/icons-material/Business';
-import HubIcon from '@mui/icons-material/Hub';
 
 import Autocomplete from '@mui/material/Autocomplete';
 import TextField from '@mui/material/TextField';
@@ -272,60 +272,7 @@ export const HomeScreen = () => {
     { field: 'col7', headerName: 'Company', width: 150 },
     { field: 'col8', headerName: 'Industry', width: 150 },
   ];
-
-  const DrawerInfo = ({ selectedRow }) => (
-    <Box sx={{ width: 700, color: '#fff' }} role="presentation">
-      <div className={styles.drawerContainer}>
-
-        <div className={styles.profile}>
-          <h3 style={{ margin: 0 }}>{selectedRow.col1}</h3>
-          <p style={{ margin: 0 }}>{selectedRow.location}</p>
-          <a 
-            href={selectedRow.linkedinUrl} 
-            target="_blank" 
-            rel="noopener noreferrer" 
-            style={{ fontSize: '0.8em', color: '#B3B3B3' }}
-            >
-            LinkedIn Profile
-          </a>
-        </div>       
-
-        <Divider sx={{ bgcolor: '#404040' }}/>
-
-        <div className={styles.connections}>
-          <Chip label="Markus" variant="outlined" color="secondary"/>
-          <Chip label="Konstantina" variant="outlined" color="secondary"/>
-        </div>    
-
-        <Divider sx={{ bgcolor: '#404040' }}/>
-
-        <div className={styles.bioSummary}>
-          <div style={{ flex: 1 }}>
-            <h4 style={{ margin: 0 }}>Bio</h4>
-            <p style={{ margin: 0, paddingTop: 5 }}>{selectedRow.bio}</p>
-          </div>
-          <div style={{ flex: 1 }}>
-            <h4 style={{ margin: 0 }}>Summary</h4>
-            <p style={{ margin: 0, paddingTop: 5 }}>{selectedRow.summary}</p>
-          </div>
-        </div>
-
-        <Divider sx={{ bgcolor: '#404040' }}/>
-
-        <div className={styles.currentPositions}>
-          <h4 style={{ margin: 0 }}>Current Positions</h4>
-        </div>        
-
-        <Divider sx={{ bgcolor: '#404040' }}/>
-
-        <div className={styles.pastPositions}>
-          <h4 style={{ margin: 0 }}>Current Positions</h4>
-        </div> 
-
-      </div> 
-    </Box>
-  );
- 
+  
   const handleRowClick = (params) => {
     setSelectedRow(params.row); 
     setOpenDrawer(true);
