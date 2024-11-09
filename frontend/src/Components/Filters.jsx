@@ -14,150 +14,154 @@ import TextField from '@mui/material/TextField';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Switch from '@mui/material/Switch';
 
+import { useFilters } from "../Components/FiltersContext";
+
 export const Filters = () => {
-    // Controlling the tabs for the filters
-    const [value, setValue] = useState(0);
-    const handleChange = (event, newValue) => {
-      setValue(newValue);
-    }; 
+  const { filterValues, updateFilterValues } = useFilters();
 
-    // Autocomplete inputs
-    const [selectedPosition, setSelectedPosition] = useState([]);
-    const [selectedFunction, setSelectedFunction] = useState([]);
-    const [selectedSeniority, setSelectedSeniority] = useState([]);
-    const [selectedIndustry, setSelectedIndustry] = useState([]);
+  // Controlling the tabs for the filters
+  const [value, setValue] = useState(0);
+  const handleChange = (event, newValue) => {
+    setValue(newValue);
+  }; 
 
-    // Switch inputs
-    const [includePastFunction, setIncludePastFunction] = useState(false);
-    const [includePastIndustry, setIncludePastIndustry] = useState(false);
+  // // Autocomplete inputs
+  // const [selectedPosition, setSelectedPosition] = useState([]);
+  // const [selectedFunction, setSelectedFunction] = useState([]);
+  // const [selectedSeniority, setSelectedSeniority] = useState([]);
+  // const [selectedIndustry, setSelectedIndustry] = useState([]);
 
-    function CustomTabPanel(props) {
-        const { children, value, index, ...other } = props;
+  // // Switch inputs
+  // const [includePastFunction, setIncludePastFunction] = useState(false);
+  // const [includePastIndustry, setIncludePastIndustry] = useState(false);
 
-        return (
-        <div
-            role="tabpanel"
-            hidden={value !== index}
-            id={`simple-tabpanel-${index}`}
-            aria-labelledby={`simple-tab-${index}`}
-            {...other}
-        >
-            {value === index && <Box sx={{ padding: '16px' }}>{children}</Box>}
-        </div>
-        );
-    }
+  function CustomTabPanel(props) {
+      const { children, value, index, ...other } = props;
 
-    return (
-        <Box sx={{ width: '100%' }}>
-            <Box sx={{ borderBottom: 1, borderColor: 'divider'}}>
-              <Tabs
-                value={value}
-                onChange={handleChange}
-                aria-label="icon tabs"
-                sx={{ minHeight: '48px'}}
-              >
-                <Tab icon={<PersonIcon />} iconPosition="start" label="Person" sx={{ minHeight: '48px', paddingTop: '0px', paddingBottom: '0px', textTransform: 'none',
-                  //  "&.Mui-selected": { color: "#ff0000", },
-                }}/>
-                <Tab icon={<BusinessIcon />} iconPosition="start" label="Company" sx={{ minHeight: '48px', paddingTop: '0px', paddingBottom: '0px', textTransform: 'none',}}/>
-                <Tab icon={<HubIcon />} iconPosition="start" label="General" sx={{ minHeight: '48px', paddingTop: '0px', paddingBottom: '0px', textTransform: 'none',}}/>
-              </Tabs>
-            </Box>
-            <CustomTabPanel value={value} index={0}>
-              <Autocomplete
-                multiple
-                options={top100Films}
-                getOptionLabel={(option) => option.title}
-                // defaultValue={[top100Films[13]]}
-                // filterSelectedOptions
-                value={selectedPosition}
-                onChange={(event, value) => setSelectedPosition(value)}  // Update state on change
-                style={{ display: 'inline-block', width: '250px', marginRight: '12px' }}
-                renderInput={(params) => (
-                  <TextField
-                    {...params}
-                    label="Position"
-                    // placeholder="Favorites"
-                  />
-                )}
-              />
-              <Autocomplete
-                multiple
-                options={top100Films}
-                getOptionLabel={(option) => option.title}
-                value={selectedFunction}
-                onChange={(event, value) => setSelectedFunction(value)}
-                style={{ display: 'inline-block', width: '250px'}}
-                renderInput={(params) => (
-                  <TextField
-                    {...params}
-                    label="Function"
-                  />
-                )}
-              />
-              <FormControlLabel
-                value="bottom"
-                control={
-                  <Switch 
-                    color="primary"
-                    checked={includePastFunction} // Bind the switch to state
-                    onChange={(event) => setIncludePastFunction(event.target.checked) } // Update state on toggle 
-                  />
-                }
-                label="Include past"
-                labelPlacement="top"
-                sx={{ verticalAlign: 'top'}}
-              />
-              <Autocomplete
-                multiple
-                options={top100Films}
-                getOptionLabel={(option) => option.title}
-                value={selectedSeniority}
-                onChange={(event, value) => setSelectedSeniority(value)}
-                style={{ display: 'inline-block', width: '250px', marginRight: '12px' }}
-                renderInput={(params) => (
-                  <TextField
-                    {...params}
-                    label="Seniority"
-                  />
-                )}
-              />
-              <Autocomplete
-                multiple
-                options={top100Films}
-                getOptionLabel={(option) => option.title}
-                value={selectedIndustry}
-                onChange={(event, value) => setSelectedIndustry(value)}
-                style={{ display: 'inline-block', width: '250px' }}
-                renderInput={(params) => (
-                  <TextField
-                    {...params}
-                    label="Industry"
-                  />
-                )}
-              />
-              <FormControlLabel
-                value="bottom"
-                control={
-                  <Switch 
-                    color="primary" 
-                    checked={includePastIndustry} // Bind the switch to state
-                    onChange={(event) => setIncludePastIndustry(event.target.checked) } // Update state on toggle 
-                  />
-                }
-                label="Include past"
-                labelPlacement="top"
-                sx={{ verticalAlign: 'top'}}
-              />
-            </CustomTabPanel>
-            <CustomTabPanel value={value} index={1}>
-              Item Two
-            </CustomTabPanel>
-            <CustomTabPanel value={value} index={2}>
-              Item Three
-            </CustomTabPanel>
-        </Box>
-    );
+      return (
+      <div
+          role="tabpanel"
+          hidden={value !== index}
+          id={`simple-tabpanel-${index}`}
+          aria-labelledby={`simple-tab-${index}`}
+          {...other}
+      >
+          {value === index && <Box sx={{ padding: '16px' }}>{children}</Box>}
+      </div>
+      );
+  }
+
+  return (
+      <Box sx={{ width: '100%' }}>
+          <Box sx={{ borderBottom: 1, borderColor: 'divider'}}>
+            <Tabs
+              value={value}
+              onChange={handleChange}
+              aria-label="icon tabs"
+              sx={{ minHeight: '48px'}}
+            >
+              <Tab icon={<PersonIcon />} iconPosition="start" label="Person" sx={{ minHeight: '48px', paddingTop: '0px', paddingBottom: '0px', textTransform: 'none',
+                //  "&.Mui-selected": { color: "#ff0000", },
+              }}/>
+              <Tab icon={<BusinessIcon />} iconPosition="start" label="Company" sx={{ minHeight: '48px', paddingTop: '0px', paddingBottom: '0px', textTransform: 'none',}}/>
+              <Tab icon={<HubIcon />} iconPosition="start" label="General" sx={{ minHeight: '48px', paddingTop: '0px', paddingBottom: '0px', textTransform: 'none',}}/>
+            </Tabs>
+          </Box>
+          <CustomTabPanel value={value} index={0}>
+            <Autocomplete
+              multiple
+              options={top100Films}
+              getOptionLabel={(option) => option.title}
+              // defaultValue={[top100Films[13]]}
+              // filterSelectedOptions
+              value={filterValues.selectedPosition}
+              onChange={(event, value) => updateFilterValues('selectedPosition', value)}  // Update state on change
+              style={{ display: 'inline-block', width: '250px', marginRight: '12px' }}
+              renderInput={(params) => (
+                <TextField
+                  {...params}
+                  label="Position"
+                  // placeholder="Favorites"
+                />
+              )}
+            />
+            {/* <Autocomplete
+              multiple
+              options={top100Films}
+              getOptionLabel={(option) => option.title}
+              value={selectedFunction}
+              onChange={(event, value) => setSelectedFunction(value)}
+              style={{ display: 'inline-block', width: '250px'}}
+              renderInput={(params) => (
+                <TextField
+                  {...params}
+                  label="Function"
+                />
+              )}
+            /> */}
+            <FormControlLabel
+              value="bottom"
+              control={
+                <Switch 
+                  color="primary"
+                  checked={filterValues.includePastFunction} // Bind the switch to state
+                  onChange={(event) => updateFilterValues('includePastFunction', !filterValues.includePastFunction) } // Update state on toggle 
+                />
+              }
+              label="Include past"
+              labelPlacement="top"
+              sx={{ verticalAlign: 'top'}}
+            />
+            {/* <Autocomplete
+              multiple
+              options={top100Films}
+              getOptionLabel={(option) => option.title}
+              value={selectedSeniority}
+              onChange={(event, value) => setSelectedSeniority(value)}
+              style={{ display: 'inline-block', width: '250px', marginRight: '12px' }}
+              renderInput={(params) => (
+                <TextField
+                  {...params}
+                  label="Seniority"
+                />
+              )}
+            />
+            <Autocomplete
+              multiple
+              options={top100Films}
+              getOptionLabel={(option) => option.title}
+              value={selectedIndustry}
+              onChange={(event, value) => setSelectedIndustry(value)}
+              style={{ display: 'inline-block', width: '250px' }}
+              renderInput={(params) => (
+                <TextField
+                  {...params}
+                  label="Industry"
+                />
+              )}
+            />
+            <FormControlLabel
+              value="bottom"
+              control={
+                <Switch 
+                  color="primary" 
+                  checked={includePastIndustry} // Bind the switch to state
+                  onChange={(event) => setIncludePastIndustry(event.target.checked) } // Update state on toggle 
+                />
+              }
+              label="Include past"
+              labelPlacement="top"
+              sx={{ verticalAlign: 'top'}}
+            /> */}
+          </CustomTabPanel>
+          <CustomTabPanel value={value} index={1}>
+            Item Two
+          </CustomTabPanel>
+          <CustomTabPanel value={value} index={2}>
+            Item Three
+          </CustomTabPanel>
+      </Box>
+  );
 }
 
 const top100Films = [

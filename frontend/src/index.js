@@ -5,12 +5,15 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { ThemeProvider } from '@mui/material/styles';
 import Theme from './Theme'; 
+import { FiltersProvider } from './Components/FiltersContext';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-    <ThemeProvider theme={Theme}>  
-      <App />
+    <ThemeProvider theme={Theme}> 
+      <FiltersProvider>
+        <App />
+      </FiltersProvider>
     </ThemeProvider>
   </React.StrictMode>
 );

@@ -11,6 +11,8 @@ import ExitToAppRoundedIcon from '@mui/icons-material/ExitToAppRounded';
 import Button from '@mui/material/Button';
 
 import { Filters } from "../Components/Filters";
+import { useFilters } from "../Components/FiltersContext";
+import { FiltersProvider } from '../Components/FiltersContext';
 
 export const HomeScreen = () => {
   const [redirect, setRedirect] = useState(false);
@@ -19,6 +21,8 @@ export const HomeScreen = () => {
   const [openDrawer, setOpenDrawer] = useState(false);
   const [name, setName] = useState('');
   const navigate = useNavigate();
+
+  const { filterValues } = useFilters();
 
   useEffect(() => {
     (async () => {
@@ -80,7 +84,13 @@ export const HomeScreen = () => {
 
   const getData = async () => {
     try {
-      const response = await fetch('http://localhost:8000/api/get_connection_list/');
+      const response = await fetch('http://localhost:8000/api/get_connection_list/', {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        credentials: 'include',
+      });
+
       if (!response.ok) {
         throw new Error('Data fetch failed');
       }
@@ -263,9 +273,9 @@ export const HomeScreen = () => {
         </Tooltip>         
       </div>
       <div className={styles.underline}></div>
-      {/* <button onClick={getData}>Get the connections</button> */}
+      <button onClick={getData}>Get the connections</button>
       <div className={styles.mainContent}>
-        <Button style={{margin: '10px', width: '100px', backgroundColor: 'yellow', color: 'black', alignSelf: 'end'}} onClick={() => { console.log('Submitted'); }}>Search</Button>
+        <Button style={{margin: '10px', width: '100px', backgroundColor: 'yellow', color: 'black', alignSelf: 'end'}} onClick={() => { console.log('Submitted', filterValues); }}>Search</Button>
         <div className={styles.filtersContainer}>
           <Filters></Filters>
         </div>
