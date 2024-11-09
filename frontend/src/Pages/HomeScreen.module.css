@@ -1,0 +1,62 @@
+.header {
+    display: flex;
+    justify-content: space-between;
+    padding: 12px;
+}
+
+.logoWrapper {
+    display: flex;
+    align-items: center;
+}
+
+.logoWrapper img {
+    height: 36px;
+    padding-right: 8px;
+}
+
+.text {
+    color: #fdb73e;
+    font-size: 1.2rem;
+    font-weight: 300;
+}
+
+.underline {
+    margin-left: 12px;
+    margin-right: 12px;
+    height: 1px;
+    background: #fdb73e;
+    border-radius: 9px;
+}
+
+.mainContent {
+    display: flex;
+    flex-direction: column;
+    /* margin: 12px; */
+    /* height: calc(100vh - 80px);  */
+    /* background-color: rgb(93, 122, 94); */
+}
+
+.dataGridContainer {
+    flex: 2; /* 2/3 height for the DataGrid */
+    margin: 12px;
+    /* background-color: red;  */
+}
+
+.detailsContainer {
+    flex: 1; /* 1/3 height for the details container */
+    /* display: flex;
+    justify-content: space-between;
+    gap: 12px; */
+    border-radius: 10px;
+    margin-top: 12px;
+    margin-right: 12px;
+    margin-left: 12px;
+    background-color: white; 
+    /* color: #000000; */
+}
+
+.personalDetails h2,
+.companyDetails h2 {
+    margin-bottom: 8px;
+    color: #000000;
+}

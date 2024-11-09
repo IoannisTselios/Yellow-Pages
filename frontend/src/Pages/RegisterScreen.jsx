@@ -200,7 +200,7 @@ export const RegisterScreen = () => {
               />
             </div>
             <div className={styles.submitContainer}> 
-              <Button type='submit' variant="contained" color='primary' size='large'>Register</Button>
+              <Button type='submit' variant="contained" color='primary' size='large'>REGISTER</Button>
             </div>
           </form>
 
