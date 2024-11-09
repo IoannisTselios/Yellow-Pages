@@ -289,7 +289,7 @@ export const HomeScreen = () => {
         aria-labelledby={`simple-tab-${index}`}
         {...other}
       >
-        {value === index && <Box sx={{ padding: '16px' }}>{children}</Box>}
+        {value === index && <Box sx={{ padding: '16px', bgcolor: "black" }}>{children}</Box>}
       </div>
     );
   }
@@ -308,9 +308,10 @@ export const HomeScreen = () => {
       <div className={styles.underline}></div>
       {/* <button onClick={getData}>Get the connections</button> */}
       <div className={styles.mainContent}>
-        <div className={styles.detailsContainer}>
-          <Box sx={{ width: '100%' }}>
-            <Box sx={{ borderBottom: 1, borderColor: 'divider'}}>
+
+        <div className={styles.filtersContainer}>
+          <Box sx={{ width: '100%', borderRadius: '10px' }}>
+            <Box sx={{ borderBottom: 1, borderColor: '#515151'}}>
               <Tabs
                 value={value}
                 onChange={handleChange}
