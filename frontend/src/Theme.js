@@ -5,7 +5,7 @@ const Theme = createTheme({
     mode: 'dark',
     primary: {      
       main: '#fff',  // Primary color for buttons (black in this case)
-      dark: '#00FF00',  // Dark version of your primary color
+      dark: '#fdb73e',  // Dark version of your primary color
     },
     secondary: {
       main: '#fdb73e', // Secondary color 00FF00
