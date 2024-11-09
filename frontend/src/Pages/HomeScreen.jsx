@@ -3,22 +3,11 @@ import styles from './HomeScreen.module.css';
 import DrawerInfo from '../Components/DrawerInfo'; 
 
 import { Navigate, useNavigate } from 'react-router-dom';
-import { DataGrid, GridRowsProp, GridColDef } from '@mui/x-data-grid';
+import { DataGrid } from '@mui/x-data-grid';
 
-import { Box, Drawer, IconButton, Tooltip } from '@mui/material';
+import { Drawer, IconButton, Tooltip } from '@mui/material';
 
 import ExitToAppRoundedIcon from '@mui/icons-material/ExitToAppRounded'; 
-import PersonIcon from '@mui/icons-material/Person';
-import BusinessIcon from '@mui/icons-material/Business';
-import HubIcon from '@mui/icons-material/Hub'; 
-
-import Tabs from '@mui/material/Tabs';
-import Tab from '@mui/material/Tab';
-
-import Autocomplete from '@mui/material/Autocomplete';
-import TextField from '@mui/material/TextField';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Switch from '@mui/material/Switch';
 import Button from '@mui/material/Button';
 
 import { Filters } from "../Components/Filters";
@@ -30,11 +19,6 @@ export const HomeScreen = () => {
   const [openDrawer, setOpenDrawer] = useState(false);
   const [name, setName] = useState('');
   const navigate = useNavigate();
-
-  const [inputValue, setInputValue] = useState('');
-
-  const [includePastFunction, setIncludePastFunction] = useState(false);
-
 
   useEffect(() => {
     (async () => {
