@@ -148,11 +148,99 @@ export const Filters = () => {
               sx={{ verticalAlign: 'top'}}
             />
           </CustomTabPanel>
+
           <CustomTabPanel value={value} index={1}>
-            Item Two
+            <Autocomplete
+              multiple
+              limitTags={2}
+              options={top100Films}
+              getOptionLabel={(option) => option.title}
+              value={filterValues.selectedCompanyName}
+              onChange={(event, value) => updateFilterValues('selectedCompanyName', value)}  // Update state on change
+              style={{ display: 'inline-block', width: '250px', marginRight: '12px' }}
+              renderInput={(params) => (
+                <TextField
+                  {...params}
+                  label="Name"
+                />
+              )}
+            />
+            <Autocomplete
+              multiple
+              limitTags={2}
+              options={top100Films}
+              getOptionLabel={(option) => option.title}
+              value={filterValues.selectedCompanyIndustry}
+              onChange={(event, value) => updateFilterValues('selectedCompanyIndustry', value)}
+              style={{ display: 'inline-block', width: '250px'}}
+              renderInput={(params) => (
+                <TextField
+                  {...params}
+                  label="Industry"
+                />
+              )}
+            />
+            <FormControlLabel
+              value="bottom"
+              control={
+                <Switch 
+                  color="primary"
+                  checked={filterValues.includePastFunction} // Bind the switch to state
+                  onChange={(event) => updateFilterValues('includePastFunction', !filterValues.includePastFunction) } // Update state on toggle 
+                />
+              }
+              label="Include past"
+              labelPlacement="top"
+              sx={{ verticalAlign: 'top'}}
+            />
+            <Autocomplete
+              multiple
+              limitTags={2}
+              options={top100Films}
+              getOptionLabel={(option) => option.title}
+              value={filterValues.selectedCompanyHeadquarters}
+              onChange={(event, value) => updateFilterValues('selectedCompanyHeadquarters', value)}
+              style={{ display: 'inline-block', width: '250px'}}
+              renderInput={(params) => (
+                <TextField
+                  {...params}
+                  label="Headquarters"
+                />
+              )}
+            />
           </CustomTabPanel>
+
           <CustomTabPanel value={value} index={2}>
-            Item Three
+            <Autocomplete
+              multiple
+              limitTags={2}
+              options={top100Films}
+              getOptionLabel={(option) => option.title}
+              value={filterValues.selectedKeyword}
+              onChange={(event, value) => updateFilterValues('selectedKeyword', value)}
+              style={{ display: 'inline-block', width: '250px', marginRight: '12px'}}
+              renderInput={(params) => (
+                <TextField
+                  {...params}
+                  label="Keyword"
+                />
+              )}
+            />
+            <Autocomplete
+              multiple
+              limitTags={2}
+              options={top100Films}
+              getOptionLabel={(option) => option.title}
+              value={filterValues.selectedConnections}
+              onChange={(event, value) => updateFilterValues('selectedConnections', value)}
+              style={{ display: 'inline-block', width: '250px'}}
+              renderInput={(params) => (
+                <TextField
+                  {...params}
+                  label="Connections"
+                />
+              )}
+            />
           </CustomTabPanel>
       </Box>
   );

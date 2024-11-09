@@ -9,8 +9,14 @@ export const FiltersProvider = ({ children }) => {
     selectedSeniority: [],
     selectedIndustry: [],
     includePastFunction: false,
-    includePastIndustry: false
-    // Add other values...
+    includePastIndustry: false,
+
+    selectedCompanyName: '',
+    selectedCompanyIndustry: [],
+    selectedCompanyHeadquarters: [],
+
+    selectedKeyword: '',
+    selectedConnections: []
   });
 
   const updateFilterValues = (key, value) => {
