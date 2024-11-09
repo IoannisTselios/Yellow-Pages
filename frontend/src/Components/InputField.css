@@ -7,6 +7,12 @@
     gap: 25px;
 }
 
+input:-webkit-autofill {
+    background-color: #121212 !important;
+    color: #000000 !important;
+    box-shadow: 0 0 0px 1000px #121212 inset !important; 
+  }
+
 /* .inputContainer{
     display: flex;
     align-items: center;

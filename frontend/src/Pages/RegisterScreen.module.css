@@ -37,9 +37,12 @@
     flex-direction: column;
     max-width: 800px;                 
     width: 100%;
-    background: #dfe0df;
+    background: #121212;
     padding-bottom: 2rem;             
     border-radius: 10px;
+    /* border-style: solid;
+    border-color: #515151;
+    border-width: 1px; */
 }
 
 .header {
@@ -90,7 +93,7 @@
 }
 
 a {
-    color: #000;
+    color: #ffffff;
 }
 
 a:hover {
