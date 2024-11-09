@@ -25,16 +25,6 @@ export const Filters = () => {
     setValue(newValue);
   }; 
 
-  // // Autocomplete inputs
-  // const [selectedPosition, setSelectedPosition] = useState([]);
-  // const [selectedFunction, setSelectedFunction] = useState([]);
-  // const [selectedSeniority, setSelectedSeniority] = useState([]);
-  // const [selectedIndustry, setSelectedIndustry] = useState([]);
-
-  // // Switch inputs
-  // const [includePastFunction, setIncludePastFunction] = useState(false);
-  // const [includePastIndustry, setIncludePastIndustry] = useState(false);
-
   function CustomTabPanel(props) {
       const { children, value, index, ...other } = props;
 
@@ -70,6 +60,7 @@ export const Filters = () => {
           <CustomTabPanel value={value} index={0}>
             <Autocomplete
               multiple
+              limitTags={2}
               options={top100Films}
               getOptionLabel={(option) => option.title}
               // defaultValue={[top100Films[13]]}
@@ -85,12 +76,13 @@ export const Filters = () => {
                 />
               )}
             />
-            {/* <Autocomplete
+            <Autocomplete
               multiple
+              limitTags={2}
               options={top100Films}
               getOptionLabel={(option) => option.title}
-              value={selectedFunction}
-              onChange={(event, value) => setSelectedFunction(value)}
+              value={filterValues.selectedFunction}
+              onChange={(event, value) => updateFilterValues('selectedFunction', value)}
               style={{ display: 'inline-block', width: '250px'}}
               renderInput={(params) => (
                 <TextField
@@ -98,7 +90,7 @@ export const Filters = () => {
                   label="Function"
                 />
               )}
-            /> */}
+            />
             <FormControlLabel
               value="bottom"
               control={
@@ -112,12 +104,13 @@ export const Filters = () => {
               labelPlacement="top"
               sx={{ verticalAlign: 'top'}}
             />
-            {/* <Autocomplete
+            <Autocomplete
               multiple
+              limitTags={2}
               options={top100Films}
               getOptionLabel={(option) => option.title}
-              value={selectedSeniority}
-              onChange={(event, value) => setSelectedSeniority(value)}
+              value={filterValues.selectedSeniority}
+              onChange={(event, value) => updateFilterValues('selectedSeniority', value)}
               style={{ display: 'inline-block', width: '250px', marginRight: '12px' }}
               renderInput={(params) => (
                 <TextField
@@ -128,10 +121,11 @@ export const Filters = () => {
             />
             <Autocomplete
               multiple
+              limitTags={2}
               options={top100Films}
               getOptionLabel={(option) => option.title}
-              value={selectedIndustry}
-              onChange={(event, value) => setSelectedIndustry(value)}
+              value={filterValues.selectedIndustry}
+              onChange={(event, value) => updateFilterValues('selectedIndustry', value)}
               style={{ display: 'inline-block', width: '250px' }}
               renderInput={(params) => (
                 <TextField
@@ -145,14 +139,14 @@ export const Filters = () => {
               control={
                 <Switch 
                   color="primary" 
-                  checked={includePastIndustry} // Bind the switch to state
-                  onChange={(event) => setIncludePastIndustry(event.target.checked) } // Update state on toggle 
+                  checked={filterValues.includePastIndustry} // Bind the switch to state
+                  onChange={(event) => updateFilterValues('includePastIndustry', !filterValues.includePastIndustry) } // Update state on toggle 
                 />
               }
               label="Include past"
               labelPlacement="top"
               sx={{ verticalAlign: 'top'}}
-            /> */}
+            />
           </CustomTabPanel>
           <CustomTabPanel value={value} index={1}>
             Item Two
