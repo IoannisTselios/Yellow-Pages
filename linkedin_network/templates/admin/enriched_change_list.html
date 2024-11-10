@@ -1,0 +1,24 @@
+{# templates/admin/enriched_change_list.html #}
+{% extends "admin/change_list.html" %}
+
+<!-- Debugging output to check app name -->
+
+
+{% block object-tools-items %}
+<li>
+    {% if opts.app_label == 'companies' %}
+    <a href="{% url 'admin:upload-csv-companies' %}" class="addlink">
+        Bulk import
+    </a>
+    {% elif opts.app_label == 'connections' %}
+    <a href="{% url 'admin:upload-csv-connections' %}" class="addlink">
+        Bulk import
+    </a>
+    {% elif opts.app_label == 'roles' %}
+    <a href="{% url 'admin:upload-csv-roles' %}" class="addlink">
+        Bulk import
+    </a>
+    {% endif %}
+</li>
+{{ block.super }}
+{% endblock %}
