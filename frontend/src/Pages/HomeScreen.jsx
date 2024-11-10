@@ -3,7 +3,7 @@ import styles from './HomeScreen.module.css';
 import DrawerInfo from '../Components/DrawerInfo'; 
 
 import { Navigate, useNavigate } from 'react-router-dom';
-import { DataGrid } from '@mui/x-data-grid';
+import { DataGrid, GridToolbar } from '@mui/x-data-grid';
 
 import { Drawer, IconButton, Tooltip } from '@mui/material';
 
@@ -281,29 +281,38 @@ export const HomeScreen = () => {
 
         <div className={styles.dataGridContainer}>
           <DataGrid 
-            style={{ borderRadius: '10px'}} //, background: '#fff'
+            style={{ borderRadius: '10px'}} 
             rows={rows} 
             columns={columns} 
             checkboxSelection 
             disableRowSelectionOnClick
             disableSelectionOnClick
+            disableDensitySelector
             getRowHeight={() => 'auto'}
             onRowClick={handleRowClick}
+            slots={{ toolbar: GridToolbar }}
+            slotProps={{
+              toolbar: {
+                printOptions: { disableToolbarButton: true }                
+              }
+            }}
             sx={{
               "& .MuiDataGrid-columnHeaderTitle": {
                 fontWeight: 'bold',
-                whiteSpace: "normal", // Allows text to wrap
+                whiteSpace: "normal",
                 lineHeight: 1.2,
               },
               "& .MuiDataGrid-columnHeader": {
-                height: "auto",        // Allows the header row height to adjust automatically
+                height: "auto",
               },
-              "& .MuiDataGrid-cell:focus": {
-                outline: "none", // Removes the border outline when a cell is focused
+              "& .MuiDataGrid-cell:focus, .MuiDataGrid-cell:focus-within": {
+                outline: "none",
               },
-              "& .MuiDataGrid-cell:focus-within": {
-                outline: "none", // Removes the border outline when a cell is clicked or focused
-              }
+              // "& .MuiDataGrid-toolbarContainer": {
+              //   display: "flex !important", // Ensure flexbox is applied
+              //   justifyContent: "flex-end !important", // Align toolbar to the right
+              //   width: "100% !important", // Make sure the toolbar container spans the full width
+              // },
             }}
           />
         </div>
