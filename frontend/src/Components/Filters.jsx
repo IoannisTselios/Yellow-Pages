@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
+import styles from './Filters.module.css';
 
-import { Box, Drawer, IconButton, Tooltip } from '@mui/material';
+import { Box, Button, Drawer, IconButton, Tooltip } from '@mui/material';
 
 import PersonIcon from '@mui/icons-material/Person';
 import BusinessIcon from '@mui/icons-material/Business';
@@ -43,7 +44,15 @@ export const Filters = () => {
 
   return (
       <Box sx={{ width: '100%' }}>
-          <Box sx={{ borderBottom: 1, borderColor: 'divider'}}>
+        <Box className={styles.tabsContainer}>
+          <Tabs value={value} onChange={handleChange} aria-label="icon tabs" /*sx={{ minHeight: '48px', flexGrow: 1 }} */>
+            <Tab icon={<PersonIcon />} iconPosition="start" label="Person" className={styles.tab} />
+            <Tab icon={<BusinessIcon />} iconPosition="start" label="Company" className={styles.tab}/>
+            <Tab icon={<HubIcon />} iconPosition="start" label="General" className={styles.tab} />
+          </Tabs>
+          <Button variant="contained" color="primary" sx={{ marginRight: '16px'}}>Apply Filters</Button>
+        </Box>
+          {/* <Box sx={{ borderBottom: 1, borderColor: 'divider'}}>
             <Tabs
               value={value}
               onChange={handleChange}
@@ -56,191 +65,199 @@ export const Filters = () => {
               <Tab icon={<BusinessIcon />} iconPosition="start" label="Company" sx={{ minHeight: '48px', paddingTop: '0px', paddingBottom: '0px', textTransform: 'none',}}/>
               <Tab icon={<HubIcon />} iconPosition="start" label="General" sx={{ minHeight: '48px', paddingTop: '0px', paddingBottom: '0px', textTransform: 'none',}}/>
             </Tabs>
-          </Box>
-          <CustomTabPanel value={value} index={0}>
-            <Autocomplete
-              multiple
-              limitTags={2}
-              options={top100Films}
-              getOptionLabel={(option) => option.title}
-              // defaultValue={[top100Films[13]]}
-              // filterSelectedOptions
-              value={filterValues.selectedPosition}
-              onChange={(event, value) => updateFilterValues('selectedPosition', value)}  // Update state on change
-              style={{ display: 'inline-block', width: '250px', marginRight: '12px' }}
-              renderInput={(params) => (
-                <TextField
-                  {...params}
-                  label="Position"
-                  // placeholder="Favorites"
-                />
-              )}
-            />
-            <Autocomplete
-              multiple
-              limitTags={2}
-              options={top100Films}
-              getOptionLabel={(option) => option.title}
-              value={filterValues.selectedFunction}
-              onChange={(event, value) => updateFilterValues('selectedFunction', value)}
-              style={{ display: 'inline-block', width: '250px'}}
-              renderInput={(params) => (
-                <TextField
-                  {...params}
-                  label="Function"
-                />
-              )}
-            />
-            <FormControlLabel
-              value="bottom"
-              control={
-                <Switch 
-                  color="primary"
-                  checked={filterValues.includePastFunction} // Bind the switch to state
-                  onChange={(event) => updateFilterValues('includePastFunction', !filterValues.includePastFunction) } // Update state on toggle 
-                />
-              }
-              label="Include past"
-              labelPlacement="top"
-              sx={{ verticalAlign: 'top'}}
-            />
-            <Autocomplete
-              multiple
-              limitTags={2}
-              options={top100Films}
-              getOptionLabel={(option) => option.title}
-              value={filterValues.selectedSeniority}
-              onChange={(event, value) => updateFilterValues('selectedSeniority', value)}
-              style={{ display: 'inline-block', width: '250px', marginRight: '12px' }}
-              renderInput={(params) => (
-                <TextField
-                  {...params}
-                  label="Seniority"
-                />
-              )}
-            />
-            <Autocomplete
-              multiple
-              limitTags={2}
-              options={top100Films}
-              getOptionLabel={(option) => option.title}
-              value={filterValues.selectedIndustry}
-              onChange={(event, value) => updateFilterValues('selectedIndustry', value)}
-              style={{ display: 'inline-block', width: '250px' }}
-              renderInput={(params) => (
-                <TextField
-                  {...params}
-                  label="Industry"
-                />
-              )}
-            />
-            <FormControlLabel
-              value="bottom"
-              control={
-                <Switch 
-                  color="primary" 
-                  checked={filterValues.includePastIndustry} // Bind the switch to state
-                  onChange={(event) => updateFilterValues('includePastIndustry', !filterValues.includePastIndustry) } // Update state on toggle 
-                />
-              }
-              label="Include past"
-              labelPlacement="top"
-              sx={{ verticalAlign: 'top'}}
-            />
+            <Button variant="contained" color="primary">Apply Filters</Button>
+          </Box> */}
+
+          {/* Person Tab */}
+          <CustomTabPanel value={value} index={0} >
+            <div className={styles.filtersContainer}>
+
+              <Autocomplete className={styles.filter}
+                multiple
+                limitTags={2}
+                options={top100Films}
+                getOptionLabel={(option) => option.title}
+                value={filterValues.selectedLocation}
+                onChange={(event, value) => updateFilterValues('selectedLocation', value)}
+                renderInput={(params) => (
+                  <TextField
+                    {...params}
+                    label="Location"
+                  />
+                )}
+              />
+
+              <Autocomplete className={styles.filter}
+                multiple
+                limitTags={2}
+                options={top100Films}
+                getOptionLabel={(option) => option.title}
+                // defaultValue={[top100Films[13]]}
+                // filterSelectedOptions
+                value={filterValues.selectedPosition}
+                onChange={(event, value) => updateFilterValues('selectedPosition', value)}  // Update state on change
+                renderInput={(params) => (
+                  <TextField
+                    {...params}
+                    label="Position"
+                    // placeholder="Favorites"
+                  />
+                )}
+              />
+
+              <div style={{ display: 'flex'}}>
+                <Autocomplete className={styles.filter}
+                  multiple
+                  limitTags={2}
+                  options={top100Films}
+                  getOptionLabel={(option) => option.title}
+                  value={filterValues.selectedFunction}
+                  onChange={(event, value) => updateFilterValues('selectedFunction', value)}
+                  renderInput={(params) => (
+                    <TextField
+                      {...params}
+                      label="Function"
+                    />
+                  )}
+                />                
+                <Tooltip title="Include Past Functions" placement="top">
+                  <Switch
+                    color="secondary"
+                    checked={filterValues.includePastFunction} // Bind the switch to state
+                    onChange={(event) => updateFilterValues('includePastFunction', !filterValues.includePastFunction)} // Update state on toggle
+                    sx={{ transform: 'rotate(-90deg)', alignSelf: 'center'}} 
+                  />
+                </Tooltip>
+              </div>
+
+              <Autocomplete className={styles.filter}
+                multiple
+                limitTags={2}
+                options={top100Films}
+                getOptionLabel={(option) => option.title}
+                value={filterValues.selectedSeniority}
+                onChange={(event, value) => updateFilterValues('selectedSeniority', value)}
+                renderInput={(params) => (
+                  <TextField
+                    {...params}
+                    label="Seniority"
+                  />
+                )}
+              />
+              
+            </div>
           </CustomTabPanel>
 
+          {/* Company Tab */}
           <CustomTabPanel value={value} index={1}>
-            <Autocomplete
-              multiple
-              limitTags={2}
-              options={top100Films}
-              getOptionLabel={(option) => option.title}
-              value={filterValues.selectedCompanyName}
-              onChange={(event, value) => updateFilterValues('selectedCompanyName', value)}  // Update state on change
-              style={{ display: 'inline-block', width: '250px', marginRight: '12px' }}
-              renderInput={(params) => (
-                <TextField
-                  {...params}
-                  label="Name"
+            <div className={styles.filtersContainer}>
+
+              <Autocomplete className={styles.filter}
+                multiple
+                limitTags={2}
+                options={top100Films}
+                getOptionLabel={(option) => option.title}
+                value={filterValues.selectedCompanyName}
+                onChange={(event, value) => updateFilterValues('selectedCompanyName', value)}  // Update state on change
+                renderInput={(params) => (
+                  <TextField
+                    {...params}
+                    label="Name"
+                  />
+                )}
+              />
+
+              <div style={{ display: 'flex'}}>  
+                <Autocomplete className={styles.filter}
+                  multiple
+                  limitTags={2}
+                  options={top100Films}
+                  getOptionLabel={(option) => option.title}
+                  value={filterValues.selectedCompanyIndustry}
+                  onChange={(event, value) => updateFilterValues('selectedCompanyIndustry', value)}
+                  renderInput={(params) => (
+                    <TextField
+                      {...params}
+                      label="Industry"
+                    />
+                  )}
                 />
-              )}
-            />
-            <Autocomplete
-              multiple
-              limitTags={2}
-              options={top100Films}
-              getOptionLabel={(option) => option.title}
-              value={filterValues.selectedCompanyIndustry}
-              onChange={(event, value) => updateFilterValues('selectedCompanyIndustry', value)}
-              style={{ display: 'inline-block', width: '250px'}}
-              renderInput={(params) => (
-                <TextField
-                  {...params}
-                  label="Industry"
-                />
-              )}
-            />
-            <FormControlLabel
-              value="bottom"
-              control={
-                <Switch 
-                  color="primary"
-                  checked={filterValues.includePastFunction} // Bind the switch to state
-                  onChange={(event) => updateFilterValues('includePastFunction', !filterValues.includePastFunction) } // Update state on toggle 
-                />
-              }
-              label="Include past"
-              labelPlacement="top"
-              sx={{ verticalAlign: 'top'}}
-            />
-            <Autocomplete
-              multiple
-              limitTags={2}
-              options={top100Films}
-              getOptionLabel={(option) => option.title}
-              value={filterValues.selectedCompanyHeadquarters}
-              onChange={(event, value) => updateFilterValues('selectedCompanyHeadquarters', value)}
-              style={{ display: 'inline-block', width: '250px'}}
-              renderInput={(params) => (
-                <TextField
-                  {...params}
-                  label="Headquarters"
-                />
-              )}
-            />
+                <Tooltip title="Include Past Industries" placement="top">
+                  <Switch
+                    color="secondary"
+                    checked={filterValues.includePastIndustry} // Bind the switch to state
+                    onChange={(event) => updateFilterValues('includePastIndustry', !filterValues.includePastIndustry)} // Update state on toggle
+                    sx={{ transform: 'rotate(-90deg)', alignSelf: 'center'}} 
+                  />
+                </Tooltip>
+                {/* <FormControlLabel
+                  value="bottom"
+                  control={
+                    <Switch 
+                      color="secondary"
+                      checked={filterValues.includePastFunction} // Bind the switch to state
+                      onChange={(event) => updateFilterValues('includePastFunction', !filterValues.includePastFunction) } // Update state on toggle 
+                    />
+                  }
+                  label="Include past"
+                  labelPlacement="top"
+                  sx={{ verticalAlign: 'top'}}
+                /> */}
+              </div>
+
+              <Autocomplete className={styles.filter}
+                multiple
+                limitTags={2}
+                options={top100Films}
+                getOptionLabel={(option) => option.title}
+                value={filterValues.selectedCompanyHeadquarters}
+                onChange={(event, value) => updateFilterValues('selectedCompanyHeadquarters', value)}
+                renderInput={(params) => (
+                  <TextField
+                    {...params}
+                    label="Headquarters"
+                  />
+                )}
+              />
+
+            </div>
           </CustomTabPanel>
 
+          {/* General Tab */}
           <CustomTabPanel value={value} index={2}>
-            <Autocomplete
-              multiple
-              limitTags={2}
-              options={top100Films}
-              getOptionLabel={(option) => option.title}
-              value={filterValues.selectedKeyword}
-              onChange={(event, value) => updateFilterValues('selectedKeyword', value)}
-              style={{ display: 'inline-block', width: '250px', marginRight: '12px'}}
-              renderInput={(params) => (
-                <TextField
-                  {...params}
-                  label="Keyword"
-                />
-              )}
-            />
-            <Autocomplete
-              multiple
-              limitTags={2}
-              options={top100Films}
-              getOptionLabel={(option) => option.title}
-              value={filterValues.selectedConnections}
-              onChange={(event, value) => updateFilterValues('selectedConnections', value)}
-              style={{ display: 'inline-block', width: '250px'}}
-              renderInput={(params) => (
-                <TextField
-                  {...params}
-                  label="Connections"
-                />
-              )}
-            />
+            <div className={styles.filtersContainer}>
+
+              <Autocomplete className={styles.filter}
+                multiple
+                limitTags={2}
+                options={top100Films}
+                getOptionLabel={(option) => option.title}
+                value={filterValues.selectedKeyword}
+                onChange={(event, value) => updateFilterValues('selectedKeyword', value)}
+                renderInput={(params) => (
+                  <TextField
+                    {...params}
+                    label="Keyword"
+                  />
+                )}
+              />
+
+              <Autocomplete className={styles.filter}
+                multiple
+                limitTags={2}
+                options={top100Films}
+                getOptionLabel={(option) => option.title}
+                value={filterValues.selectedConnections}
+                onChange={(event, value) => updateFilterValues('selectedConnections', value)}
+                renderInput={(params) => (
+                  <TextField
+                    {...params}
+                    label="Connections"
+                  />
+                )}
+              />
+
+            </div> 
           </CustomTabPanel>
       </Box>
   );

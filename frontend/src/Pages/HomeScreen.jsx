@@ -273,6 +273,7 @@ export const HomeScreen = () => {
         </Tooltip>         
       </div>
       <div className={styles.underline}></div>
+      
       <div className={styles.mainContent}>
         <Button style={{margin: '10px', width: '100px', backgroundColor: 'yellow', color: 'black', alignSelf: 'end'}} onClick={() => { console.log('Submitted', filterValues); }}>Search</Button>
         <div className={styles.filtersContainer}>
