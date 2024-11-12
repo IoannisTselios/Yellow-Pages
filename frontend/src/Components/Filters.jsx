@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import styles from './Filters.module.css';
 
-import { Box, Button, Drawer, IconButton, Tooltip } from '@mui/material';
+import { Box, Button, Tooltip } from '@mui/material';
 
 import PersonIcon from '@mui/icons-material/Person';
 import BusinessIcon from '@mui/icons-material/Business';
@@ -50,7 +50,7 @@ export const Filters = () => {
             <Tab icon={<BusinessIcon />} iconPosition="start" label="Company" className={styles.tab}/>
             <Tab icon={<HubIcon />} iconPosition="start" label="General" className={styles.tab} />
           </Tabs>
-          <Button variant="contained" color="primary" sx={{ marginRight: '16px'}}>Apply Filters</Button>
+          <Button variant="contained" color="primary" sx={{ marginRight: '16px'}} onClick={() => { console.log('Submitted', filterValues); }}>Apply Filters</Button>
         </Box>
           {/* <Box sx={{ borderBottom: 1, borderColor: 'divider'}}>
             <Tabs

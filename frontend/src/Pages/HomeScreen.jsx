@@ -8,11 +8,8 @@ import { DataGrid, GridToolbar } from '@mui/x-data-grid';
 import { Drawer, IconButton, Tooltip } from '@mui/material';
 
 import ExitToAppRoundedIcon from '@mui/icons-material/ExitToAppRounded'; 
-import Button from '@mui/material/Button';
 
 import { Filters } from "../Components/Filters";
-import { useFilters } from "../Components/FiltersContext";
-import { FiltersProvider } from '../Components/FiltersContext';
 
 export const HomeScreen = () => {
   const [redirect, setRedirect] = useState(false);
@@ -21,8 +18,6 @@ export const HomeScreen = () => {
   const [openDrawer, setOpenDrawer] = useState(false);
   const [name, setName] = useState('');
   const navigate = useNavigate();
-
-  const { filterValues } = useFilters();
 
   useEffect(() => {
     (async () => {
@@ -275,7 +270,6 @@ export const HomeScreen = () => {
       <div className={styles.underline}></div>
       
       <div className={styles.mainContent}>
-        <Button style={{margin: '10px', width: '100px', backgroundColor: 'yellow', color: 'black', alignSelf: 'end'}} onClick={() => { console.log('Submitted', filterValues); }}>Search</Button>
         <div className={styles.filtersContainer}>
           <Filters></Filters>
         </div>

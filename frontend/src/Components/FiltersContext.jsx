@@ -11,12 +11,12 @@ export const FiltersProvider = ({ children }) => {
     selectedIndustry: [],
     includePastFunction: false,    
 
-    selectedCompanyName: '',
+    selectedCompanyName: [],
     selectedCompanyIndustry: [],
     includePastIndustry: false,
     selectedCompanyHeadquarters: [],
 
-    selectedKeyword: '',
+    selectedKeyword: [],
     selectedConnections: []
   });
 
