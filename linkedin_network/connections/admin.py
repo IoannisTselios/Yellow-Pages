@@ -11,19 +11,19 @@ import pandas as pd
 class CSVUploadForm(forms.Form):
     csv_file = forms.FileField()
 
-# class UserConnectionInline(admin.TabularInline):
-#     model = UserConnection  
-#     extra = 1  # number of empty forms to display
-#     # autocomplete_fields = ['user']  # Search for users
-#     # readonly_fields = ['connected_on']
-#     fk_name = 'connection'  # Explicitly set the foreign key field
+class UserConnectionInline(admin.TabularInline):
+    model = UserConnection  
+    extra = 1  # number of empty forms to display
+    # autocomplete_fields = ['user']  # Search for users
+    # readonly_fields = ['connected_on']
+    fk_name = 'connection'  # Explicitly set the foreign key field
 
 class ConnectionAdmin(admin.ModelAdmin):
     change_list_template = "admin/enriched_change_list.html"  # Custom template
 
     list_display = ('first_name', 'last_name', 'location', 'get_current_position', 'get_current_company', 'connection_strength', 'url')
     search_fields = ('first_name', 'last_name', 'location')
-    # inlines = [UserConnectionInline]
+    inlines = [UserConnectionInline]
 
     def get_current_position(self, obj):
         # Fetch the main role for this connection
