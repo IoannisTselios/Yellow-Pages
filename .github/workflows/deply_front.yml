@@ -1,0 +1,50 @@
+name: Deploy Frontend to AWS on Merge
+
+on:
+  push:
+    branches:
+      - main  # Trigger on push to the main branch
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Set up SSH agent and add key
+        uses: webfactory/ssh-agent@v0.5.3
+        with:
+          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+
+      - name: Sync frontend folder to AWS server
+        run: |
+          rsync -avz --delete -e "ssh -o StrictHostKeyChecking=no" \
+          ./frontend/ ${{ secrets.AWS_USER }}@${{ secrets.AWS_HOST }}:/home/ec2-user/downloads/frontend/
+
+      - name: SSH into AWS server and deploy frontend
+        run: |
+          ssh -o StrictHostKeyChecking=no ${{ secrets.AWS_USER }}@${{ secrets.AWS_HOST }} << 'EOF'
+            cd /home/ec2-user/downloads/frontend/
+
+            # Update server packages
+            sudo yum update -y
+
+            # Install Node.js and npm if not already installed
+            if ! command -v node &> /dev/null || ! command -v npm &> /dev/null; then
+              curl -fsSL https://rpm.nodesource.com/setup_16.x | sudo bash -
+              sudo yum install -y nodejs
+            fi
+
+            # Install dependencies
+            npm install
+
+            # Stop existing frontend process if running
+            if pgrep -f "npm start"; then
+              pkill -f "npm start"
+            fi
+
+            # Start the frontend in the background
+            nohup npm start > frontend.log 2>&1 &
+          EOF

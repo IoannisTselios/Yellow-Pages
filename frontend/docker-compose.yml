@@ -1,0 +1,10 @@
+version: '3.8'
+
+services:
+  react-frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "80:80" # Map port 80 of the container to port 80 on the server
+    restart: always
