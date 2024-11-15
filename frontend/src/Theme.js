@@ -4,11 +4,11 @@ const Theme = createTheme({
   palette: {
     mode: 'dark',
     primary: {      
-      main: '#fdb73e',  // Primary color for buttons (black in this case)
-      dark: '#00FF00',  // Dark version of your primary color
+      main: '#fff',  // Primary color for buttons (black in this case)
+      dark: '#fdb73e',  // Dark version of your primary color
     },
     secondary: {
-      main: '#FF0000', // Secondary color 00FF00
+      main: '#fdb73e', // Secondary color 00FF00
     },
   },
   components: {
