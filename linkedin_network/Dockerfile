@@ -1,5 +1,6 @@
 # Base image: Using official Python 3.12-slim-buster
-FROM python:3.12.0b1-slim-buster
+# FROM python:3.12.0b1-slim-buster
+FROM python:3.10-slim
 
 # Set the working directory inside the container
 WORKDIR /usr/src/app

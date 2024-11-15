@@ -9,7 +9,7 @@ class Connection(models.Model):
     last_name = models.CharField(max_length=50)
     bio = models.TextField(null=True, blank=True)
     summary = models.TextField(null=True, blank=True)
-    url = models.URLField(max_length=200)
+    url = models.URLField(primary_key=True, max_length=200)
     location = models.CharField(max_length=100)
     # many-to-many relation to app users
     connections = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='connections', through='UserConnection', blank=False)
@@ -23,12 +23,12 @@ class Connection(models.Model):
     
 
 class UserConnection(models.Model):
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, null=False, blank=False) 
-    connection = models.ForeignKey(Connection, on_delete=models.CASCADE)
-    connected_on = models.DateTimeField(auto_now_add=True)
-
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    connection = models.ForeignKey(Connection, to_field='url', on_delete=models.CASCADE, db_column='connection_url', related_name='user_connections')
+    connected_on = models.DateTimeField()
+    
     class Meta:
-        unique_together = ('user', 'connection')  # a user cannot be linked to the same connection multiple times
+        unique_together = ('user', 'connection')
 
     def __str__(self):
         return f'{self.user.username} linked to {self.connection.first_name} {self.connection.last_name}'

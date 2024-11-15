@@ -28,7 +28,7 @@ docker compose --env-file .env.dev up -d --build
 python manage.py createsuperuser
 ```
 
-and fill in your user's credentials
+and fill in your user's credentials.
 
 7. Navigate to http://localhost:8000/admin on your browser.
 
