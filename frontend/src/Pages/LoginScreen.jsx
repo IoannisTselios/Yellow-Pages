@@ -19,7 +19,7 @@ export default function LoginScreen() {
 
     try {
       // Send POST request to the backend
-      const response = await fetch('http://localhost:8000/api/login', {
+      const response = await fetch('http://localhost:80/api/login', { //'http://localhost:80/api/login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -96,14 +96,4 @@ export default function LoginScreen() {
       </div>
     </div>
   );
-}
-
-
-
-          //   <form onSubmit={handleLogin}>            
-          //   <InputField type="email" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} /> 
-          //   <InputField type="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} />
-          //   <div className="submitContainer">  
-          //     <Button type='submit' variant="contained" color='primary' size='large'>Login</Button>
-          //   </div>            
-          // </form>     
+}  

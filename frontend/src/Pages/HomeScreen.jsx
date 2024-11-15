@@ -5,7 +5,7 @@ import DrawerInfo from '../Components/DrawerInfo';
 import { Navigate, useNavigate } from 'react-router-dom';
 import { DataGrid, GridToolbar } from '@mui/x-data-grid';
 
-import { Drawer, IconButton, Tooltip } from '@mui/material';
+import { Button, Drawer, IconButton, Tooltip } from '@mui/material';
 
 import ExitToAppRoundedIcon from '@mui/icons-material/ExitToAppRounded'; 
 
@@ -22,7 +22,7 @@ export const HomeScreen = () => {
   useEffect(() => {
     (async () => {
       try {
-        const response = await fetch('http://localhost:8000/api/get_current_user', {
+        const response = await fetch('http://localhost:80/api/get_current_user', {
           headers: {
             'Content-Type': 'application/json',
           },
@@ -50,7 +50,7 @@ export const HomeScreen = () => {
 
   const handleLogout = async () => {
     try {
-      const logout = await fetch('http://localhost:8000/api/logout', {
+      const logout = await fetch('http://localhost:80/api/logout', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -73,13 +73,13 @@ export const HomeScreen = () => {
   }
 
   // Only render the main content once loading is complete
-  if (loading) {
-    return <div>Loading...</div>; // Placeholder while waiting for authentication check
-  }
+  // if (loading) {
+  //   return <div>Loading...</div>; // Placeholder while waiting for authentication check
+  // }
 
   const getData = async () => {
     try {
-      const response = await fetch('http://localhost:8000/api/get_connection_list/', {
+      const response = await fetch('http://localhost:80/api/get_connection_list/', {
         headers: {
           'Content-Type': 'application/json',
         },
@@ -270,6 +270,7 @@ export const HomeScreen = () => {
       <div className={styles.underline}></div>
       
       <div className={styles.mainContent}>
+         <Button variant="contained" color="primary" sx={{ marginRight: '16px'}} onClick={getData}>Get Data</Button>
         <div className={styles.filtersContainer}>
           <Filters></Filters>
         </div>

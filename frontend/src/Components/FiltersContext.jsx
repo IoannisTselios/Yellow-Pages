@@ -4,6 +4,7 @@ const FiltersContext = createContext();
 
 export const FiltersProvider = ({ children }) => {
   const [filterValues, setFilterValues] = useState({
+    selectedName: '',
     selectedLocation: [],
     selectedPosition: [],
     selectedFunction: [],

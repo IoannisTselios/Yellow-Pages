@@ -52,25 +52,23 @@ export const Filters = () => {
           </Tabs>
           <Button variant="contained" color="primary" sx={{ marginRight: '16px'}} onClick={() => { console.log('Submitted', filterValues); }}>Apply Filters</Button>
         </Box>
-          {/* <Box sx={{ borderBottom: 1, borderColor: 'divider'}}>
-            <Tabs
-              value={value}
-              onChange={handleChange}
-              aria-label="icon tabs"
-              sx={{ minHeight: '48px'}}
-            >
-              <Tab icon={<PersonIcon />} iconPosition="start" label="Person" sx={{ minHeight: '48px', paddingTop: '0px', paddingBottom: '0px', textTransform: 'none',
-                //  "&.Mui-selected": { color: "#ff0000", },
-              }}/>
-              <Tab icon={<BusinessIcon />} iconPosition="start" label="Company" sx={{ minHeight: '48px', paddingTop: '0px', paddingBottom: '0px', textTransform: 'none',}}/>
-              <Tab icon={<HubIcon />} iconPosition="start" label="General" sx={{ minHeight: '48px', paddingTop: '0px', paddingBottom: '0px', textTransform: 'none',}}/>
-            </Tabs>
-            <Button variant="contained" color="primary">Apply Filters</Button>
-          </Box> */}
 
           {/* Person Tab */}
           <CustomTabPanel value={value} index={0} >
             <div className={styles.filtersContainer}>
+               <Autocomplete className={styles.filter}
+                limitTags={2}
+                options={top100Films}
+                getOptionLabel={(option) => option.title}
+                value={filterValues.selectedName}
+                onChange={(event, value) => updateFilterValues('selectedName', value)}  // Update state on change
+                renderInput={(params) => (
+                  <TextField
+                    {...params}
+                    label="Name"
+                  />
+                )}
+              />
 
               <Autocomplete className={styles.filter}
                 multiple
@@ -162,7 +160,7 @@ export const Filters = () => {
                 renderInput={(params) => (
                   <TextField
                     {...params}
-                    label="Name"
+                    label="Company Name"
                   />
                 )}
               />
