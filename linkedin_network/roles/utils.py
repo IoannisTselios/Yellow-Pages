@@ -36,7 +36,7 @@ def save_roles_from_dataframe(df: pd.DataFrame):
                 )
 
                 # Determine main_role based on the 'main' column in the CSV
-                main_role = bool(row.get('main', False))  # Converts "True"/"False" or 1/0 to boolean
+                main_role = bool(row.get('Main', False))  # Converts "True"/"False" or 1/0 to boolean
 
                 # Create the Role instance
                 role = Role(

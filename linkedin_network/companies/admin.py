@@ -15,8 +15,8 @@ class CompanyAdmin(admin.ModelAdmin):
     change_list_template = "admin/enriched_change_list.html"  # Custom template
 
     list_display = ('name', 'company_type', 'industry', 'employee_count', 'year_founded')
-    search_fields = ('name', 'industry', 'company_type')
-    list_filter = ('company_type', 'industry', 'year_founded')
+    search_fields = ('name', 'industry', 'company_type', 'linkedin_sales_link')
+    list_filter = ('company_type', 'industry', 'year_founded', 'linkedin_sales_link')
 
     def get_urls(self):
         urls = super().get_urls()
