@@ -31,31 +31,43 @@ jobs:
 
             # Update system packages
             echo "Updating system packages..."
-            sudo yum update -y
+            sudo yum update -y || { echo "Failed to update system packages"; exit 1; }
 
             # Install Node.js and npm (version 18.x)
             echo "Checking Node.js installation..."
-            if ! command -v node &> /dev/null || ! command -v npm &> /dev/null; then
-              echo "Node.js not found. Installing Node.js 18.x..."
-              curl -fsSL https://rpm.nodesource.com/setup_18.x | sudo bash -
-              sudo yum install -y nodejs
+            NODE_REQUIRED_VERSION="18"
+            if ! command -v node &> /dev/null; then
+              echo "Node.js not found. Installing Node.js ${NODE_REQUIRED_VERSION}.x..."
+              curl -fsSL https://rpm.nodesource.com/setup_${NODE_REQUIRED_VERSION}.x | sudo bash - || { echo "Failed to download Node.js setup script"; exit 1; }
+              sudo yum install -y nodejs || { echo "Failed to install Node.js"; exit 1; }
             else
-              echo "Node.js is already installed. Version: $(node -v)"
+              INSTALLED_NODE_VERSION=$(node -v | grep -oE '[0-9]+' | head -1)
+              if [ "$INSTALLED_NODE_VERSION" -lt "$NODE_REQUIRED_VERSION" ]; then
+                echo "Node.js version is lower than required. Updating to ${NODE_REQUIRED_VERSION}.x..."
+                curl -fsSL https://rpm.nodesource.com/setup_${NODE_REQUIRED_VERSION}.x | sudo bash - || { echo "Failed to download Node.js setup script"; exit 1; }
+                sudo yum install -y nodejs || { echo "Failed to install Node.js"; exit 1; }
+              else
+                echo "Node.js is already installed. Version: $(node -v)"
+              fi
             fi
 
             # Install project dependencies
             echo "Installing npm dependencies..."
-            npm install
+            npm install || { echo "Failed to install npm dependencies"; exit 1; }
 
             # Stop any existing frontend process
+            echo "Checking for existing frontend processes..."
             if pgrep -f "npm start"; then
               echo "Stopping existing frontend process..."
-              pkill -f "npm start"
+              pkill -f "npm start" || { echo "Failed to stop existing frontend process"; exit 1; }
             fi
 
             # Start the frontend application
             echo "Starting the frontend application..."
             nohup npm start > /home/ec2-user/frontend/frontend.log 2>&1 &
-            echo "Frontend deployed successfully. Logs are in frontend.log."
-
+            if [ $? -eq 0 ]; then
+              echo "Frontend deployed successfully. Logs are in /home/ec2-user/frontend/frontend.log"
+            else
+              echo "Failed to start the frontend application"; exit 1;
+            fi
           EOF
