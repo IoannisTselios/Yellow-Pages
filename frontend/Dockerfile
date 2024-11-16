@@ -1,5 +1,5 @@
 # Use Node.js image to build the React app
-FROM node:16 AS build
+FROM node:18 AS build
 
 # Set working directory
 WORKDIR /app
@@ -8,7 +8,7 @@ WORKDIR /app
 COPY package*.json ./
 
 # Install dependencies
-RUN npm install
+RUN npm install --legacy-peer-deps
 
 # Copy the app's source code
 COPY . .

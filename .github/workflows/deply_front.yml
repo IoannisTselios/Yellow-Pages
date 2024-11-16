@@ -18,56 +18,75 @@ jobs:
         with:
           ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
 
-      - name: Sync frontend folder to AWS server
+      - name: Build and Sync Frontend Code to AWS Server
         run: |
           rsync -avz --delete -e "ssh -o StrictHostKeyChecking=no" \
           ./frontend/ ${{ secrets.AWS_USER }}@${{ secrets.AWS_HOST }}:/home/ec2-user/frontend/
 
-      - name: SSH into AWS server and deploy frontend
+      - name: SSH into AWS server, build app, and prepare Docker
         run: |
           ssh -o StrictHostKeyChecking=no ${{ secrets.AWS_USER }}@${{ secrets.AWS_HOST }} << 'EOF'
-            # Navigate to the frontend directory
+            set -e
+
+            # 1. Remove Node.js v16
+            echo "Removing existing Node.js version..."
+            sudo dnf remove nodejs -y || true
+
+            # 2. Install Node.js v18
+            echo "Installing Node.js v18..."
+            curl -fsSL https://rpm.nodesource.com/setup_18.x | sudo bash -
+            sudo dnf install nodejs -y
+
+            # 3. Navigate to the React App Folder
+            echo "Navigating to the frontend directory..."
             cd /home/ec2-user/frontend/ || { echo "Frontend directory not found"; exit 1; }
 
-            # Update system packages
-            echo "Updating system packages..."
-            sudo yum update -y || { echo "Failed to update system packages"; exit 1; }
+            # 4. Remove package-lock.json and node_modules
+            echo "Cleaning up dependencies..."
+            rm -rf package-lock.json node_modules || true
 
-            # Install Node.js and npm (version 18.x)
-            echo "Checking Node.js installation..."
-            NODE_REQUIRED_VERSION="18"
-            if ! command -v node &> /dev/null; then
-              echo "Node.js not found. Installing Node.js ${NODE_REQUIRED_VERSION}.x..."
-              curl -fsSL https://rpm.nodesource.com/setup_${NODE_REQUIRED_VERSION}.x | sudo bash - || { echo "Failed to download Node.js setup script"; exit 1; }
-              sudo yum install -y nodejs || { echo "Failed to install Node.js"; exit 1; }
-            else
-              INSTALLED_NODE_VERSION=$(node -v | grep -oE '[0-9]+' | head -1)
-              if [ "$INSTALLED_NODE_VERSION" -lt "$NODE_REQUIRED_VERSION" ]; then
-                echo "Node.js version is lower than required. Updating to ${NODE_REQUIRED_VERSION}.x..."
-                curl -fsSL https://rpm.nodesource.com/setup_${NODE_REQUIRED_VERSION}.x | sudo bash - || { echo "Failed to download Node.js setup script"; exit 1; }
-                sudo yum install -y nodejs || { echo "Failed to install Node.js"; exit 1; }
-              else
-                echo "Node.js is already installed. Version: $(node -v)"
-              fi
-            fi
+            # 5. Install Dependencies with Increased Memory Allocation
+            echo "Installing dependencies..."
+            NODE_OPTIONS="--max-old-space-size=2048" npm install --legacy-peer-deps
 
-            # Install project dependencies
-            echo "Installing npm dependencies..."
-            npm install || { echo "Failed to install npm dependencies"; exit 1; }
+            # 6. De-duplicate Dependencies
+            echo "De-duplicating dependencies..."
+            npm dedupe
 
-            # Stop any existing frontend process
-            echo "Checking for existing frontend processes..."
-            if pgrep -f "npm start"; then
-              echo "Stopping existing frontend process..."
-              pkill -f "npm start" || { echo "Failed to stop existing frontend process"; exit 1; }
-            fi
-
-            # Start the frontend application
-            echo "Starting the frontend application..."
+            # 7. Start the Development Server (for Testing Purposes)
+            echo "Starting the development server..."
             nohup npm start > /home/ec2-user/frontend/frontend.log 2>&1 &
-            if [ $? -eq 0 ]; then
-              echo "Frontend deployed successfully. Logs are in /home/ec2-user/frontend/frontend.log"
-            else
-              echo "Failed to start the frontend application"; exit 1;
-            fi
+
+            # 8. Build the Production-Ready App
+            echo "Building the production-ready app..."
+            npm run build
+
+            # 9. Install Nginx
+            echo "Installing Nginx..."
+            sudo yum install nginx -y
+
+            # 10. Copy Build Files to Nginx’s Default Web Root
+            echo "Deploying the app to Nginx web root..."
+            sudo cp -r build/* /usr/share/nginx/html/
+
+            # 11. Start Nginx
+            echo "Starting Nginx server..."
+            sudo systemctl start nginx
+
+            # 12. Enable Nginx to Start on Boot
+            echo "Enabling Nginx to start on boot..."
+            sudo systemctl enable nginx
+
+            # 13. Build Docker Image
+            echo "Building Docker image for the app..."
+            cd /home/ec2-user/frontend/
+            docker build -t frontend-app .
+
+            # 14. Run Docker Container
+            echo "Running the Docker container..."
+            docker stop frontend-app || true
+            docker rm frontend-app || true
+            docker run -d -p 80:80 --name frontend-app frontend-app
+
+            echo "Deployment completed successfully with Docker!"
           EOF
