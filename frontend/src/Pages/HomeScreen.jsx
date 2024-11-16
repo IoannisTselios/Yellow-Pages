@@ -22,7 +22,7 @@ export const HomeScreen = () => {
   useEffect(() => {
     (async () => {
       try {
-        const response = await fetch('http://localhost:80/api/get_current_user', {
+        const response = await fetch('http://13.48.244.239:80/api/get_current_user', {
           headers: {
             'Content-Type': 'application/json',
           },
@@ -50,7 +50,7 @@ export const HomeScreen = () => {
 
   const handleLogout = async () => {
     try {
-      const logout = await fetch('http://localhost:80/api/logout', {
+      const logout = await fetch('http://13.48.244.239:80/api/logout', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -79,7 +79,7 @@ export const HomeScreen = () => {
 
   const getData = async () => {
     try {
-      const response = await fetch('http://localhost:80/api/get_connection_list/', {
+      const response = await fetch('http://13.48.244.239:80/api/get_connection_list/', {
         headers: {
           'Content-Type': 'application/json',
         },
