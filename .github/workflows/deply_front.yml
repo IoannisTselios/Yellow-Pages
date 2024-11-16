@@ -21,30 +21,41 @@ jobs:
       - name: Sync frontend folder to AWS server
         run: |
           rsync -avz --delete -e "ssh -o StrictHostKeyChecking=no" \
-          ./frontend/ ${{ secrets.AWS_USER }}@${{ secrets.AWS_HOST }}:/home/ec2-user/downloads/frontend/
+          ./frontend/ ${{ secrets.AWS_USER }}@${{ secrets.AWS_HOST }}:/home/ec2-user/frontend/
 
       - name: SSH into AWS server and deploy frontend
         run: |
           ssh -o StrictHostKeyChecking=no ${{ secrets.AWS_USER }}@${{ secrets.AWS_HOST }} << 'EOF'
-            cd /home/ec2-user/downloads/frontend/
+            # Navigate to the frontend directory
+            cd /home/ec2-user/frontend/ || { echo "Frontend directory not found"; exit 1; }
 
-            # Update server packages
+            # Update system packages
+            echo "Updating system packages..."
             sudo yum update -y
 
-            # Install Node.js and npm if not already installed
+            # Install Node.js and npm (version 18.x)
+            echo "Checking Node.js installation..."
             if ! command -v node &> /dev/null || ! command -v npm &> /dev/null; then
-              curl -fsSL https://rpm.nodesource.com/setup_16.x | sudo bash -
+              echo "Node.js not found. Installing Node.js 18.x..."
+              curl -fsSL https://rpm.nodesource.com/setup_18.x | sudo bash -
               sudo yum install -y nodejs
+            else
+              echo "Node.js is already installed. Version: $(node -v)"
             fi
 
-            # Install dependencies
+            # Install project dependencies
+            echo "Installing npm dependencies..."
             npm install
 
-            # Stop existing frontend process if running
+            # Stop any existing frontend process
             if pgrep -f "npm start"; then
+              echo "Stopping existing frontend process..."
               pkill -f "npm start"
             fi
 
-            # Start the frontend in the background
-            nohup npm start > frontend.log 2>&1 &
+            # Start the frontend application
+            echo "Starting the frontend application..."
+            nohup npm start > /home/ec2-user/frontend/frontend.log 2>&1 &
+            echo "Frontend deployed successfully. Logs are in frontend.log."
+
           EOF
