@@ -1,4 +1,5 @@
 from rest_framework import serializers
+from django.db.models.functions import Lower
 from .models import Role
 
 class RoleSerializer(serializers.ModelSerializer):
@@ -7,4 +8,11 @@ class RoleSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Role
-        fields = ['company', 'position', 'start_date', 'end_date', 'location', 'main_role']
+        fields = ['company', 'position', 'description', 'start_date', 'end_date', 'location', 'main_role']
+
+
+class PositionSerializer(serializers.Serializer):
+    positions = serializers.ListField(
+        child=serializers.CharField(),
+        label="Positions"
+    )

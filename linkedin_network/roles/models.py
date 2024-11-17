@@ -9,6 +9,7 @@ class Role(models.Model):
     connection = models.ForeignKey(Connection, on_delete=models.CASCADE)
     company = models.ForeignKey(Company, on_delete=models.CASCADE)
     position = models.CharField(max_length=100)
+    description = models.TextField(null=True, blank=True)
     start_date = models.DateField()  # Store the start date as a DateTimeField
     end_date = models.DateField(blank=True, null=True)  # Allow null for ongoing roles
     main_role = models.BooleanField(default=False)

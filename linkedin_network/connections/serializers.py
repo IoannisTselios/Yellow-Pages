@@ -2,6 +2,12 @@ from rest_framework import serializers
 from .models import Connection
 from roles.serializers import RoleSerializer
 
+class LocationSerializer(serializers.Serializer):
+    locations = serializers.ListField(
+        child=serializers.CharField(),
+        label="Locations"
+    )
+
 class ConnectionSerializer(serializers.ModelSerializer):
     main_role = serializers.SerializerMethodField()
     other_roles = serializers.SerializerMethodField()
