@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import styles from './Filters.module.css';
 
-import { Box, Button, Tooltip } from '@mui/material';
+import { Box, Button, Tooltip, Slider, Typography } from '@mui/material';
 
 import PersonIcon from '@mui/icons-material/Person';
 import BusinessIcon from '@mui/icons-material/Business';
@@ -41,6 +41,17 @@ function CustomTabPanel(props) {
     );
 }
 
+const companySizes = [
+  '1-10',
+  '11-50',
+  '51-200',
+  '201-500',
+  '501-1,000',
+  '1,001-5,000',
+  '5,001-10,000',
+  '10,001+',
+];
+
 export const Filters = () => {
   const { filterValues, updateFilterValues } = useFilters();
 
@@ -48,17 +59,19 @@ export const Filters = () => {
   const [value, setValue] = useState(0);
   const handleChange = (event, newValue) => {
     setValue(newValue);
-  }; 
-
-  const [va, setVa] = useState("");
-
-  const [size, setSize] = useState("");
-
-  const handleSizeChange = (event) => {
-    setSize(event.target.value);
   };
 
-  // const [year, setYear] = useState(new Date());
+  // handling company size results
+  const getStart = (value) => {
+    return value.split('-')[0]
+  }
+  const getEnd = (value) => {
+    console.log(value.split('-'))
+    if (value.split('-').length > 1)
+      return value.split('-')[1]
+    else 
+      return value.split('-')[0]
+  }
 
   return (
       <Box sx={{ width: '100%' }}>
@@ -234,15 +247,52 @@ export const Filters = () => {
                 )}
               />
 
-              <LocalizationProvider dateAdapter={AdapterDayjs}>
+              {/* <LocalizationProvider dateAdapter={AdapterDayjs}>
                 <DemoContainer components={['DatePicker']}>
                   <DatePicker className={styles.filterSmall} label={'Year From'} views={['year']} />
                   <DatePicker className={styles.filterSmall} label={'Year To'} views={['year']} />
                 </DemoContainer>
-              </LocalizationProvider>
+              </LocalizationProvider> */}
 
+              <Box className={styles.filter}>
+                <Typography id="company-year-slider" gutterBottom>
+                  Year Founded: {filterValues.selectedCompanyYear[0]} - {filterValues.selectedCompanyYear[1]}
+                </Typography>
+                <Slider className={styles.filter}
+                  value={filterValues.selectedCompanyYear}
+                  defaultValue={[2014, 2024]}
+                  // valueLabelDisplay="on"
+                  aria-labelledby="company-year-slider"
+                  step={1}
+                  marks
+                  min={2000}
+                  max={2024}
+                  onChange={(event, value) => updateFilterValues('selectedCompanyYear', value)}
+                />
+              </Box>
 
-              <FormControl className={styles.filter}>
+              <Box className={styles.filter}>
+                <Typography id="company-size-slider" gutterBottom>
+                  Company Size: {getStart(companySizes[filterValues.selectedCompanySize[0]])} - {getEnd(companySizes[filterValues.selectedCompanySize[1]])}
+                </Typography>
+                <Slider
+                  value={filterValues.selectedCompanySize}
+                  min={0}
+                  max={companySizes.length - 1}
+                  step={1}
+                  // marks={companySizes.map((size, index) => ({ value: index, label: size }))}
+                  marks={companySizes.map((size, index) => ({
+                    value: index,
+                    label: index === 0 || index === companySizes.length - 1 ? size : '', // Show label only for the first and last marks
+                  }))}
+                  // valueLabelFormat={valueLabelFormat}
+                  onChange={(event, value) => updateFilterValues('selectedCompanySize', value)}
+                  // valueLabelDisplay="on"
+                  aria-labelledby="company-size-slider"
+                />
+              </Box>
+
+              {/* <FormControl className={styles.filter}>
                 <InputLabel id="company-size-label">Company Size</InputLabel>
                 <Select
                   labelId="company-size-label"
@@ -260,7 +310,7 @@ export const Filters = () => {
                   <MenuItem value="5001-10000">5,001-10,000 employees</MenuItem>
                   <MenuItem value="10000+">10,000+ employees</MenuItem>
                 </Select>
-              </FormControl>
+              </FormControl> */}
 
 
             </div>
