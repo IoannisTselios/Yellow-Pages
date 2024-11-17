@@ -26,3 +26,10 @@ class Role(models.Model):
 
     def __str__(self):
         return f'{self.connection.first_name} {self.connection.last_name}: {self.position}'
+    
+
+class Function(models.Model):
+    connection = models.ForeignKey(Connection, on_delete=models.CASCADE)
+    function = models.CharField(max_length=100)
+    months_in_function = models.IntegerField(blank=True, null=True)
+    is_current = models.BooleanField(default=False)

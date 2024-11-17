@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from .models import Connection
-from roles.serializers import RoleSerializer
+from roles.serializers import RoleSerializer, FunctionSerializer
 
 class LocationSerializer(serializers.Serializer):
     locations = serializers.ListField(
@@ -13,10 +13,11 @@ class ConnectionSerializer(serializers.ModelSerializer):
     other_roles = serializers.SerializerMethodField()
     past_roles = serializers.SerializerMethodField()
     connected_with = serializers.SerializerMethodField()
+    functions = FunctionSerializer(many=True, read_only=True, source='function_set')
 
     class Meta:
         model = Connection
-        fields = ['first_name', 'last_name', 'location', 'connection_strength', 'url', 'bio', 'summary', 'connected_with', 'main_role', 'other_roles', 'past_roles']
+        fields = ['first_name', 'last_name', 'location', 'connection_strength', 'url', 'bio', 'summary', 'connected_with', 'main_role', 'other_roles', 'past_roles', 'functions']
 
     def get_main_role(self, obj):
         # Main role: main_role=True

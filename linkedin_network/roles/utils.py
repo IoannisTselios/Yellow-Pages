@@ -2,10 +2,44 @@ import pandas as pd
 from django.db import transaction
 from django.core.exceptions import ValidationError
 from datetime import datetime
-from .models import Connection, Company, Role
+from .models import Connection, Company, Role, Function
 import logging
 
 logger = logging.getLogger(__name__)
+
+def save_functions_from_dataframe(df: pd.DataFrame):
+    """
+    Saves Function data from a DataFrame to the Function model.
+    """
+    with transaction.atomic():  # Ensure atomicity
+        for index, row in df.iterrows():
+            try:
+                # Find the associated Connection by the LinkedIn URL
+                connection = Connection.objects.filter(url=row['url']).first()
+                if not connection:
+                    print(f"Skipping row {index}: Connection not found for LinkedIn URL: {row['url']}")
+                    continue  # Skip this row if connection is not found
+
+                # Create the Function instance
+                function = Function(
+                    connection=connection,
+                    function=row['function'],
+                    months_in_function=int(row['months_in_function']) if pd.notna(row['months_in_function']) else None,
+                    is_current=bool(row['is_current']) if pd.notna(row['is_current']) else False
+                )
+
+                # Validate and save the Function instance
+                function.full_clean()  # Runs the model's clean method for validation
+                function.save()
+                logger.info(f"Saved Function '{function.function}' for connection {connection.url} (row {index})")
+
+            except ValidationError as ve:
+                logger.error(f"Validation error for Function at row {index}: {ve}")
+                raise ve  # Raise to trigger transaction rollback
+            except Exception as e:
+                logger.error(f"Failed to save Function for row {index}: {e}")
+                raise e  # Re-raise to trigger transaction rollback
+
 
 def save_roles_from_dataframe(df: pd.DataFrame):
     """

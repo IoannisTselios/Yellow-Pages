@@ -60,7 +60,10 @@ class ConnectionFilter(filters.FilterSet):
     company_size_min = filters.NumberFilter(method='filter_by_all_company_size', label='All Company Size Min')
     company_size_max = filters.NumberFilter(method='filter_by_all_company_size', label='All Company Size Max')
 
-
+    # Filtering by function (generic)
+    function = filters.CharFilter(method='filter_by_function', label='Function')
+    # Filtering by current function
+    current_function = filters.CharFilter(method='filter_by_current_function', label='Current Function')
 
 
     class Meta:
@@ -255,4 +258,19 @@ class ConnectionFilter(filters.FilterSet):
             role__company__employee_count__lte=max_value,  # Maximum company size
         ).distinct()
 
+    # multi-filtering enabled
+    def filter_by_function(self, queryset, name, value):
+        functions = value.split(',')
+        query = Q()
+        for function in functions:
+            query |= Q(function__function__icontains=function.strip())  # Matches any function name
+        return queryset.filter(query).distinct()
+
+    # multi-filtering enabled
+    def filter_by_current_function(self, queryset, name, value):
+        functions = value.split(',')
+        query = Q()
+        for function in functions:
+            query |= Q(function__function__icontains=function.strip(), function__is_current=True)
+        return queryset.filter(query).distinct()
 
