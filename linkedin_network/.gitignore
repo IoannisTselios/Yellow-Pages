@@ -1,4 +1,3 @@
 # Ignore Python bytecode
 __pycache__/
 *.pyc
-deply_front.yml
