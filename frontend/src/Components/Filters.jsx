@@ -15,7 +15,31 @@ import TextField from '@mui/material/TextField';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Switch from '@mui/material/Switch';
 
+import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+
+import { FormControl, InputLabel, MenuItem, Select } from "@mui/material";
+
 import { useFilters } from "../Components/FiltersContext";
+import { filterStateInitializer } from "@mui/x-data-grid/internals";
+
+function CustomTabPanel(props) {
+    const { children, value, index, ...other } = props;
+
+    return (
+    <div
+        role="tabpanel"
+        hidden={value !== index}
+        id={`simple-tabpanel-${index}`}
+        aria-labelledby={`simple-tab-${index}`}
+        {...other}
+    >
+        {value === index && <Box sx={{ padding: '16px' }}>{children}</Box>}
+    </div>
+    );
+}
 
 export const Filters = () => {
   const { filterValues, updateFilterValues } = useFilters();
@@ -26,21 +50,15 @@ export const Filters = () => {
     setValue(newValue);
   }; 
 
-  function CustomTabPanel(props) {
-      const { children, value, index, ...other } = props;
+  const [va, setVa] = useState("");
 
-      return (
-      <div
-          role="tabpanel"
-          hidden={value !== index}
-          id={`simple-tabpanel-${index}`}
-          aria-labelledby={`simple-tab-${index}`}
-          {...other}
-      >
-          {value === index && <Box sx={{ padding: '16px' }}>{children}</Box>}
-      </div>
-      );
-  }
+  const [size, setSize] = useState("");
+
+  const handleSizeChange = (event) => {
+    setSize(event.target.value);
+  };
+
+  // const [year, setYear] = useState(new Date());
 
   return (
       <Box sx={{ width: '100%' }}>
@@ -128,20 +146,21 @@ export const Filters = () => {
                 </Tooltip>
               </div>
 
-              <Autocomplete className={styles.filter}
-                multiple
-                limitTags={2}
-                options={top100Films}
-                getOptionLabel={(option) => option.title}
-                value={filterValues.selectedSeniority}
-                onChange={(event, value) => updateFilterValues('selectedSeniority', value)}
-                renderInput={(params) => (
-                  <TextField
-                    {...params}
-                    label="Seniority"
-                  />
-                )}
-              />
+              <FormControl className={styles.filter}>
+                <InputLabel id="seniority">Seniority</InputLabel>
+                <Select
+                  labelId="seniority-label"
+                  defaultValue = ""
+                  onChange={(event) => updateFilterValues('selectedSeniority', event.target.value)}
+                  value={filterValues.selectedSeniority}
+                  label="Seniority"
+                >
+                  <MenuItem value="">None</MenuItem>
+                  <MenuItem value="entry">Entry</MenuItem>
+                  <MenuItem value="mid">Mid</MenuItem>
+                  <MenuItem value="senior">Senior</MenuItem>
+                </Select>
+              </FormControl>
               
             </div>
           </CustomTabPanel>
@@ -150,20 +169,30 @@ export const Filters = () => {
           <CustomTabPanel value={value} index={1}>
             <div className={styles.filtersContainer}>
 
-              <Autocomplete className={styles.filter}
-                multiple
-                limitTags={2}
-                options={top100Films}
-                getOptionLabel={(option) => option.title}
-                value={filterValues.selectedCompanyName}
-                onChange={(event, value) => updateFilterValues('selectedCompanyName', value)}  // Update state on change
-                renderInput={(params) => (
-                  <TextField
-                    {...params}
-                    label="Company Name"
+              <div style={{ display: 'flex'}}>
+                <Autocomplete className={styles.filter}
+                  multiple
+                  limitTags={2}
+                  options={top100Films}
+                  getOptionLabel={(option) => option.title}
+                  value={filterValues.selectedCompanyName}
+                  onChange={(event, value) => updateFilterValues('selectedCompanyName', value)}  // Update state on change
+                  renderInput={(params) => (
+                    <TextField
+                      {...params}
+                      label="Company Name"
+                    />
+                  )}
+                />     
+                <Tooltip title="Include Past Companies" placement="top">
+                  <Switch
+                    color="secondary"
+                    checked={filterValues.includePastCompanies} // Bind the switch to state
+                    onChange={(event) => updateFilterValues('includePastCompanies', !filterValues.includePastCompanies)} // Update state on toggle
+                    sx={{ transform: 'rotate(-90deg)', alignSelf: 'center'}} 
                   />
-                )}
-              />
+                </Tooltip>
+              </div>
 
               <div style={{ display: 'flex'}}>  
                 <Autocomplete className={styles.filter}
@@ -188,19 +217,6 @@ export const Filters = () => {
                     sx={{ transform: 'rotate(-90deg)', alignSelf: 'center'}} 
                   />
                 </Tooltip>
-                {/* <FormControlLabel
-                  value="bottom"
-                  control={
-                    <Switch 
-                      color="secondary"
-                      checked={filterValues.includePastFunction} // Bind the switch to state
-                      onChange={(event) => updateFilterValues('includePastFunction', !filterValues.includePastFunction) } // Update state on toggle 
-                    />
-                  }
-                  label="Include past"
-                  labelPlacement="top"
-                  sx={{ verticalAlign: 'top'}}
-                /> */}
               </div>
 
               <Autocomplete className={styles.filter}
@@ -218,6 +234,35 @@ export const Filters = () => {
                 )}
               />
 
+              <LocalizationProvider dateAdapter={AdapterDayjs}>
+                <DemoContainer components={['DatePicker']}>
+                  <DatePicker className={styles.filterSmall} label={'Year From'} views={['year']} />
+                  <DatePicker className={styles.filterSmall} label={'Year To'} views={['year']} />
+                </DemoContainer>
+              </LocalizationProvider>
+
+
+              <FormControl className={styles.filter}>
+                <InputLabel id="company-size-label">Company Size</InputLabel>
+                <Select
+                  labelId="company-size-label"
+                  label="Company Size"
+                  multiple
+                  value={filterValues.selectedCompanySize}
+                  onChange={(event) => updateFilterValues('selectedCompanySize', event.target.value)}
+                >
+                  <MenuItem value="1-10">1-10 employees</MenuItem>
+                  <MenuItem value="11-50">11-50 employees</MenuItem>
+                  <MenuItem value="51-200">51-200 employees</MenuItem>
+                  <MenuItem value="201-500">201-500 employees</MenuItem>
+                  <MenuItem value="501-1000">501-1,000 employees</MenuItem>
+                  <MenuItem value="1001-5000">1,001-5,000 employees</MenuItem>
+                  <MenuItem value="5001-10000">5,001-10,000 employees</MenuItem>
+                  <MenuItem value="10000+">10,000+ employees</MenuItem>
+                </Select>
+              </FormControl>
+
+
             </div>
           </CustomTabPanel>
 
@@ -225,19 +270,11 @@ export const Filters = () => {
           <CustomTabPanel value={value} index={2}>
             <div className={styles.filtersContainer}>
 
-              <Autocomplete className={styles.filter}
-                multiple
-                limitTags={2}
-                options={top100Films}
-                getOptionLabel={(option) => option.title}
+              <TextField className={styles.filter}
+                variant="outlined"
+                label="Keyword"
                 value={filterValues.selectedKeyword}
-                onChange={(event, value) => updateFilterValues('selectedKeyword', value)}
-                renderInput={(params) => (
-                  <TextField
-                    {...params}
-                    label="Keyword"
-                  />
-                )}
+                onChange={(event) => updateFilterValues('selectedKeyword', event.target.value)} 
               />
 
               <Autocomplete className={styles.filter}

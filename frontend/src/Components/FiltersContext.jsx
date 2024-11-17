@@ -4,20 +4,22 @@ const FiltersContext = createContext();
 
 export const FiltersProvider = ({ children }) => {
   const [filterValues, setFilterValues] = useState({
-    selectedName: '',
+    selectedName: null,
     selectedLocation: [],
     selectedPosition: [],
     selectedFunction: [],
-    selectedSeniority: [],
+    selectedSeniority: "",
     selectedIndustry: [],
     includePastFunction: false,    
 
     selectedCompanyName: [],
+    includePastCompanies: false,
     selectedCompanyIndustry: [],
     includePastIndustry: false,
     selectedCompanyHeadquarters: [],
+    selectedCompanySize: [],
 
-    selectedKeyword: [],
+    selectedKeyword: "",
     selectedConnections: []
   });
 

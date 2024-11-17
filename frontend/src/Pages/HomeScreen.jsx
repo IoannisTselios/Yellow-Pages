@@ -73,9 +73,9 @@ export const HomeScreen = () => {
   }
 
   // Only render the main content once loading is complete
-  // if (loading) {
-  //   return <div>Loading...</div>; // Placeholder while waiting for authentication check
-  // }
+  if (loading) {
+    return <div>Loading...</div>; // Placeholder while waiting for authentication check
+  }
 
   const getData = async () => {
     try {
