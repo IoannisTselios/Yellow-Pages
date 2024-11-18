@@ -20,7 +20,7 @@ jobs:
 
       - name: Build and Sync Frontend Code to AWS Server
         run: |
-          rsync -avz --delete -e "ssh -o StrictHostKeyChecking=no" \
+          rsync -avz --delete --no-owner --no-group --chmod=ugo=rwX -e "ssh -o StrictHostKeyChecking=no" \
           ./frontend/ ${{ secrets.AWS_USER }}@${{ secrets.AWS_HOST }}:/home/ec2-user/frontend/
 
       - name: SSH into AWS server, build app, and prepare Docker
