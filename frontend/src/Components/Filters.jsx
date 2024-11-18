@@ -66,7 +66,6 @@ export const Filters = () => {
     return value.split('-')[0]
   }
   const getEnd = (value) => {
-    console.log(value.split('-'))
     if (value.split('-').length > 1)
       return value.split('-')[1]
     else 
