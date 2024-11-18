@@ -44,12 +44,20 @@ const DrawerInfo = ({ selectedRow }) => {
 
         <div className={styles.currentPositions}>
           <h4 style={{ margin: 0 }}>Current Positions</h4>
+
+          <p>{selectedRow.main_role.position}</p>
+          <p>{selectedRow.main_role.start_date}</p>
         </div>        
 
         <Divider sx={{ bgcolor: '#404040' }}/>
 
         <div className={styles.pastPositions}>
           <h4 style={{ margin: 0 }}>Past Positions</h4>
+
+          <p>{selectedRow.past_roles[0].position}</p>
+          <p>{selectedRow.past_roles[0].start_date}</p>
+          <p>{selectedRow.past_roles[0].end_date}</p>
+
         </div> 
 
       </div> 

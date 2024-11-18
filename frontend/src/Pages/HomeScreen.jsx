@@ -17,7 +17,7 @@ export const HomeScreen = () => {
   const [selectedRow, setSelectedRow] = useState(null);
   const [openDrawer, setOpenDrawer] = useState(false);
   const [name, setName] = useState('');
-  const [dataRows, setDataRows] = useState(null);
+  const [dataRows, setDataRows] = useState([]);
 
 
   const navigate = useNavigate();
@@ -29,7 +29,7 @@ export const HomeScreen = () => {
   useEffect(() => {
     (async () => {
       try {
-        const response = await fetch('http://13.48.244.239:80/api/get_current_user', {
+        const response = await fetch('http://localhost:80/api/get_current_user', {
           headers: {
             'Content-Type': 'application/json',
           },
@@ -98,9 +98,11 @@ export const HomeScreen = () => {
       }
 
       const data = await response.json();
-      setDataRows(data);
+      setDataRows(data.results);
       
       console.log('Data fetch successful:', data);
+      console.log('here', data.results)
+      console.log('this shit', dataRows)
 
     } catch (error) {
       console.error('Error during data fetch:', error);
@@ -238,7 +240,7 @@ export const HomeScreen = () => {
       width: 150, 
       renderCell: (params) => (
         <div>
-          <div>{params.value + params.row.last_name}</div>
+          <div>{params.value + ' ' + params.row.last_name}</div>
           <a 
             href={params.row.url} 
             target="_blank" 
@@ -253,16 +255,33 @@ export const HomeScreen = () => {
     { field: 'location', headerName: 'Location', width: 150 },
     { field: 'connected_with', headerName: 'Connections', width: 150 },
     { field: 'connection_strength', headerName: 'Connection Strength', width: 120 }, 
-    // { field: 'main_role', headerName: 'Position', width: 150 },
     {
       field: 'position',
       headerName: 'Position',
-      valueGetter: (params) => params.row.main_role?.position || 'N/A', // Retrieves position from main_role
+      renderCell: (params) => (
+        <div>
+          {params.row.main_role ? params.row.main_role.position : 'N/A'}
+        </div>
+      ),
+
+      // I do not know why the below is not working...
+      // valueGetter: (params) => {
+      //   console.log('ValueGetter Params:', params);
+      //   return params?.row?.main_role ? params.row.main_role.position : 'N/A'
+      // }, // Retrieves position from main_role
       width: 150
     },
     // { field: 'col5', headerName: 'Function', width: 150 },
     // { field: 'col6', headerName: 'Seniority', width: 150 },
-    // { field: 'col7', headerName: 'Company', width: 150 },
+    { 
+      field: 'company', 
+      headerName: 'Company', 
+      renderCell: (params) => (
+        <div>
+          {params.row.main_role ? params.row.main_role.company : 'N/A'}
+        </div>
+      ),
+      width: 150 },
     // { field: 'col8', headerName: 'Industry', width: 150 },
   ];
   
@@ -292,6 +311,7 @@ export const HomeScreen = () => {
         </div>
 
         <div className={styles.dataGridContainer}>
+          { dataRows.length > 0 &&
           <DataGrid 
             getRowId={(row) => row.url}
             style={{ borderRadius: '10px'}} 
@@ -323,6 +343,7 @@ export const HomeScreen = () => {
               },
             }}
           />
+          }
         </div>
 
       </div>
