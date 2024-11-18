@@ -40,30 +40,10 @@ jobs:
             # 3. Navigate to the React App Folder
             echo "Navigating to the frontend directory..."
             cd /home/ec2-user/frontend/ || { echo "Frontend directory not found"; exit 1; }
-
-            # 4. Remove package-lock.json and node_modules
-            echo "Cleaning up dependencies..."
-            rm -rf package-lock.json node_modules || true
-
-            # 5. Install Dependencies with Increased Memory Allocation
-            echo "Installing dependencies..."
-            NODE_OPTIONS="--max-old-space-size=4096" npm run build --legacy-peer-deps
-
-            # 6. Add Missing Babel Dependency
-            echo "Adding missing Babel dependency..."
-            npm install @babel/plugin-proposal-private-property-in-object --save-dev
-
-            # 7. De-duplicate Dependencies
-            echo "De-duplicating dependencies..."
-            npm dedupe
-
-            # 8. Start the Development Server (for Testing Purposes)
-            echo "Starting the development server..."
-            nohup npm start > /home/ec2-user/frontend/frontend.log 2>&1 &
-
-            # 9. Build the Production-Ready App
-            echo "Building the production-ready app..."
-            npm run build
+            
+            # 4. Install Node Modules
+            echo "Installing Node modules..."
+            NODE_OPTIONS="--max-old-space-size=4096" npm install --legacy-peer-deps
 
             # 10. Install Ngin
             echo "Installing Nginx..."
