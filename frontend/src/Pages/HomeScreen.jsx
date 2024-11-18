@@ -16,7 +16,7 @@ export const HomeScreen = () => {
   const [loading, setLoading] = useState(true); // Loading state for conditional rendering
   const [selectedRow, setSelectedRow] = useState(null);
   const [openDrawer, setOpenDrawer] = useState(false);
-  const [name, setName] = useState('');
+  // const [name, setName] = useState('');
   const [dataRows, setDataRows] = useState([]);
 
 
@@ -45,7 +45,7 @@ export const HomeScreen = () => {
           throw new Error('User data is empty or invalid');
         }
         
-        setName(content.first_name); // Set the user’s name if needed
+        // setName(content.first_name); // Set the user’s name if needed
         setLoading(false); // Stop loading once user is authenticated
 
       } catch (error) {
@@ -86,7 +86,7 @@ export const HomeScreen = () => {
 
   const getData = async () => {
     try {
-      const response = await fetch('http://localhost:80/api/get_connection_list/?page=1', {
+      const response = await fetch('http://localhost:80/api/get_connection_list/?page=3', {
         headers: {
           'Content-Type': 'application/json',
         },
@@ -139,96 +139,6 @@ export const HomeScreen = () => {
   //     location: 'Berlin', 
   //     bio: 'Experienced data analyst with a strong background in sales.', 
   //     summary: 'Enjoys uncovering insights that drive business growth.'
-  //   },
-  //   { 
-  //     id: 3, 
-  //     col1: 'Arthur Peterson', 
-  //     linkedinUrl: 'https://www.linkedin.com/in/georgia-tsoukala-5144a4245/', 
-  //     col2: 'Henry', 
-  //     col3: 2, 
-  //     col4: 'Change Management', 
-  //     col5: 'Communication', 
-  //     col6: 'Junior', 
-  //     col7: 'Novo Nordisk', 
-  //     col8: 'Pharmaceutical',
-  //     location: 'Amsterdam', 
-  //     bio: 'Communication specialist passionate about change management.', 
-  //     summary: 'Strives to facilitate smooth transitions in complex projects.'
-  //   },
-  //   { 
-  //     id: 4, 
-  //     col1: 'Moby Dick', 
-  //     linkedinUrl: 'https://www.linkedin.com/in/georgia-tsoukala-5144a4245/', 
-  //     col2: 'Mary', 
-  //     col3: 5, 
-  //     col4: 'Product Owner', 
-  //     col5: 'Management', 
-  //     col6: 'CEO', 
-  //     col7: 'DontKnow', 
-  //     col8: 'Pharmaceutical',
-  //     location: 'Stockholm', 
-  //     bio: 'Innovative product owner with a vision for business growth.', 
-  //     summary: 'Focuses on aligning products with customer needs and business goals.'
-  //   },
-  //   { 
-  //     id: 5, 
-  //     col1: 'Alice Wonderland', 
-  //     linkedinUrl: 'https://www.linkedin.com/in/alice-wonderland', 
-  //     col2: 'Bob, Charlie', 
-  //     col3: 3, 
-  //     col4: 'Marketing Specialist', 
-  //     col5: 'Marketing', 
-  //     col6: 'Senior', 
-  //     col7: 'Wonder Corp', 
-  //     col8: 'Entertainment',
-  //     location: 'Paris', 
-  //     bio: 'Creative marketer with a flair for storytelling.', 
-  //     summary: 'Passionate about creating campaigns that resonate with audiences.'
-  //   },
-  //   { 
-  //     id: 6, 
-  //     col1: 'Charlie Brown', 
-  //     linkedinUrl: 'https://www.linkedin.com/in/charlie-brown', 
-  //     col2: 'Alice, David', 
-  //     col3: 4, 
-  //     col4: 'Financial Analyst', 
-  //     col5: 'Finance', 
-  //     col6: 'Mid', 
-  //     col7: 'Peanuts Inc', 
-  //     col8: 'Finance',
-  //     location: 'New York', 
-  //     bio: 'Finance enthusiast with a keen eye for detail.', 
-  //     summary: 'Skilled in identifying financial trends and improving efficiency.'
-  //   },
-  //   { 
-  //     id: 7, 
-  //     col1: 'David Gray', 
-  //     linkedinUrl: 'https://www.linkedin.com/in/david-gray', 
-  //     col2: 'Charlie, Eve', 
-  //     col3: 5, 
-  //     col4: 'UX Designer', 
-  //     col5: 'Design', 
-  //     col6: 'Junior', 
-  //     col7: 'Gray Matter', 
-  //     col8: 'Tech',
-  //     location: 'London', 
-  //     bio: 'User-centric designer with a passion for simplicity.', 
-  //     summary: 'Focuses on creating intuitive and accessible designs.'
-  //   },
-  //   { 
-  //     id: 8, 
-  //     col1: 'Eve White', 
-  //     linkedinUrl: 'https://www.linkedin.com/in/eve-white', 
-  //     col2: 'Alice, Charlie, David', 
-  //     col3: 4, 
-  //     col4: 'HR Manager', 
-  //     col5: 'Human Resources', 
-  //     col6: 'Senior', 
-  //     col7: 'WhiteCo', 
-  //     col8: 'Retail',
-  //     location: 'San Francisco', 
-  //     bio: 'Dedicated HR professional fostering positive workplaces.', 
-  //     summary: 'Specializes in team building and talent acquisition strategies.'
   //   },
   // ];
 

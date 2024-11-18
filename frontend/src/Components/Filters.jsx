@@ -158,7 +158,8 @@ export const Filters = () => {
                 </Tooltip>
               </div>
 
-              <FormControl className={styles.filter}>
+              {/* Seniority in case we implement it */}
+              {/* <FormControl className={styles.filter}>
                 <InputLabel id="seniority">Seniority</InputLabel>
                 <Select
                   labelId="seniority-label"
@@ -172,7 +173,7 @@ export const Filters = () => {
                   <MenuItem value="mid">Mid</MenuItem>
                   <MenuItem value="senior">Senior</MenuItem>
                 </Select>
-              </FormControl>
+              </FormControl> */}
               
             </div>
           </CustomTabPanel>
@@ -279,38 +280,15 @@ export const Filters = () => {
                   min={0}
                   max={companySizes.length - 1}
                   step={1}
-                  // marks={companySizes.map((size, index) => ({ value: index, label: size }))}
                   marks={companySizes.map((size, index) => ({
                     value: index,
                     label: index === 0 || index === companySizes.length - 1 ? size : '', // Show label only for the first and last marks
                   }))}
                   // valueLabelFormat={valueLabelFormat}
                   onChange={(event, value) => updateFilterValues('selectedCompanySize', value)}
-                  // valueLabelDisplay="on"
                   aria-labelledby="company-size-slider"
                 />
               </Box>
-
-              {/* <FormControl className={styles.filter}>
-                <InputLabel id="company-size-label">Company Size</InputLabel>
-                <Select
-                  labelId="company-size-label"
-                  label="Company Size"
-                  multiple
-                  value={filterValues.selectedCompanySize}
-                  onChange={(event) => updateFilterValues('selectedCompanySize', event.target.value)}
-                >
-                  <MenuItem value="1-10">1-10 employees</MenuItem>
-                  <MenuItem value="11-50">11-50 employees</MenuItem>
-                  <MenuItem value="51-200">51-200 employees</MenuItem>
-                  <MenuItem value="201-500">201-500 employees</MenuItem>
-                  <MenuItem value="501-1000">501-1,000 employees</MenuItem>
-                  <MenuItem value="1001-5000">1,001-5,000 employees</MenuItem>
-                  <MenuItem value="5001-10000">5,001-10,000 employees</MenuItem>
-                  <MenuItem value="10000+">10,000+ employees</MenuItem>
-                </Select>
-              </FormControl> */}
-
 
             </div>
           </CustomTabPanel>
