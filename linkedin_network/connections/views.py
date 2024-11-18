@@ -4,12 +4,11 @@ from rest_framework.generics import ListAPIView
 from rest_framework.views import APIView
 from rest_framework import filters
 from django_filters.rest_framework import DjangoFilterBackend
+from core.pagination import CustomPageNumberPagination
 from django.db.models.functions import Lower
 from .models import Connection
 from .serializers import ConnectionSerializer, LocationSerializer
 from .filters import ConnectionFilter
-from  linkedin_network.jwt_auth import jwt_required
-from django.utils.decorators import method_decorator
 from rest_framework.response import Response
 import jwt
 
@@ -44,7 +43,7 @@ class LocationMetadataView(APIView):
 class ConnectionListView(ListAPIView):
     queryset = Connection.objects.all()
     serializer_class = ConnectionSerializer
-    pagination_class = PageNumberPagination
+    pagination_class = CustomPageNumberPagination
     filter_backends = [DjangoFilterBackend]  # Enable filtering
     filterset_class = ConnectionFilter
 

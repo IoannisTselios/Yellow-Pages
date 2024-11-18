@@ -50,6 +50,7 @@ INSTALLED_APPS = [
     'companies',
     'roles',
     'users',
+    'core',
 ]
 
 MIDDLEWARE = [
