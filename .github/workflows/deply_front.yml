@@ -47,7 +47,7 @@ jobs:
 
             # 5. Install Dependencies with Increased Memory Allocation
             echo "Installing dependencies..."
-            NODE_OPTIONS="--max-old-space-size=2048" npm install --legacy-peer-deps
+            NODE_OPTIONS="--max-old-space-size=4096" npm run build --legacy-peer-deps
 
             # 6. Add Missing Babel Dependency
             echo "Adding missing Babel dependency..."
