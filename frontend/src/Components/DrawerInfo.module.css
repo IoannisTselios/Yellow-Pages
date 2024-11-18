@@ -30,3 +30,11 @@
     padding-top: 16px;
     padding-bottom: 16px;
 }
+
+.gridContainer {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    padding-top: 16px;
+    padding-bottom: 16px
+}
