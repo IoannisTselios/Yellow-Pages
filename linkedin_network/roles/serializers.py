@@ -9,11 +9,12 @@ class FunctionSerializer(serializers.ModelSerializer):
 
 class RoleSerializer(serializers.ModelSerializer):
     company = serializers.CharField(source='company.name')
+    industry = serializers.CharField(source='company.industry')
     location = serializers.CharField(source='company.headquarters') 
 
     class Meta:
         model = Role
-        fields = ['company', 'position', 'description', 'start_date', 'end_date', 'location', 'main_role']
+        fields = ['company', 'position', 'industry', 'description', 'start_date', 'end_date', 'location', 'main_role']
 
 
 class PositionSerializer(serializers.Serializer):
