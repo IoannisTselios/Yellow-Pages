@@ -15,9 +15,15 @@
         Bulk import
     </a>
     {% elif opts.app_label == 'roles' %}
+    {% if opts.model_name == 'role' %}
     <a href="{% url 'admin:upload-csv-roles' %}" class="addlink">
         Bulk import
     </a>
+    {% elif opts.model_name == 'function' %}
+    <a href="{% url 'admin:upload-csv-functions' %}" class="addlink">
+        Bulk import
+    </a>
+    {% endif %}
     {% endif %}
 </li>
 {{ block.super }}
