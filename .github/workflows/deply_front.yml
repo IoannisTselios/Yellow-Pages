@@ -60,16 +60,5 @@ jobs:
             # 13. Enable Nginx to Start on Boot
             echo "Enabling Nginx to start on boot..."
             sudo systemctl enable nginx
-
-            # 14. Build Docker Image
-            echo "Building Docker image for the app..."
-            docker build -t frontend-app .
-
-            # 15. Run Docker Container
-            echo "Running the Docker container..."
-            docker stop frontend-app || true
-            docker rm frontend-app || true
-            docker run -d -p 80:80 --name frontend-app frontend-app
-
-            echo "Deployment completed successfully with Docker!"
+            
           EOF
