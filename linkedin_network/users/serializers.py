@@ -17,3 +17,9 @@ class UserSerializer(serializers.ModelSerializer):
             instance.set_password(password)
         instance.save()
         return instance
+    
+class UserLiteSerializer(serializers.Serializer):
+    users = serializers.ListField(
+        child=serializers.CharField(),
+        label="Users"
+    )

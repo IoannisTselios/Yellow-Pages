@@ -1,0 +1,15 @@
+services:
+  frontend:
+    build: # Build from the Dockerfile located in the frontend directory
+      context: ./frontend # Location of the frontend Dockerfile
+      dockerfile: Dockerfile
+    ports:
+      - "80:80" # Map container port 80 to host port 80
+    container_name: frontend-app
+    restart: always
+    networks:
+      - app-network # Connect frontend to the same network as backend
+
+networks:
+  app-network:
+    driver: bridge

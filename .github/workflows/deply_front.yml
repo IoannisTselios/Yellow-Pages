@@ -1,0 +1,64 @@
+name: Deploy Frontend to AWS on Merge
+
+on:
+  push:
+    branches:
+      - main  # Trigger on push to the main branch
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Set up SSH agent and add key
+        uses: webfactory/ssh-agent@v0.5.3
+        with:
+          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+
+      - name: Build and Sync Frontend Code to AWS Server
+        run: |
+          rsync -avz --delete --no-owner --no-group --no-t --chmod=ugo=rwX -e "ssh -o StrictHostKeyChecking=no" \
+          ./frontend/ ${{ secrets.AWS_USER }}@${{ secrets.AWS_HOST }}:/home/ec2-user/frontend/
+
+      - name: SSH into AWS server, build app, and prepare Docker
+        run: |
+          ssh -o StrictHostKeyChecking=no ${{ secrets.AWS_USER }}@${{ secrets.AWS_HOST }} << 'EOF'
+            set -e
+
+            # 1. Remove Node.js v16
+            echo "Removing existing Node.js version..."
+            sudo dnf remove nodejs -y || true
+
+            # 2. Install Node.js v18
+            echo "Installing Node.js v18..."
+            curl -fsSL https://rpm.nodesource.com/setup_18.x | sudo bash -
+            sudo dnf install nodejs -y
+
+            # 3. Navigate to the React App Folder
+            echo "Navigating to the frontend directory..."
+            cd /home/ec2-user/frontend/ || { echo "Frontend directory not found"; exit 1; }
+            
+            # 4. Install Node Modules
+            echo "Installing Node modules..."
+            NODE_OPTIONS="--max-old-space-size=4096" npm install --legacy-peer-deps
+
+            # 10. Install Ngin
+            echo "Installing Nginx..."
+            sudo yum install nginx -y
+
+            # 11. Copy Build Files to Nginx’s Default Web Root
+            echo "Deploying the app to Nginx web root..."
+            sudo cp -r build/* /usr/share/nginx/html/
+
+            # 12. Start Nginx
+            echo "Starting Nginx server..."
+            sudo systemctl start nginx
+
+            # 13. Enable Nginx to Start on Boot
+            echo "Enabling Nginx to start on boot..."
+            sudo systemctl enable nginx
+            
+          EOF

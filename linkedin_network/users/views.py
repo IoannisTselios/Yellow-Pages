@@ -1,7 +1,8 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.exceptions import AuthenticationFailed
-from .serializers import UserSerializer
+from django.db.models.functions import Lower
+from .serializers import UserSerializer, UserLiteSerializer
 from .models import User
 import jwt, datetime
 
@@ -71,3 +72,31 @@ class LogoutView(APIView):
             'message': 'success'
         }
         return response
+    
+
+class UserLiteView(APIView):
+    def get(self, request):
+        # Check for authentication token
+        token = request.COOKIES.get('jwt')
+        if not token:
+            raise AuthenticationFailed('Unauthenticated!')
+
+        try:
+            payload = jwt.decode(token, 'secret', algorithms=['HS256'])
+        except jwt.ExpiredSignatureError:
+            raise AuthenticationFailed('Unauthenticated!')
+
+        # Query unique  names
+        users = User.objects.filter(first_name__isnull=False, first_name__gt='') \
+            .values_list('first_name', flat=True).distinct()
+
+        # Prepare the data
+        data = {
+            "users": list(users)
+        }
+
+        # Serialize the data
+        serializer = UserLiteSerializer(data)
+        
+        # Return the serialized data
+        return Response(serializer.data)
