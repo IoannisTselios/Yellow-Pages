@@ -46,10 +46,10 @@ const companySizes = [
   '10-50',
   '50-200',
   '200-500',
-  '500-1,000',
-  '1,000-5,000',
-  '5,000-10,000',
-  '10,000+',
+  '500-1000',
+  '1,000-5000',
+  '5,000-10000',
+  '10000+',
 ];
 
 export const Filters = ({locations, positions, functions, industries, hqs, connections}) => {
@@ -61,7 +61,7 @@ export const Filters = ({locations, positions, functions, industries, hqs, conne
     setValue(newValue);
   };
 
-  // handling company size results
+  // Handling company size results
   const getStart = (value) => {
     return value.split('-')[0]
   }
@@ -125,8 +125,16 @@ export const Filters = ({locations, positions, functions, industries, hqs, conne
     }
 
     if (params.selectedCompanySize.length === 2) {
-      queryParams.append("main_company_size_min", params.selectedCompanySize[0]);
-      queryParams.append("main_company_size_max", params.selectedCompanySize[1]);
+      queryParams.append("main_company_size_min", getStart(companySizes[params.selectedCompanySize[0]]));
+
+      console.log(getStart(companySizes[params.selectedCompanySize[0]]));
+      console.log(getEnd(companySizes[params.selectedCompanySize[1]]));
+
+      if(getEnd(companySizes[params.selectedCompanySize[1]]) == '10000+'){
+        console.log("+++");
+      } else {
+        queryParams.append("main_company_size_max", getEnd(companySizes[params.selectedCompanySize[1]]));
+      }      
     }
 
     if (params.selectedCompanyYear.length === 2) {
@@ -358,12 +366,12 @@ export const Filters = ({locations, positions, functions, industries, hqs, conne
                 )}
               />
 
-              <LocalizationProvider dateAdapter={AdapterDayjs}>
+              {/* <LocalizationProvider dateAdapter={AdapterDayjs}>
                 <DemoContainer components={['DatePicker']}>
                   <DatePicker className={styles.filterSmall} label={'Year From'} views={['year']} />
                   <DatePicker className={styles.filterSmall} label={'Year To'} views={['year']} />
                 </DemoContainer>
-              </LocalizationProvider>
+              </LocalizationProvider> */}
 
               <Box className={styles.filter}>
                 <Typography id="company-year-slider" gutterBottom>
@@ -393,7 +401,7 @@ export const Filters = ({locations, positions, functions, industries, hqs, conne
                   step={1}
                   marks={companySizes.map((size, index) => ({
                     value: index,
-                    label: index === 0 ? "1" : (index === companySizes.length - 1 ? size : '') 
+                    label: index === 0 ? "1" : (index === companySizes.length - 1 ? "10,000+" : '') 
                     // label: index === 0 || index === companySizes.length - 1 ? size : '', // Show label only for the first and last marks
                   }))}
                   // valueLabelFormat={valueLabelFormat}

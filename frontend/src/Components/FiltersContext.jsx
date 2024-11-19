@@ -18,8 +18,8 @@ export const FiltersProvider = ({ children }) => {
     selectedCompanyIndustry: [],
     includePastIndustry: false,
     selectedCompanyHeadquarters: [],
-    selectedCompanySize: [0, 2],
-    selectedCompanyYear: [2014, 2024],
+    selectedCompanySize: [0, 7],
+    selectedCompanyYear: [1800, 2024],
 
     selectedKeyword: "",
     selectedConnections: [],

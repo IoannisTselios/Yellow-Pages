@@ -193,30 +193,30 @@ export const HomeScreen = () => {
     return <div>Loading...</div>; // Placeholder while waiting for authentication check
   }
 
-  const getData = async () => {
-    try {
-      const response = await fetch('http://localhost:80/api/get_connection_list/', {
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        credentials: 'include',
-      });
+  // const getData = async () => {
+  //   try {
+  //     const response = await fetch('http://localhost:80/api/get_connection_list/', {
+  //       headers: {
+  //         'Content-Type': 'application/json',
+  //       },
+  //       credentials: 'include',
+  //     });
 
-      if (!response.ok) {
-        throw new Error('Data fetch failed');
-      }
+  //     if (!response.ok) {
+  //       throw new Error('Data fetch failed');
+  //     }
 
-      const data = await response.json();
-      setDataRows(data.results);
+  //     const data = await response.json();
+  //     setDataRows(data.results);
       
-      console.log('Data fetch successful:', data);
-      console.log('here', data.results)
-      console.log('this shit', dataRows)
+  //     console.log('Data fetch successful:', data);
+  //     console.log('here', data.results)
+  //     console.log('this shit', dataRows)
 
-    } catch (error) {
-      console.error('Error during data fetch:', error);
-    }
-  };
+  //   } catch (error) {
+  //     console.error('Error during data fetch:', error);
+  //   }
+  // };
 
   // const rows = [
   //   { 
@@ -332,7 +332,7 @@ export const HomeScreen = () => {
       <div className={styles.underline}></div>
       
       <div className={styles.mainContent}>
-         <Button variant="contained" color="primary" sx={{ marginRight: '16px'}} onClick={getData}>Get Data</Button>
+         {/* <Button variant="contained" color="primary" sx={{ marginRight: '16px'}} onClick={getData}>Get Data</Button> */}
         <div className={styles.filtersContainer}>
           <Filters locations={locations} positions={positions} functions={functions} industries={industries} hqs={headquarters} connections={connections}></Filters>
         </div>
