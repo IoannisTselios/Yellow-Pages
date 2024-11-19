@@ -27,8 +27,10 @@ export const HomeScreen = () => {
   // saving the values of the filters
   const [locations, setLocations] = useState([]);
   const [positions, setPositions] = useState([]);
+  const [functions, setFunctions] = useState([]);
   const [industries, setIndustries] = useState([]);
   const [headquarters, setHeadquarters] = useState([]);
+  const [connections, setConnections] = useState([]);
 
 
   useEffect(() => {
@@ -102,6 +104,25 @@ export const HomeScreen = () => {
       }
 
       try {
+        const resp_func = await fetch('http://localhost:80/api/get_functions', {
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          credentials: 'include',
+        });
+        
+        if (!resp_func.ok) {
+          throw new Error('Error fetching functions');
+        }
+
+        const data_func = await resp_func.json();
+        setFunctions(data_func.functions);
+
+      } catch (error) {
+        console.error("Functions fetch failed:", error);
+      }
+
+      try {
         const resp_comp = await fetch('http://localhost:80/api/get_company_metadata', {
           headers: {
             'Content-Type': 'application/json',
@@ -120,6 +141,26 @@ export const HomeScreen = () => {
       } catch (error) {
         console.error("Company metadata fetch failed:", error);
       }
+
+      try {
+        const resp_conn = await fetch('http://localhost:80/api/get_users', {
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          credentials: 'include',
+        });
+        
+        if (!resp_conn.ok) {
+          throw new Error('Error fetching connections');
+        }
+
+        const data_conn = await resp_conn.json();
+        setConnections(data_conn.users);
+
+      } catch (error) {
+        console.error("Connections fetch failed:", error);
+      }
+
     })();
   }, [loading])
 
@@ -152,32 +193,30 @@ export const HomeScreen = () => {
     return <div>Loading...</div>; // Placeholder while waiting for authentication check
   }
 
-  // const getData = async () => {
-  //   try {
-  //     const response = await fetch('http://localhost:80/api/get_connection_list/?page=3', {
-  //       headers: {
-  //         'Content-Type': 'application/json',
-  //       },
-  //       credentials: 'include',
-  //     });
+  const getData = async () => {
+    try {
+      const response = await fetch('http://localhost:80/api/get_connection_list/', {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        credentials: 'include',
+      });
 
-  //     if (!response.ok) {
-  //       throw new Error('Data fetch failed');
-  //     }
+      if (!response.ok) {
+        throw new Error('Data fetch failed');
+      }
 
-  //     const data = await response.json();
-  //     setDataRows(data.results);
+      const data = await response.json();
+      setDataRows(data.results);
       
-  //     console.log('Data fetch successful:', data);
-  //     console.log('here', data.results)
-  //     console.log('this shit', dataRows)
+      console.log('Data fetch successful:', data);
+      console.log('here', data.results)
+      console.log('this shit', dataRows)
 
-  //   } catch (error) {
-  //     console.error('Error during data fetch:', error);
-  //   }
-
-  //   console.log(locations)
-  // };
+    } catch (error) {
+      console.error('Error during data fetch:', error);
+    }
+  };
 
   // const rows = [
   //   { 
@@ -293,9 +332,9 @@ export const HomeScreen = () => {
       <div className={styles.underline}></div>
       
       <div className={styles.mainContent}>
-         {/* <Button variant="contained" color="primary" sx={{ marginRight: '16px'}} onClick={getData}>Get Data</Button> */}
+         <Button variant="contained" color="primary" sx={{ marginRight: '16px'}} onClick={getData}>Get Data</Button>
         <div className={styles.filtersContainer}>
-          <Filters locations={locations} positions={positions} industries={industries} hqs={headquarters} ></Filters>
+          <Filters locations={locations} positions={positions} functions={functions} industries={industries} hqs={headquarters} connections={connections}></Filters>
         </div>
 
         <div className={styles.dataGridContainer}>

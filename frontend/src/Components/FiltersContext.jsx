@@ -9,9 +9,9 @@ export const FiltersProvider = ({ children }) => {
     selectedLocation: [],
     selectedPosition: [],
     selectedFunction: [],
+    includePastFunction: false,  
     // selectedSeniority: "",
-    selectedIndustry: [],
-    includePastFunction: false,    
+      
 
     selectedCompanyName: "",
     includePastCompanies: false,

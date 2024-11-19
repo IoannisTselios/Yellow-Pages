@@ -43,16 +43,16 @@ function CustomTabPanel(props) {
 
 const companySizes = [
   '1-10',
-  '11-50',
-  '51-200',
-  '201-500',
-  '501-1,000',
-  '1,001-5,000',
-  '5,001-10,000',
-  '10,001+',
+  '10-50',
+  '50-200',
+  '200-500',
+  '500-1,000',
+  '1,000-5,000',
+  '5,000-10,000',
+  '10,000+',
 ];
 
-export const Filters = ({locations, positions, industries, hqs}) => {
+export const Filters = ({locations, positions, functions, industries, hqs, connections}) => {
   const { filterValues, updateFilterValues } = useFilters();
 
   // Controlling the tabs for the filters
@@ -115,7 +115,9 @@ export const Filters = ({locations, positions, industries, hqs}) => {
     // }
 
     if (params.includePastFunction && params.selectedFunction.length > 0) {
-      queryParams.append("past_function", params.selectedFunction.join(","));
+      queryParams.append("function", params.selectedFunction.join(","));
+    } else if (params.selectedFunction.length > 0) {
+      queryParams.append("current_function", params.selectedFunction.join(","));
     }
 
     if (params.selectedConnections.length > 0) {
@@ -240,8 +242,8 @@ export const Filters = ({locations, positions, industries, hqs}) => {
                 <Autocomplete className={styles.filter}
                   multiple
                   limitTags={2}
-                  options={top100Films}
-                  getOptionLabel={(option) => option.title}
+                  options={functions}
+                  getOptionLabel={(option) => option}
                   value={filterValues.selectedFunction}
                   onChange={(event, value) => updateFilterValues('selectedFunction', value)}
                   renderInput={(params) => (
@@ -356,12 +358,12 @@ export const Filters = ({locations, positions, industries, hqs}) => {
                 )}
               />
 
-              {/* <LocalizationProvider dateAdapter={AdapterDayjs}>
+              <LocalizationProvider dateAdapter={AdapterDayjs}>
                 <DemoContainer components={['DatePicker']}>
                   <DatePicker className={styles.filterSmall} label={'Year From'} views={['year']} />
                   <DatePicker className={styles.filterSmall} label={'Year To'} views={['year']} />
                 </DemoContainer>
-              </LocalizationProvider> */}
+              </LocalizationProvider>
 
               <Box className={styles.filter}>
                 <Typography id="company-year-slider" gutterBottom>
@@ -373,8 +375,8 @@ export const Filters = ({locations, positions, industries, hqs}) => {
                   // valueLabelDisplay="on"
                   aria-labelledby="company-year-slider"
                   step={1}
-                  marks
-                  min={2000}
+                  // marks
+                  min={1800}
                   max={2024}
                   onChange={(event, value) => updateFilterValues('selectedCompanyYear', value)}
                 />
@@ -391,7 +393,8 @@ export const Filters = ({locations, positions, industries, hqs}) => {
                   step={1}
                   marks={companySizes.map((size, index) => ({
                     value: index,
-                    label: index === 0 || index === companySizes.length - 1 ? size : '', // Show label only for the first and last marks
+                    label: index === 0 ? "1" : (index === companySizes.length - 1 ? size : '') 
+                    // label: index === 0 || index === companySizes.length - 1 ? size : '', // Show label only for the first and last marks
                   }))}
                   // valueLabelFormat={valueLabelFormat}
                   onChange={(event, value) => updateFilterValues('selectedCompanySize', value)}
@@ -416,8 +419,8 @@ export const Filters = ({locations, positions, industries, hqs}) => {
               <Autocomplete className={styles.filter}
                 multiple
                 limitTags={2}
-                options={top100Films}
-                getOptionLabel={(option) => option.title}
+                options={connections}
+                getOptionLabel={(option) => option}
                 value={filterValues.selectedConnections}
                 onChange={(event, value) => updateFilterValues('selectedConnections', value)}
                 renderInput={(params) => (
