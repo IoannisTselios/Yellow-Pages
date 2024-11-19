@@ -4,15 +4,16 @@ const FiltersContext = createContext();
 
 export const FiltersProvider = ({ children }) => {
   const [filterValues, setFilterValues] = useState({
-    selectedName: null,
+    selectedFirstName: "",//null,
+    selectedLastName: "",
     selectedLocation: [],
     selectedPosition: [],
     selectedFunction: [],
-    selectedSeniority: "",
+    // selectedSeniority: "",
     selectedIndustry: [],
     includePastFunction: false,    
 
-    selectedCompanyName: [],
+    selectedCompanyName: "",
     includePastCompanies: false,
     selectedCompanyIndustry: [],
     includePastIndustry: false,
@@ -21,7 +22,9 @@ export const FiltersProvider = ({ children }) => {
     selectedCompanyYear: [2014, 2024],
 
     selectedKeyword: "",
-    selectedConnections: []
+    selectedConnections: [],
+
+    filteredData: []
   });
 
   const updateFilterValues = (key, value) => {

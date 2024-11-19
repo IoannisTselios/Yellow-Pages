@@ -10,8 +10,11 @@ import { Button, Drawer, IconButton, Tooltip } from '@mui/material';
 import ExitToAppRoundedIcon from '@mui/icons-material/ExitToAppRounded'; 
 
 import { Filters } from "../Components/Filters";
+import { useFilters } from "../Components/FiltersContext";
 
 export const HomeScreen = () => {
+  const { filterValues, updateFilterValues } = useFilters();
+
   const [redirect, setRedirect] = useState(false);
   const [loading, setLoading] = useState(true); // Loading state for conditional rendering
   const [selectedRow, setSelectedRow] = useState(null);
@@ -19,12 +22,14 @@ export const HomeScreen = () => {
   // const [name, setName] = useState('');
   const [dataRows, setDataRows] = useState([]);
 
-
   const navigate = useNavigate();
 
-  function getRowId(row) {
-    return row.internalId;
-  }
+  // saving the values of the filters
+  const [locations, setLocations] = useState([]);
+  const [positions, setPositions] = useState([]);
+  const [industries, setIndustries] = useState([]);
+  const [headquarters, setHeadquarters] = useState([]);
+
 
   useEffect(() => {
     (async () => {
@@ -55,6 +60,69 @@ export const HomeScreen = () => {
     })();
   }, [navigate]);
 
+  useEffect(() => {
+    (async () => {
+
+      try {
+        const resp_loc = await fetch('http://localhost:80/api/get_locations', {
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          credentials: 'include',
+        });
+        
+        if (!resp_loc.ok) {
+          throw new Error('Error fetching locations');
+        }
+
+        const data_loc = await resp_loc.json();
+        setLocations(data_loc.locations);
+
+      } catch (error) {
+        console.error("Locations fetch failed:", error);
+      }
+
+      try {
+        const resp_pos = await fetch('http://localhost:80/api/get_positions', {
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          credentials: 'include',
+        });
+        
+        if (!resp_pos.ok) {
+          throw new Error('Error fetching positions');
+        }
+
+        const data_pos = await resp_pos.json();
+        setPositions(data_pos.positions);
+
+      } catch (error) {
+        console.error("Locations fetch failed:", error);
+      }
+
+      try {
+        const resp_comp = await fetch('http://localhost:80/api/get_company_metadata', {
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          credentials: 'include',
+        });
+        
+        if (!resp_comp.ok) {
+          throw new Error('Error fetching company metadata');
+        }
+
+        const data_comp = await resp_comp.json();
+        setIndustries(data_comp.industries);
+        setHeadquarters(data_comp.headquarters);
+
+      } catch (error) {
+        console.error("Company metadata fetch failed:", error);
+      }
+    })();
+  }, [loading])
+
   const handleLogout = async () => {
     try {
       const logout = await fetch('http://13.48.244.239:80/api/logout', {
@@ -84,30 +152,32 @@ export const HomeScreen = () => {
     return <div>Loading...</div>; // Placeholder while waiting for authentication check
   }
 
-  const getData = async () => {
-    try {
-      const response = await fetch('http://localhost:80/api/get_connection_list/?page=3', {
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        credentials: 'include',
-      });
+  // const getData = async () => {
+  //   try {
+  //     const response = await fetch('http://localhost:80/api/get_connection_list/?page=3', {
+  //       headers: {
+  //         'Content-Type': 'application/json',
+  //       },
+  //       credentials: 'include',
+  //     });
 
-      if (!response.ok) {
-        throw new Error('Data fetch failed');
-      }
+  //     if (!response.ok) {
+  //       throw new Error('Data fetch failed');
+  //     }
 
-      const data = await response.json();
-      setDataRows(data.results);
+  //     const data = await response.json();
+  //     setDataRows(data.results);
       
-      console.log('Data fetch successful:', data);
-      console.log('here', data.results)
-      console.log('this shit', dataRows)
+  //     console.log('Data fetch successful:', data);
+  //     console.log('here', data.results)
+  //     console.log('this shit', dataRows)
 
-    } catch (error) {
-      console.error('Error during data fetch:', error);
-    }
-  };
+  //   } catch (error) {
+  //     console.error('Error during data fetch:', error);
+  //   }
+
+  //   console.log(locations)
+  // };
 
   // const rows = [
   //   { 
@@ -192,7 +262,15 @@ export const HomeScreen = () => {
         </div>
       ),
       width: 150 },
-    // { field: 'col8', headerName: 'Industry', width: 150 },
+    { 
+      field: 'industry', 
+      headerName: 'Industry', 
+      renderCell: (params) => (
+        <div>
+          {params.row.main_role ? params.row.main_role.industry : 'N/A'}
+        </div>
+      ),
+      width: 150 },
   ];
   
   const handleRowClick = (params) => {
@@ -215,17 +293,17 @@ export const HomeScreen = () => {
       <div className={styles.underline}></div>
       
       <div className={styles.mainContent}>
-         <Button variant="contained" color="primary" sx={{ marginRight: '16px'}} onClick={getData}>Get Data</Button>
+         {/* <Button variant="contained" color="primary" sx={{ marginRight: '16px'}} onClick={getData}>Get Data</Button> */}
         <div className={styles.filtersContainer}>
-          <Filters></Filters>
+          <Filters locations={locations} positions={positions} industries={industries} hqs={headquarters} ></Filters>
         </div>
 
         <div className={styles.dataGridContainer}>
-          { dataRows.length > 0 &&
+          { filterValues.filteredData.length > 0 &&
           <DataGrid 
             getRowId={(row) => row.url}
             style={{ borderRadius: '10px'}} 
-            rows={dataRows} 
+            rows={filterValues.filteredData} 
             columns={columns} 
             checkboxSelection 
             disableRowSelectionOnClick

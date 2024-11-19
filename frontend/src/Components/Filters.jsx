@@ -52,7 +52,7 @@ const companySizes = [
   '10,001+',
 ];
 
-export const Filters = () => {
+export const Filters = ({locations, positions, industries, hqs}) => {
   const { filterValues, updateFilterValues } = useFilters();
 
   // Controlling the tabs for the filters
@@ -72,6 +72,96 @@ export const Filters = () => {
       return value.split('-')[0]
   }
 
+  const generateEndpoint = (params) => {
+    const baseURL = "http://localhost:80/api/get_connection_list/";
+
+    const queryParams = new URLSearchParams();
+
+    if (params.selectedFirstName) {
+      queryParams.append("first_name", params.selectedFirstName);
+    }
+    if (params.selectedLastName) {
+      queryParams.append("last_name", params.selectedLastName);
+    }
+
+    if (params.selectedLocation.length > 0) {
+      queryParams.append("location", params.selectedLocation.join(","));
+    }
+
+    if (params.selectedPosition.length > 0) {
+      queryParams.append("main_position", params.selectedPosition.join(","));
+      queryParams.append("current_position", params.selectedPosition.join(","));
+    }
+
+    if (params.selectedKeyword) {
+      queryParams.append("keyword", params.selectedKeyword);
+    }
+
+    if (params.includePastCompanies && params.selectedCompanyName) {
+      queryParams.append("company", params.selectedCompanyName); // is it contains or exact or what?
+      // when to use current and when main??
+    } else if (params.selectedCompanyName) {
+      queryParams.append("main_company", params.selectedCompanyName);
+    }
+
+    if (params.includePastIndustry && params.selectedCompanyIndustry.length > 0) {
+      queryParams.append("industry", params.selectedCompanyIndustry.join(","));
+    } else if (params.selectedCompanyIndustry.length > 0) {
+      queryParams.append("main_industry", params.selectedCompanyIndustry.join(","));
+    }
+
+    // if (params.selectedCompanyHeadquarters.length > 0) {
+    //   queryParams.append("company_location", params.selectedCompanyHeadquarters.join(","));
+    // }
+
+    if (params.includePastFunction && params.selectedFunction.length > 0) {
+      queryParams.append("past_function", params.selectedFunction.join(","));
+    }
+
+    if (params.selectedConnections.length > 0) {
+      queryParams.append("connected_with", params.selectedConnections.join(","));
+    }
+
+    if (params.selectedCompanySize.length === 2) {
+      queryParams.append("main_company_size_min", params.selectedCompanySize[0]);
+      queryParams.append("main_company_size_max", params.selectedCompanySize[1]);
+    }
+
+    if (params.selectedCompanyYear.length === 2) {
+      queryParams.append("main_company_year_min", params.selectedCompanyYear[0]);
+      queryParams.append("main_company_year_max", params.selectedCompanyYear[1]);
+    }
+
+    return `${baseURL}?${queryParams.toString()}`;
+  };
+
+  const handleApply = async () => {
+    console.log('Submitted', filterValues); 
+    // localhost:80/api/get_connection_list/?location=Denmark&keyword=pre-seed,seed&main_company=Google&past_company=Microsoft,Azure&current_company=Netflix,Sequoia&company=Apple,Google&main_company_size_min=100&main_company_size_max=5000&past_company_size_min=50&past_company_size_max=10000&current_company_size_min=200&current_company_size_max=500&company_size_min=10&company_size_max=1000&main_industry=Tech,Finance&past_industry=Healthcare&current_industry=Education&industry=Retail&main_position=Manager&past_position=Analyst&current_position=Developer&position=Engineer&connected_with=Mads&current_function=General Law&function=Academic Research&first_name=Artemis&page=2
+    const my_endpoint = generateEndpoint(filterValues);
+    console.log('MY ENDPOINT', my_endpoint)
+    try {
+      const response_filter = await fetch(my_endpoint, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        credentials: 'include',
+      });
+
+      if (!response_filter.ok) {
+        throw new Error('Filtering failed');
+      }
+
+      const filter_data = await response_filter.json();
+      console.log('THIS DATA', filter_data);
+      updateFilterValues('filteredData', filter_data.results);
+
+    } catch (error) {
+      console.error('Error during filtering:', error);
+    }
+  }
+
   return (
       <Box sx={{ width: '100%' }}>
         <Box className={styles.tabsContainer}>
@@ -80,13 +170,13 @@ export const Filters = () => {
             <Tab icon={<BusinessIcon />} iconPosition="start" label="Company" className={styles.tab}/>
             <Tab icon={<HubIcon />} iconPosition="start" label="General" className={styles.tab} />
           </Tabs>
-          <Button variant="contained" color="primary" sx={{ marginRight: '16px'}} onClick={() => { console.log('Submitted', filterValues); }}>Apply Filters</Button>
+          <Button variant="contained" color="primary" sx={{ marginRight: '16px'}} onClick={handleApply}>Apply Filters</Button>
         </Box>
 
           {/* Person Tab */}
           <CustomTabPanel value={value} index={0} >
             <div className={styles.filtersContainer}>
-               <Autocomplete className={styles.filter}
+               {/* <Autocomplete className={styles.filter}
                 limitTags={2}
                 options={top100Films}
                 getOptionLabel={(option) => option.title}
@@ -98,13 +188,26 @@ export const Filters = () => {
                     label="Name"
                   />
                 )}
-              />
+              /> */}
+              <TextField className={styles.filter}
+                variant="outlined"
+                label="First Name"
+                value={filterValues.selectedFirstName}
+                onChange={(event) => updateFilterValues('selectedFirstName', event.target.value)} 
+              /> 
+
+              <TextField className={styles.filter}
+                variant="outlined"
+                label="Last Name"
+                value={filterValues.selectedLastName}
+                onChange={(event) => updateFilterValues('selectedLastName', event.target.value)} 
+              /> 
 
               <Autocomplete className={styles.filter}
                 multiple
                 limitTags={2}
-                options={top100Films}
-                getOptionLabel={(option) => option.title}
+                options={locations}
+                getOptionLabel={(option) => option}
                 value={filterValues.selectedLocation}
                 onChange={(event, value) => updateFilterValues('selectedLocation', value)}
                 renderInput={(params) => (
@@ -118,8 +221,8 @@ export const Filters = () => {
               <Autocomplete className={styles.filter}
                 multiple
                 limitTags={2}
-                options={top100Films}
-                getOptionLabel={(option) => option.title}
+                options={positions}
+                getOptionLabel={(option) => option}
                 // defaultValue={[top100Films[13]]}
                 // filterSelectedOptions
                 value={filterValues.selectedPosition}
@@ -183,7 +286,7 @@ export const Filters = () => {
             <div className={styles.filtersContainer}>
 
               <div style={{ display: 'flex'}}>
-                <Autocomplete className={styles.filter}
+                {/* <Autocomplete className={styles.filter}
                   multiple
                   limitTags={2}
                   options={top100Films}
@@ -196,7 +299,13 @@ export const Filters = () => {
                       label="Company Name"
                     />
                   )}
-                />     
+                />   */}
+                <TextField className={styles.filter}
+                  variant="outlined"
+                  label="Company Name"
+                  value={filterValues.selectedCompanyName}
+                  onChange={(event) => updateFilterValues('selectedCompanyName', event.target.value)} 
+                />   
                 <Tooltip title="Include Past Companies" placement="top">
                   <Switch
                     color="secondary"
@@ -211,8 +320,8 @@ export const Filters = () => {
                 <Autocomplete className={styles.filter}
                   multiple
                   limitTags={2}
-                  options={top100Films}
-                  getOptionLabel={(option) => option.title}
+                  options={industries}
+                  getOptionLabel={(option) => option}
                   value={filterValues.selectedCompanyIndustry}
                   onChange={(event, value) => updateFilterValues('selectedCompanyIndustry', value)}
                   renderInput={(params) => (
@@ -235,8 +344,8 @@ export const Filters = () => {
               <Autocomplete className={styles.filter}
                 multiple
                 limitTags={2}
-                options={top100Films}
-                getOptionLabel={(option) => option.title}
+                options={hqs}
+                getOptionLabel={(option) => option}
                 value={filterValues.selectedCompanyHeadquarters}
                 onChange={(event, value) => updateFilterValues('selectedCompanyHeadquarters', value)}
                 renderInput={(params) => (
