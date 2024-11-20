@@ -5,7 +5,7 @@ import DrawerInfo from '../Components/DrawerInfo';
 import { Navigate, useNavigate } from 'react-router-dom';
 import { DataGrid, GridToolbar } from '@mui/x-data-grid';
 
-import { Button, Drawer, IconButton, Tooltip } from '@mui/material';
+import { Button, CircularProgress, Drawer, IconButton, LinearProgress, Tooltip } from '@mui/material';
 
 import ExitToAppRoundedIcon from '@mui/icons-material/ExitToAppRounded'; 
 
@@ -14,6 +14,8 @@ import { useFilters } from "../Components/FiltersContext";
 
 export const HomeScreen = () => {
   const { filterValues, updateFilterValues } = useFilters();
+
+  const [loadingData, setLoadingData] = useState(false);  //Loading while the endpoint is getting the filtered data
 
   const [redirect, setRedirect] = useState(false);
   const [loading, setLoading] = useState(true); // Loading state for conditional rendering
@@ -327,24 +329,39 @@ export const HomeScreen = () => {
         </div>
         <Tooltip title="Logout" placement="left">
           <IconButton color="secondary" onClick={handleLogout}><ExitToAppRoundedIcon /></IconButton>
-        </Tooltip>         
+        </Tooltip>
       </div>
       <div className={styles.underline}></div>
-      
+  
       <div className={styles.mainContent}>
-         {/* <Button variant="contained" color="primary" sx={{ marginRight: '16px'}} onClick={getData}>Get Data</Button> */}
-        <div className={styles.filtersContainer}>
-          <Filters locations={locations} positions={positions} functions={functions} industries={industries} hqs={headquarters} connections={connections}></Filters>
-        </div>
 
+        {/* Filters */}
+        <div className={styles.filtersContainer}>
+          <Filters
+            setLoadingData={setLoadingData}
+            locations={locations}
+            positions={positions}
+            functions={functions}
+            industries={industries}
+            hqs={headquarters}
+            connections={connections}
+          />
+        </div>
+  
+        {/* Data Table */}
         <div className={styles.dataGridContainer}>
-          {filterValues.filteredData.length > 0 ? (
-            <DataGrid 
+          {loadingData ? (
+            // Show loading indicator while loading data
+            <LinearProgress />
+            // <CircularProgress size={80} />
+          ) : filterValues.filteredData.length > 0 ? (
+            // Show the DataGrid if there is data
+            <DataGrid
               getRowId={(row) => row.url}
-              style={{ borderRadius: '10px'}} 
-              rows={filterValues.filteredData} 
-              columns={columns} 
-              checkboxSelection 
+              style={{ borderRadius: '10px' }}
+              rows={filterValues.filteredData}
+              columns={columns}
+              checkboxSelection
               disableRowSelectionOnClick
               disableSelectionOnClick
               disableDensitySelector
@@ -353,7 +370,7 @@ export const HomeScreen = () => {
               slots={{ toolbar: GridToolbar }}
               slotProps={{
                 toolbar: {
-                  printOptions: { disableToolbarButton: true }                
+                  printOptions: { disableToolbarButton: true }
                 }
               }}
               sx={{
@@ -371,19 +388,21 @@ export const HomeScreen = () => {
               }}
             />
           ) : (
-            <p className={styles.noDataMessage}>No results. Try adjusting the filters!</p>  //when no data is available
+            // Show no data message if there is no data
+            <p className={styles.noDataMessage}>No results. Try adjusting the filters!</p>
           )}
         </div>
-
       </div>
-      <div>      
-        <Drawer 
-          open={openDrawer} 
-          onClose={() => setOpenDrawer(false)} 
+  
+      {/* Drawer */}
+      <div>
+        <Drawer
+          open={openDrawer}
+          onClose={() => setOpenDrawer(false)}
           anchor={'right'}
-          sx={{ 
-            "& .MuiDrawer-paper": { 
-              backgroundColor: "#181818" 
+          sx={{
+            "& .MuiDrawer-paper": {
+              backgroundColor: "#181818"
             }
           }}
         >
@@ -392,5 +411,6 @@ export const HomeScreen = () => {
       </div>
     </div>
   );
+  
 }
 

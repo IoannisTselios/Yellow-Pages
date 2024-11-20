@@ -52,8 +52,8 @@ const companySizes = [
   '10000+',
 ];
 
-export const Filters = ({locations, positions, functions, industries, hqs, connections}) => {
-  const { filterValues, updateFilterValues } = useFilters();
+export const Filters = ({setLoadingData, locations, positions, functions, industries, hqs, connections}) => {
+  const { filterValues, updateFilterValues } = useFilters();  
 
   //Controlling the tabs for the filters
   const [value, setValue] = useState(0);
@@ -150,6 +150,9 @@ export const Filters = ({locations, positions, functions, industries, hqs, conne
     // localhost:80/api/get_connection_list/?location=Denmark&keyword=pre-seed,seed&main_company=Google&past_company=Microsoft,Azure&current_company=Netflix,Sequoia&company=Apple,Google&main_company_size_min=100&main_company_size_max=5000&past_company_size_min=50&past_company_size_max=10000&current_company_size_min=200&current_company_size_max=500&company_size_min=10&company_size_max=1000&main_industry=Tech,Finance&past_industry=Healthcare&current_industry=Education&industry=Retail&main_position=Manager&past_position=Analyst&current_position=Developer&position=Engineer&connected_with=Mads&current_function=General Law&function=Academic Research&first_name=Artemis&page=2
     const my_endpoint = generateEndpoint(filterValues);
     console.log('MY ENDPOINT', my_endpoint)
+
+    setLoadingData(true);  //Loading set to true before the fetch request
+
     try {
       const response_filter = await fetch(my_endpoint, {
         method: 'GET',
@@ -169,6 +172,8 @@ export const Filters = ({locations, positions, functions, industries, hqs, conne
 
     } catch (error) {
       console.error('Error during filtering:', error);
+    } finally {
+      setLoadingData(false);  //Loading set to false when the fetch is done or an error occurs
     }
   }
 
@@ -467,6 +472,7 @@ export const Filters = ({locations, positions, functions, industries, hqs, conne
 
             </div> 
           </CustomTabPanel>
+          
       </Box>
   );
 }
