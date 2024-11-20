@@ -32,7 +32,7 @@ class CompanyMetadataView(APIView):
         # Prepare the data
         metadata = {
             "industries": list(industries),
-            "headquarter_country": list(headquarter_country),
+            "headquarters": list(headquarter_country),
         }
 
         # Serialize the data
