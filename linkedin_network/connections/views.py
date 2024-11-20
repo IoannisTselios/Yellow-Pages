@@ -7,7 +7,7 @@ from django_filters.rest_framework import DjangoFilterBackend
 from core.pagination import CustomPageNumberPagination
 from django.db.models.functions import Lower
 from .models import Connection
-from .serializers import ConnectionSerializer, LocationSerializer
+from .serializers import ConnectionSerializer, CountrySerializer
 from .filters import ConnectionFilter
 from rest_framework.response import Response
 import jwt
@@ -25,17 +25,20 @@ class LocationMetadataView(APIView):
             raise AuthenticationFailed('Unauthenticated!')
 
         # Query unique locations
-        locations = Connection.objects.annotate(lower_location=Lower('location')) \
-            .filter(lower_location__isnull=False, lower_location__gt='') \
-            .values_list('lower_location', flat=True).distinct()
+        countries = Connection.objects.filter(
+                country__isnull=False, 
+                country__gt='',
+            ).exclude(
+                country__in=["Unknown", "Not Found"]
+            ).values_list('country', flat=True).distinct()
 
         # Prepare the data
         metadata = {
-            "locations": list(locations),
+            "countries": list(countries),
         }
 
         # Serialize the data
-        serializer = LocationSerializer(metadata)
+        serializer = CountrySerializer(metadata)
 
         # Return the serialized data
         return Response(serializer.data)

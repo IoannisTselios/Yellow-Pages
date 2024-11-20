@@ -2,10 +2,10 @@ from rest_framework import serializers
 from .models import Connection
 from roles.serializers import RoleSerializer, FunctionSerializer
 
-class LocationSerializer(serializers.Serializer):
-    locations = serializers.ListField(
+class CountrySerializer(serializers.Serializer):
+    countries = serializers.ListField(
         child=serializers.CharField(),
-        label="Locations"
+        label="Countries"
     )
 
 class ConnectionSerializer(serializers.ModelSerializer):
