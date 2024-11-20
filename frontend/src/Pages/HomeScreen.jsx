@@ -338,39 +338,41 @@ export const HomeScreen = () => {
         </div>
 
         <div className={styles.dataGridContainer}>
-          { filterValues.filteredData.length > 0 &&
-          <DataGrid 
-            getRowId={(row) => row.url}
-            style={{ borderRadius: '10px'}} 
-            rows={filterValues.filteredData} 
-            columns={columns} 
-            checkboxSelection 
-            disableRowSelectionOnClick
-            disableSelectionOnClick
-            disableDensitySelector
-            getRowHeight={() => 'auto'}
-            onRowClick={handleRowClick}
-            slots={{ toolbar: GridToolbar }}
-            slotProps={{
-              toolbar: {
-                printOptions: { disableToolbarButton: true }                
-              }
-            }}
-            sx={{
-              "& .MuiDataGrid-columnHeaderTitle": {
-                fontWeight: 'bold',
-                whiteSpace: "normal",
-                lineHeight: 1.2,
-              },
-              "& .MuiDataGrid-columnHeader": {
-                height: "auto",
-              },
-              "& .MuiDataGrid-cell:focus, .MuiDataGrid-cell:focus-within": {
-                outline: "none",
-              },
-            }}
-          />
-          }
+          {filterValues.filteredData.length > 0 ? (
+            <DataGrid 
+              getRowId={(row) => row.url}
+              style={{ borderRadius: '10px'}} 
+              rows={filterValues.filteredData} 
+              columns={columns} 
+              checkboxSelection 
+              disableRowSelectionOnClick
+              disableSelectionOnClick
+              disableDensitySelector
+              getRowHeight={() => 'auto'}
+              onRowClick={handleRowClick}
+              slots={{ toolbar: GridToolbar }}
+              slotProps={{
+                toolbar: {
+                  printOptions: { disableToolbarButton: true }                
+                }
+              }}
+              sx={{
+                "& .MuiDataGrid-columnHeaderTitle": {
+                  fontWeight: 'bold',
+                  whiteSpace: "normal",
+                  lineHeight: 1.2,
+                },
+                "& .MuiDataGrid-columnHeader": {
+                  height: "auto",
+                },
+                "& .MuiDataGrid-cell:focus, .MuiDataGrid-cell:focus-within": {
+                  outline: "none",
+                },
+              }}
+            />
+          ) : (
+            <p className={styles.noDataMessage}>No results. Try adjusting the filters!</p>  //when no data is available
+          )}
         </div>
 
       </div>

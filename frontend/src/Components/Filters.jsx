@@ -55,7 +55,7 @@ const companySizes = [
 export const Filters = ({locations, positions, functions, industries, hqs, connections}) => {
   const { filterValues, updateFilterValues } = useFilters();
 
-  // Controlling the tabs for the filters
+  //Controlling the tabs for the filters
   const [value, setValue] = useState(0);
   const handleChange = (event, newValue) => {
     setValue(newValue);
