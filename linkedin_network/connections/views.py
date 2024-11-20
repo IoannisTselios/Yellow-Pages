@@ -25,16 +25,16 @@ class LocationMetadataView(APIView):
             raise AuthenticationFailed('Unauthenticated!')
 
         # Query unique locations
-        locations = Connection.objects.filter(
+        countries = Connection.objects.filter(
                 country__isnull=False, 
                 country__gt='',
             ).exclude(
                 country__in=["Unknown", "Not Found"]
-            ).values_list('connections/', flat=True).distinct()
+            ).values_list('country', flat=True).distinct()
 
         # Prepare the data
         metadata = {
-            "locations": list(locations),
+            "locations": list(countries),
         }
 
         # Serialize the data

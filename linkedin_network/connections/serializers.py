@@ -5,7 +5,7 @@ from roles.serializers import RoleSerializer, FunctionSerializer
 class CountrySerializer(serializers.Serializer):
     locations = serializers.ListField(
         child=serializers.CharField(),
-        label="locations"
+        label="Countries"
     )
 
 class ConnectionSerializer(serializers.ModelSerializer):
