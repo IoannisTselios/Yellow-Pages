@@ -11,6 +11,7 @@ class Connection(models.Model):
     summary = models.TextField(null=True, blank=True)
     url = models.URLField(primary_key=True, max_length=200)
     location = models.CharField(max_length=100)
+    country = models.CharField(max_length=100, blank=True)
     # many-to-many relation to app users
     connections = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='connections', through='UserConnection', blank=False)
 

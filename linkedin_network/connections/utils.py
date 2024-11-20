@@ -38,6 +38,8 @@ def save_connections_from_dataframe(df):
                 'summary': row.get('summary', ''),
                 'url': row.get('url', ''),
                 'location': row.get('location', ''),
+                'country': row.get('country', ''),
+
             }            
 
             # Create or update the Connection instance using URL as the unique identifier
