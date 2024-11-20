@@ -36,7 +36,7 @@ export const HomeScreen = () => {
   useEffect(() => {
     (async () => {
       try {
-        const response = await fetch('http://13.48.244.239:80/api/get_current_user', {
+        const response = await fetch('http://localhost:80/api/get_current_user', {
           headers: {
             'Content-Type': 'application/json',
           },
@@ -66,7 +66,7 @@ export const HomeScreen = () => {
     (async () => {
 
       try {
-        const resp_loc = await fetch('http://13.48.244.239:80/api/get_locations', {
+        const resp_loc = await fetch('http://localhost:80/api/get_locations', {
           headers: {
             'Content-Type': 'application/json',
           },
@@ -85,7 +85,7 @@ export const HomeScreen = () => {
       }
 
       try {
-        const resp_pos = await fetch('http://13.48.244.239:80/api/get_positions', {
+        const resp_pos = await fetch('http://localhost:80/api/get_positions', {
           headers: {
             'Content-Type': 'application/json',
           },
@@ -104,7 +104,7 @@ export const HomeScreen = () => {
       }
 
       try {
-        const resp_func = await fetch('http://13.48.244.239:80/api/get_functions', {
+        const resp_func = await fetch('http://localhost:80/api/get_functions', {
           headers: {
             'Content-Type': 'application/json',
           },
@@ -123,7 +123,7 @@ export const HomeScreen = () => {
       }
 
       try {
-        const resp_comp = await fetch('http://13.48.244.239:80/api/get_company_metadata', {
+        const resp_comp = await fetch('http://localhost:80/api/get_company_metadata', {
           headers: {
             'Content-Type': 'application/json',
           },
@@ -143,7 +143,7 @@ export const HomeScreen = () => {
       }
 
       try {
-        const resp_conn = await fetch('http://13.48.244.239:80/api/get_users', {
+        const resp_conn = await fetch('http://localhost:80/api/get_users', {
           headers: {
             'Content-Type': 'application/json',
           },
@@ -166,7 +166,7 @@ export const HomeScreen = () => {
 
   const handleLogout = async () => {
     try {
-      const logout = await fetch('http://13.48.244.239:80/api/logout', {
+      const logout = await fetch('http://localhost:80/api/logout', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -195,7 +195,7 @@ export const HomeScreen = () => {
 
   // const getData = async () => {
   //   try {
-  //     const response = await fetch('http://13.48.244.239:80/api/get_connection_list/', {
+  //     const response = await fetch('http://localhost:80/api/get_connection_list/', {
   //       headers: {
   //         'Content-Type': 'application/json',
   //       },

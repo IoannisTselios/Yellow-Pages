@@ -73,7 +73,7 @@ export const Filters = ({locations, positions, functions, industries, hqs, conne
   }
 
   const generateEndpoint = (params) => {
-    const baseURL = "http://13.48.244.239:80/api/get_connection_list/";
+    const baseURL = "http://localhost:80/api/get_connection_list/";
 
     const queryParams = new URLSearchParams();
 
@@ -147,7 +147,7 @@ export const Filters = ({locations, positions, functions, industries, hqs, conne
 
   const handleApply = async () => {
     console.log('Submitted', filterValues); 
-    // 13.48.244.239:80/api/get_connection_list/?location=Denmark&keyword=pre-seed,seed&main_company=Google&past_company=Microsoft,Azure&current_company=Netflix,Sequoia&company=Apple,Google&main_company_size_min=100&main_company_size_max=5000&past_company_size_min=50&past_company_size_max=10000&current_company_size_min=200&current_company_size_max=500&company_size_min=10&company_size_max=1000&main_industry=Tech,Finance&past_industry=Healthcare&current_industry=Education&industry=Retail&main_position=Manager&past_position=Analyst&current_position=Developer&position=Engineer&connected_with=Mads&current_function=General Law&function=Academic Research&first_name=Artemis&page=2
+    // localhost:80/api/get_connection_list/?location=Denmark&keyword=pre-seed,seed&main_company=Google&past_company=Microsoft,Azure&current_company=Netflix,Sequoia&company=Apple,Google&main_company_size_min=100&main_company_size_max=5000&past_company_size_min=50&past_company_size_max=10000&current_company_size_min=200&current_company_size_max=500&company_size_min=10&company_size_max=1000&main_industry=Tech,Finance&past_industry=Healthcare&current_industry=Education&industry=Retail&main_position=Manager&past_position=Analyst&current_position=Developer&position=Engineer&connected_with=Mads&current_function=General Law&function=Academic Research&first_name=Artemis&page=2
     const my_endpoint = generateEndpoint(filterValues);
     console.log('MY ENDPOINT', my_endpoint)
     try {
