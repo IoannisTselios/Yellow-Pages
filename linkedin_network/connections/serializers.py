@@ -3,9 +3,9 @@ from .models import Connection
 from roles.serializers import RoleSerializer, FunctionSerializer
 
 class CountrySerializer(serializers.Serializer):
-    countries = serializers.ListField(
+    locations = serializers.ListField(
         child=serializers.CharField(),
-        label="Countries"
+        label="locations"
     )
 
 class ConnectionSerializer(serializers.ModelSerializer):
