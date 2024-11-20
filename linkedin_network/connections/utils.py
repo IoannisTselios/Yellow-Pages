@@ -7,10 +7,8 @@ import pandas as pd
 from bs4 import BeautifulSoup
 from collections import defaultdict
 
-
 logger = logging.getLogger(__name__)
 User = get_user_model()
-
 
 def read_html_content_for_all_users():
     """
@@ -102,6 +100,61 @@ def get_interaction_data():
     comments_df = parse_interactions_from_html(user_html_content)
 
     return comments_df
+
+
+def calculate_employment_overlap():
+    """
+    Calculate overlapping employment periods for employees within the same company.
+    Returns:
+        DataFrame: A DataFrame with overlapping employment data.
+    """
+    from roles.models import Role
+
+    # Dictionary to store employment periods by company
+    employment_by_company = defaultdict(list)
+
+    # Fetch all roles from the database
+    roles = Role.objects.select_related('connection', 'company')
+
+    # Organize roles by company
+    for role in roles:
+        employee_name = f"{role.connection.first_name} {role.connection.last_name}"
+        print(f"Employee name: {employee_name}")
+        start_date = role.start_date
+        end_date = role.end_date or datetime.today().date()  # Use today's date for ongoing roles
+        company_name = role.company.name
+
+        # Append employee and their role period to the company's employment list
+        employment_by_company[company_name].append((employee_name, start_date, end_date))
+
+    # List to store unique overlap data
+    overlap_data = []
+
+    # Check for overlapping employment periods within each company
+    for company, employments in employment_by_company.items():
+        for i, (emp1, start1, end1) in enumerate(employments):
+            for j, (emp2, start2, end2) in enumerate(employments):
+                # Ensure emp1 and emp2 are not the same and only calculate once for each unique pair
+                if i < j and emp1 != emp2:
+                    # Sort the pair to ensure uniqueness (name1, name2) == (name2, name1)
+                    name_pair = tuple(sorted((emp1, emp2)))
+                    overlap_start = max(start1, start2)
+                    overlap_end = min(end1, end2)
+                    
+                    # Calculate overlap duration
+                    if overlap_start <= overlap_end:
+                        overlap_duration = (overlap_end.year - overlap_start.year) * 12 + (overlap_end.month - overlap_start.month)
+                        if overlap_duration > 0:
+                            overlap_data.append({
+                                "name1": name_pair[0],
+                                "name2": name_pair[1],
+                                "company": company,
+                                "worked_for": overlap_duration
+                            })
+
+    # Convert overlap data to DataFrame
+    overlap_df = pd.DataFrame(overlap_data, columns=['name1', 'name2', 'company', 'worked_for'])
+    return overlap_df
 
 
 
