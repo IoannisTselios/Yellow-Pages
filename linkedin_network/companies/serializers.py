@@ -5,7 +5,7 @@ class CompanyMetadataSerializer(serializers.Serializer):
         child=serializers.CharField(),
         label="Industries"
     )
-    headquarter_country = serializers.ListField(
+    headquarters = serializers.ListField(
         child=serializers.CharField(),
         label="Headquarter_Country"
     )
