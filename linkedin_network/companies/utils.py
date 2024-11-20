@@ -26,6 +26,7 @@ def save_companies_from_dataframe(df: pd.DataFrame):
                 employee_count=int(row['employee_count']) if pd.notna(row['employee_count']) else None,
                 year_founded=int(row['year_founded']) if pd.notna(row['year_founded']) else None,
                 headquarters=row['headquarters'] if pd.notna(row['headquarters']) else "",
+                headquarter_country=row['country'] if pd.notna(row['country']) else "",
                 specialties=row['specialties'] if pd.notna(row['specialties']) else "",
                 investment_stage="",  # Defaults for extra fields not in the CSV
                 funding=None
