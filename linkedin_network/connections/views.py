@@ -30,7 +30,7 @@ class LocationMetadataView(APIView):
                 country__gt='',
             ).exclude(
                 country__in=["Unknown", "Not Found"]
-            ).values_list('country', flat=True).distinct()
+            ).values_list('connections/', flat=True).distinct()
 
         # Prepare the data
         metadata = {
