@@ -12,7 +12,6 @@ export const FiltersProvider = ({ children }) => {
     includePastFunction: false,  
     // selectedSeniority: "",
       
-
     selectedCompanyName: "",
     includePastCompanies: false,
     selectedCompanyIndustry: [],
