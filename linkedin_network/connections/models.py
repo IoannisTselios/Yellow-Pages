@@ -14,10 +14,7 @@ class Connection(models.Model):
     country = models.CharField(max_length=100, blank=True)
     # many-to-many relation to app users
     connections = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='connections', through='UserConnection', blank=False)
-
-    @property
-    def connection_strength(self):
-        return strength_metric_calculation(self)
+    connection_strength = models.FloatField()
 
     def __str__(self):
         return f'{self.first_name} {self.last_name}'
