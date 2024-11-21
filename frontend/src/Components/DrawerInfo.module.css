@@ -1,5 +1,14 @@
+* {
+    margin: 0;
+    padding: 0 
+}
+
+h4 {
+    padding-bottom: 5px;
+}
+
 .drawerContainer{
-    margin: 12px;
+    margin: 16px;
 }
 
 .profile{
@@ -13,28 +22,10 @@
     gap: 12px;
 }
 
-.bioSummary{
-    padding-top: 16px;
-    padding-bottom: 16px;
-    display: flex;
-    justify-content: space-between;
-    gap: 12px;
-}
-
-.currentPositions{
-    padding-top: 16px;
-    padding-bottom: 16px;
-}
-
-.pastPositions{
-    padding-top: 16px;
-    padding-bottom: 16px;
-}
-
 .gridContainer {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 20px;
     padding-top: 16px;
-    padding-bottom: 16px
+    padding-bottom: 16px;
 }

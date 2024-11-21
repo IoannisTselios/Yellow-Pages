@@ -9,21 +9,12 @@ import HubIcon from '@mui/icons-material/Hub';
 
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
-
 import Autocomplete from '@mui/material/Autocomplete';
 import TextField from '@mui/material/TextField';
-import FormControlLabel from '@mui/material/FormControlLabel';
 import Switch from '@mui/material/Switch';
 
-import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import { DatePicker } from '@mui/x-date-pickers/DatePicker';
-
-import { FormControl, InputLabel, MenuItem, Select } from "@mui/material";
-
 import { useFilters } from "../Components/FiltersContext";
-import { filterStateInitializer } from "@mui/x-data-grid/internals";
+
 
 function CustomTabPanel(props) {
     const { children, value, index, ...other } = props;

@@ -42,7 +42,7 @@ const DrawerInfo = ({ selectedRow }) => {
           <h3 style={{ margin: 0 }}>{selectedRow.first_name + ' ' + selectedRow.last_name}</h3>
           <p style={{ margin: 0 }}>{selectedRow.location}</p>
           <a 
-            href={selectedRow.linkedinUrl} 
+            href={selectedRow.url} 
             target="_blank" 
             rel="noopener noreferrer" 
             style={{ fontSize: '0.8em', color: '#B3B3B3' }}
@@ -54,8 +54,6 @@ const DrawerInfo = ({ selectedRow }) => {
         <Divider sx={{ bgcolor: '#404040' }}/>
 
         <div className={styles.connections}>
-          {/* <Chip label="Markus" variant="outlined" color="secondary"/>
-          <Chip label="Konstantina" variant="outlined" color="secondary"/> */}
           {selectedRow.connected_with.map((name, index) => (
             <Chip 
               key={index} 
@@ -68,14 +66,14 @@ const DrawerInfo = ({ selectedRow }) => {
 
         <Divider sx={{ bgcolor: '#404040' }}/>
 
-        <div className={styles.bioSummary}>
-          <div style={{ flex: 1 }}>
-            <h4 style={{ margin: 0 }}>Bio</h4>
-            <p style={{ margin: 0, paddingTop: 5 }}>{selectedRow.bio}</p>
+        <div className={styles.gridContainer}>
+          <div>
+            <h4>Bio</h4>
+            <p>{selectedRow.bio}</p>
           </div>
-          <div style={{ flex: 1 }}>
-            <h4 style={{ margin: 0 }}>Summary</h4>
-            <p style={{ margin: 0, paddingTop: 5 }}>{selectedRow.summary}</p>
+          <div>
+            <h4>Summary</h4>
+            <p>{selectedRow.summary}</p>
           </div>
         </div>
 
@@ -85,16 +83,13 @@ const DrawerInfo = ({ selectedRow }) => {
         { selectedRow.main_role ? 
           <div className={styles.gridContainer}>
             <div>
-              <p>{selectedRow.main_role.position}</p>
+              <p style={{fontWeight: 'bold'}}>{selectedRow.main_role.position}</p>
               {/* <p>{selectedRow.main_role.start_date}</p> */}
               <p>{calculateTimeDifference(selectedRow.main_role.start_date, new Date())}</p>
             </div>
             <div>
-              <p>{selectedRow.main_role.company}</p>
-              <p>{selectedRow.main_role.industry}</p>
-              <p>{selectedRow.main_role.company_size}</p>
-              <p>{selectedRow.main_role.year_founded}</p>
-              <p>{selectedRow.main_role.location}</p>
+              <p><span style={{fontWeight: 'bold'}}>{selectedRow.main_role.company}</span> - {selectedRow.main_role.industry}</p>
+              <p style={{fontSize: 14}}>{selectedRow.main_role.location.split(',')[0]} - {selectedRow.main_role.company_size} people - since {selectedRow.main_role.year_founded}</p>
             </div>
           </div>  
           : <p>There are no current roles</p>
@@ -103,16 +98,13 @@ const DrawerInfo = ({ selectedRow }) => {
         {selectedRow.other_roles.map((role, index) => (
           <div key={index} className={styles.gridContainer}>
             <div>
-              <p>{role.position}</p>
+              <p style={{fontWeight: 'bold'}}>{role.position}</p>
               {/* <p>{role.start_date}</p> */}
               <p>{calculateTimeDifference(role.start_date, new Date())}</p>
             </div>
             <div>
-              <p>{role.company}</p>
-              <p>{role.industry}</p>
-              <p>{role.company_size}</p>
-              <p>{role.year_founded}</p>
-              <p>{role.location}</p>
+              <p><span style={{fontWeight: 'bold'}}>{role.company}</span> - {role.industry}</p>
+              <p style={{fontSize: 14}}>{role.location.split(',')[0]} - {role.company_size} people - since {role.year_founded}</p>
             </div>
           </div>        
         ))}
@@ -123,15 +115,12 @@ const DrawerInfo = ({ selectedRow }) => {
         {selectedRow.past_roles.map((past_role, index) => (
           <div key={index} className={styles.gridContainer}>
             <div>
-              <p>{past_role.position}</p>
+              <p style={{fontWeight: 'bold'}}>{past_role.position}</p>
               <p>{calculateTimeDifference(past_role.start_date, past_role.end_date)}</p>
             </div>
             <div>
-              <p>{past_role.company}</p>
-              <p>{past_role.industry}</p>
-              <p>{past_role.company_size}</p>
-              <p>{past_role.year_founded}</p>
-              <p>{past_role.location}</p>
+              <p><span style={{fontWeight: 'bold'}}>{past_role.company}</span> - {past_role.industry}</p>
+              <p style={{fontSize: 14}}>{past_role.location.split(',')[0]} - {past_role.company_size} people - since {past_role.year_founded}</p>
             </div>
           </div>        
         ))}

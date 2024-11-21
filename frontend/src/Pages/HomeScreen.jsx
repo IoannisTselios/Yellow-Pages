@@ -220,38 +220,101 @@ export const HomeScreen = () => {
   //   }
   // };
 
-  // const rows = [
-  //   { 
-  //     id: 1, 
-  //     col1: 'Bety Boo', 
-  //     linkedinUrl: 'https://www.linkedin.com/in/georgia-tsoukala-5144a4245/', 
-  //     col2: 'Jack, Henry, Mary', 
-  //     col3: 3, 
-  //     col4: 'Student', 
-  //     col5: 'Developer', 
-  //     col6: 'Junior', 
-  //     col7: 'Novo Nordisk', 
-  //     col8: 'Pharmaceutical',
-  //     location: 'Copenhagen', 
-  //     bio: 'A passionate learner with a knack for technology.', 
-  //     summary: 'Currently focused on building skills in full-stack development.'
-  //   },
-  //   { 
-  //     id: 2, 
-  //     col1: 'John Hex', 
-  //     linkedinUrl: 'https://www.linkedin.com/in/georgia-tsoukala-5144a4245/', 
-  //     col2: 'Henry, Mary', 
-  //     col3: 4, 
-  //     col4: 'Data Analyst', 
-  //     col5: 'Data Science', 
-  //     col6: 'Mid', 
-  //     col7: 'Hexagon', 
-  //     col8: 'Sales',
-  //     location: 'Berlin', 
-  //     bio: 'Experienced data analyst with a strong background in sales.', 
-  //     summary: 'Enjoys uncovering insights that drive business growth.'
-  //   },
-  // ];
+//   const rows = [
+//     {
+//   first_name: "John",
+//   last_name: "Doe",
+//   location: "San Francisco, CA",
+//   "connection_strength": 0,
+//   url: "https://www.linkedin.com/in/johndoe/1",
+//   connected_with: ["Markus", "Konstantina", "Emily", "Sofia"],
+//   bio: "John is a software engineer with over 10 years of experience in building scalable web applications.",
+//   summary: "Specializes in front-end development and creating user-friendly interfaces. Passionate about mentoring junior developers.",
+//   main_role: {
+//     position: "Lead Frontend Developer",
+//     start_date: "2020-05-15", // YYYY-MM-DD
+//     company: "Tech Solutions Inc.",
+//     industry: "Software Development",
+//     company_size: "201-500",
+//     year_founded: 2010,
+//     location: "San Francisco, CA"
+//   },
+//   other_roles: [
+//     {
+//       position: "Frontend Developer",
+//       start_date: "2018-03-10",
+//       company: "Web Creatives Ltd.",
+//       industry: "Web Development",
+//       company_size: "51-200",
+//       year_founded: 2012,
+//       location: "New York, NY"
+//     },
+//     {
+//       position: "UI/UX Designer",
+//       start_date: "2015-08-01",
+//       company: "Creative Minds Studio",
+//       industry: "Design Services",
+//       company_size: "11-50",
+//       year_founded: 2008,
+//       location: "Los Angeles, CA"
+//     }
+//   ],
+//   past_roles: [
+//     {
+//       position: "Junior Frontend Developer",
+//       start_date: "2012-06-01",
+//       end_date: "2015-07-31",
+//       company: "Startup Hub",
+//       industry: "Tech Startups",
+//       company_size: "1-10",
+//       year_founded: 2011,
+//       location: "Austin, TX"
+//     },
+//     {
+//       position: "Intern",
+//       start_date: "2011-01-01",
+//       end_date: "2012-05-31",
+//       company: "Digital Innovators",
+//       industry: "IT Services",
+//       company_size: "51-200",
+//       year_founded: 2005,
+//       location: "Boston, MA"
+//     }
+//   ]
+// },
+//         {
+//             "first_name": "Amy",
+//             "last_name": "Soricelli",
+//             "location": "New York, New York, United States",
+//             "connection_strength": 0,
+//             "url": "https://www.linkedin.com/in/amysoricelli",
+//             "bio": "Vice President, Career Services",
+//             "summary": "A lifetime of  Compassionate Recruiting for all levels of office support staff.    \n\nStrong partnerships with a loyal band of clients and candidates:  \n\n*27,450+ LinkedIn connections/ 28,955 followers. \n\n\"Placed\" 5,000+  people in .various roles and industries.\n\nManagement and support of a dynamic team of Career Service professionals.  \n\nCustomer relations;  Student engagement\n\nVirtual workshops on all aspects of job search and career readiness.\n\nDedicated assistance with the process of career development for all alumni from all programs.\n\nA member of numerous committees related to Student Success, Community Service, Strategic Planning, Retention, and Social Media\n\nMentor for the Leadership Berkeley Program.\n\nI believe in building strong relationships, listening effectively, and acting quickly but compassionately.\n*In order for me to be a happy person -  each day must include employment assistance of some kind.",
+//             "connected_with": [
+//                 "Nico"
+//             ],
+//             "main_role": null,
+//             "other_roles": [],
+//             "past_roles": [],
+//             "functions": []
+//         },
+//         {
+//             "first_name": "Dylan",
+//             "last_name": "Wolff",
+//             "location": "Oslo, Oslo, Norway",
+//             "connection_strength": 0,
+//             "url": "https://www.linkedin.com/in/dylan-wolff-oslo",
+//             "bio": "Senior Investment Professional and Business Executive",
+//             "summary": "I am a senior investment professional and business executive with over 30 years of international experience in private equity, secondaries, venture, equities, portfolio management, asset allocation, infrastructure, startups, fintech, impact investing, sustainable finance, hedge funds, management consulting and law. \n\nI was previously a partner at NorgesInvestor, an Engagement Manager (Project Leader) at McKinsey, the Chief Investment Officer at UNI Pensjon, and a corporate lawyer at Telenor. I currently advise the CEO of Capassa, a B2B SaaS fintech scaleup.\n\nI hold degrees in business and law from leading Canadian universities, in addition to a \"Mini-MBA\" education from McKinsey and courses in many subjects including sustainable finance, AI, negotiations, valuation, and many more. \n\nI am originally from Canada, but have been living in Norway since 1993. I speak and write fluent English and Norwegian, as well as intermediate French and basic Spanish.\n\nI can be reached at dylanwolff01@gmail.com.",
+//             "connected_with": [
+//                 "Mads"
+//             ],
+//             "main_role": null,
+//             "other_roles": [],
+//             "past_roles": [],
+//             "functions": []
+//         },
+//   ];
 
   const columns = [
     // { field: "id", headerName: '#', hide: true, width: 50 },
