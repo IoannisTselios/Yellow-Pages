@@ -11,9 +11,8 @@ class Company(models.Model):
     description = models.TextField(blank=True, null=True)
     employee_count = models.IntegerField(blank=True, null=True)
     year_founded = models.IntegerField(blank=True, null=True)
-
-    # to be scraped
     headquarters = models.CharField(max_length=150, blank=True, null=True) # this should not be nullanble 
+    headquarter_country = models.CharField(max_length=150, blank=True, null=True) # this should not be nullanble 
     investment_stage = models.CharField(max_length=50, blank=True, null=True)
     funding =  models.IntegerField(blank=True, null=True)
 

@@ -22,14 +22,17 @@ class CompanyMetadataView(APIView):
         industries = Company.objects.annotate(lower_industry=Lower('industry')) \
             .filter(lower_industry__isnull=False, lower_industry__gt='') \
             .values_list('lower_industry', flat=True).distinct()
-        headquarters = Company.objects.annotate(lower_headquarters=Lower('headquarters')) \
-            .filter(lower_headquarters__isnull=False, lower_headquarters__gt='') \
-            .values_list('lower_headquarters', flat=True).distinct()
+        headquarter_country = Company.objects.filter(
+                headquarter_country__isnull=False, 
+                headquarter_country__gt='',
+            ).exclude(
+                headquarter_country__in=["Unknown", "Not Found"]
+            ).values_list('headquarter_country', flat=True).distinct()
 
         # Prepare the data
         metadata = {
             "industries": list(industries),
-            "headquarters": list(headquarters),
+            "headquarters": list(headquarter_country),
         }
 
         # Serialize the data
