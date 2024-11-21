@@ -220,101 +220,183 @@ export const HomeScreen = () => {
   //   }
   // };
 
-//   const rows = [
-//     {
-//   first_name: "John",
-//   last_name: "Doe",
-//   location: "San Francisco, CA",
-//   "connection_strength": 0,
-//   url: "https://www.linkedin.com/in/johndoe/1",
-//   connected_with: ["Markus", "Konstantina", "Emily", "Sofia"],
-//   bio: "John is a software engineer with over 10 years of experience in building scalable web applications.",
-//   summary: "Specializes in front-end development and creating user-friendly interfaces. Passionate about mentoring junior developers.",
-//   main_role: {
-//     position: "Lead Frontend Developer",
-//     start_date: "2020-05-15", // YYYY-MM-DD
-//     company: "Tech Solutions Inc.",
-//     industry: "Software Development",
-//     company_size: "201-500",
-//     year_founded: 2010,
-//     location: "San Francisco, CA"
-//   },
-//   other_roles: [
-//     {
-//       position: "Frontend Developer",
-//       start_date: "2018-03-10",
-//       company: "Web Creatives Ltd.",
-//       industry: "Web Development",
-//       company_size: "51-200",
-//       year_founded: 2012,
-//       location: "New York, NY"
-//     },
-//     {
-//       position: "UI/UX Designer",
-//       start_date: "2015-08-01",
-//       company: "Creative Minds Studio",
-//       industry: "Design Services",
-//       company_size: "11-50",
-//       year_founded: 2008,
-//       location: "Los Angeles, CA"
-//     }
-//   ],
-//   past_roles: [
-//     {
-//       position: "Junior Frontend Developer",
-//       start_date: "2012-06-01",
-//       end_date: "2015-07-31",
-//       company: "Startup Hub",
-//       industry: "Tech Startups",
-//       company_size: "1-10",
-//       year_founded: 2011,
-//       location: "Austin, TX"
-//     },
-//     {
-//       position: "Intern",
-//       start_date: "2011-01-01",
-//       end_date: "2012-05-31",
-//       company: "Digital Innovators",
-//       industry: "IT Services",
-//       company_size: "51-200",
-//       year_founded: 2005,
-//       location: "Boston, MA"
-//     }
-//   ]
-// },
-//         {
-//             "first_name": "Amy",
-//             "last_name": "Soricelli",
-//             "location": "New York, New York, United States",
-//             "connection_strength": 0,
-//             "url": "https://www.linkedin.com/in/amysoricelli",
-//             "bio": "Vice President, Career Services",
-//             "summary": "A lifetime of  Compassionate Recruiting for all levels of office support staff.    \n\nStrong partnerships with a loyal band of clients and candidates:  \n\n*27,450+ LinkedIn connections/ 28,955 followers. \n\n\"Placed\" 5,000+  people in .various roles and industries.\n\nManagement and support of a dynamic team of Career Service professionals.  \n\nCustomer relations;  Student engagement\n\nVirtual workshops on all aspects of job search and career readiness.\n\nDedicated assistance with the process of career development for all alumni from all programs.\n\nA member of numerous committees related to Student Success, Community Service, Strategic Planning, Retention, and Social Media\n\nMentor for the Leadership Berkeley Program.\n\nI believe in building strong relationships, listening effectively, and acting quickly but compassionately.\n*In order for me to be a happy person -  each day must include employment assistance of some kind.",
-//             "connected_with": [
-//                 "Nico"
-//             ],
-//             "main_role": null,
-//             "other_roles": [],
-//             "past_roles": [],
-//             "functions": []
-//         },
-//         {
-//             "first_name": "Dylan",
-//             "last_name": "Wolff",
-//             "location": "Oslo, Oslo, Norway",
-//             "connection_strength": 0,
-//             "url": "https://www.linkedin.com/in/dylan-wolff-oslo",
-//             "bio": "Senior Investment Professional and Business Executive",
-//             "summary": "I am a senior investment professional and business executive with over 30 years of international experience in private equity, secondaries, venture, equities, portfolio management, asset allocation, infrastructure, startups, fintech, impact investing, sustainable finance, hedge funds, management consulting and law. \n\nI was previously a partner at NorgesInvestor, an Engagement Manager (Project Leader) at McKinsey, the Chief Investment Officer at UNI Pensjon, and a corporate lawyer at Telenor. I currently advise the CEO of Capassa, a B2B SaaS fintech scaleup.\n\nI hold degrees in business and law from leading Canadian universities, in addition to a \"Mini-MBA\" education from McKinsey and courses in many subjects including sustainable finance, AI, negotiations, valuation, and many more. \n\nI am originally from Canada, but have been living in Norway since 1993. I speak and write fluent English and Norwegian, as well as intermediate French and basic Spanish.\n\nI can be reached at dylanwolff01@gmail.com.",
-//             "connected_with": [
-//                 "Mads"
-//             ],
-//             "main_role": null,
-//             "other_roles": [],
-//             "past_roles": [],
-//             "functions": []
-//         },
-//   ];
+  const rows = [
+    {
+  first_name: "John",
+  last_name: "Doe",
+  location: "San Francisco, CA",
+  "connection_strength": 0,
+  url: "https://www.linkedin.com/in/johndoe/1",
+  connected_with: ["Markus", "Konstantina", "Emily", "Sofia"],
+  bio: "",
+  summary: "Specializes in front-end development and creating user-friendly interfaces. Passionate about mentoring junior developers.",
+  main_role: {
+    position: "Lead Frontend Developer",
+    start_date: "2020-05-15", // YYYY-MM-DD
+    company: "Tech Solutions Inc.",
+    industry: "Software Development",
+    company_size: "201-500",
+    company_description: "Dotdash's vibrant brands help over 100 million users each month find answers, solve problems, and get inspired. Dotdash is among the largest and fastest growing publishers online, and has won over 80 awards in the last year alone, including Digiday's 2020 Publisher of the Year. Dotdash brands include Verywell, Investopedia, The Balance, The Spruce, Simply Recipes, Serious Eats, Byrdie, Brides, MyDomaine, Lifewire, TripSavvy, Liquor.com, TreeHugger and Thoughtco.\n",
+    year_founded: 2010,
+    location: "San Francisco, CA"
+  },
+  other_roles: [
+    {
+      position: "Frontend Developer",
+      start_date: "2018-03-10",
+      company: "Web Creatives Ltd.",
+      industry: "Web Development",
+      company_size: "51-200",
+      year_founded: 2012,
+      location: "New York, NY"
+    },
+    {
+      position: "UI/UX Designer",
+      start_date: "2015-08-01",
+      company: "Creative Minds Studio",
+      industry: "Design Services",
+      company_size: "11-50",
+      year_founded: 2008,
+      location: "Los Angeles, CA"
+    }
+  ],
+  past_roles: [
+    {
+      position: "Junior Frontend Developer",
+      start_date: "2012-06-01",
+      end_date: "2015-07-31",
+      company: "Startup Hub",
+      industry: "Tech Startups",
+      company_size: "1-10",
+      year_founded: 2011,
+      location: "Austin, TX"
+    },
+    {
+      position: "Intern",
+      start_date: "2011-01-01",
+      end_date: "2012-05-31",
+      company: "Digital Innovators",
+      industry: "IT Services",
+      company_size: "51-200",
+      year_founded: 2005,
+      location: "Boston, MA"
+    }
+  ]
+},
+        {
+            "first_name": "Amy",
+            "last_name": "Soricelli",
+            "location": "New York, New York, United States",
+            "connection_strength": 0,
+            "url": "https://www.linkedin.com/in/amysoricelli",
+            "bio": "Vice President, Career Services",
+            "summary": "A lifetime of  Compassionate Recruiting for all levels of office support staff.    \n\nStrong partnerships with a loyal band of clients and candidates:  \n\n*27,450+ LinkedIn connections/ 28,955 followers. \n\n\"Placed\" 5,000+  people in .various roles and industries.\n\nManagement and support of a dynamic team of Career Service professionals.  \n\nCustomer relations;  Student engagement\n\nVirtual workshops on all aspects of job search and career readiness.\n\nDedicated assistance with the process of career development for all alumni from all programs.\n\nA member of numerous committees related to Student Success, Community Service, Strategic Planning, Retention, and Social Media\n\nMentor for the Leadership Berkeley Program.\n\nI believe in building strong relationships, listening effectively, and acting quickly but compassionately.\n*In order for me to be a happy person -  each day must include employment assistance of some kind.",
+            "connected_with": [
+                "Nico"
+            ],
+            "main_role": null,
+            "other_roles": [],
+            "past_roles": [],
+            "functions": []
+        },
+        {
+            "first_name": "Dylan",
+            "last_name": "Wolff",
+            "location": "Oslo, Oslo, Norway",
+            "connection_strength": 0,
+            "url": "https://www.linkedin.com/in/dylan-wolff-oslo",
+            "bio": "Senior Investment Professional and Business Executive",
+            "summary": "I am a senior investment professional and business executive with over 30 years of international experience in private equity, secondaries, venture, equities, portfolio management, asset allocation, infrastructure, startups, fintech, impact investing, sustainable finance, hedge funds, management consulting and law. \n\nI was previously a partner at NorgesInvestor, an Engagement Manager (Project Leader) at McKinsey, the Chief Investment Officer at UNI Pensjon, and a corporate lawyer at Telenor. I currently advise the CEO of Capassa, a B2B SaaS fintech scaleup.\n\nI hold degrees in business and law from leading Canadian universities, in addition to a \"Mini-MBA\" education from McKinsey and courses in many subjects including sustainable finance, AI, negotiations, valuation, and many more. \n\nI am originally from Canada, but have been living in Norway since 1993. I speak and write fluent English and Norwegian, as well as intermediate French and basic Spanish.\n\nI can be reached at dylanwolff01@gmail.com.",
+            "connected_with": [
+                "Mads"
+            ],
+            "main_role": {
+                "company": "Dotdash",
+                "position": "Financial Review Board Member",
+                "industry": "Book and Periodical Publishing",
+                "company_website": "https://www.dotdash.com",
+                "company_linkedin_link": "https://www.linkedin.com/company/dotdashco/",
+                "company_description": "Dotdash's vibrant brands help over 100 million users each month find answers, solve problems, and get inspired. Dotdash is among the largest and fastest growing publishers online, and has won over 80 awards in the last year alone, including Digiday's 2020 Publisher of the Year. Dotdash brands include Verywell, Investopedia, The Balance, The Spruce, Simply Recipes, Serious Eats, Byrdie, Brides, MyDomaine, Lifewire, TripSavvy, Liquor.com, TreeHugger and Thoughtco.\n",
+                "company_size": "149",
+                "company_headquarters": "New York, US",
+                "year_founded": null,
+                "description": null,
+                "start_date": "2022-12-01",
+                "end_date": null,
+                "location": "New York, US",
+                "main_role": true
+            },
+            "other_roles": [
+                {
+                    "company": "Berkeley College",
+                    "position": "Vice President, Career Services",
+                    "industry": "Higher Education",
+                    "company_website": "https://www.berkeleycollege.edu.com",
+                    "company_linkedin_link": "https://www.linkedin.com/school/berkeley-college/",
+                    "company_description": "Founded in 1931, Berkeley College offers career-focused degrees (Associate’s, Bachelor’s, Master’s) and certificate programs at campuses in New York City, New Jersey, and through nationally recognized online programs. Berkeley College is regionally accredited by the Middle States Commission on Higher Education. \n\nBerkeley focuses on real-world career preparation with a wide range of programs in Business, Healthcare, Criminal Justice, Design, and other in-demand career fields. Curricula are developed with input from industry experts and professors have professional experience in the subjects they teach. Students have access to a wide range of on-campus and online support services, including tutoring Career Services, and more.",
+                    "company_size": "1353",
+                    "company_headquarters": "New York, US",
+                    "year_founded": "1931",
+                    "description": null,
+                    "start_date": "2017-04-01",
+                    "end_date": null,
+                    "location": "New York, US",
+                    "main_role": false
+                }
+            ],
+            "past_roles": [
+                {
+                    "company": "Berkeley College",
+                    "position": "Assistant Vice President Career Services and Alumni Relations",
+                    "industry": "Higher Education",
+                    "company_website": "https://www.berkeleycollege.edu.com",
+                    "company_linkedin_link": "https://www.linkedin.com/school/berkeley-college/",
+                    "company_description": "Founded in 1931, Berkeley College offers career-focused degrees (Associate’s, Bachelor’s, Master’s) and certificate programs at campuses in New York City, New Jersey, and through nationally recognized online programs. Berkeley College is regionally accredited by the Middle States Commission on Higher Education. \n\nBerkeley focuses on real-world career preparation with a wide range of programs in Business, Healthcare, Criminal Justice, Design, and other in-demand career fields. Curricula are developed with input from industry experts and professors have professional experience in the subjects they teach. Students have access to a wide range of on-campus and online support services, including tutoring Career Services, and more.",
+                    "company_size": "1353",
+                    "company_headquarters": "New York, US",
+                    "year_founded": "1931",
+                    "description": null,
+                    "start_date": "2014-06-01",
+                    "end_date": "2017-04-01",
+                    "location": "New York, US",
+                    "main_role": false
+                },
+                {
+                    "company": "Berkeley College",
+                    "position": "Sr. Director, Alumni Career Services & Counselor Development",
+                    "industry": "Higher Education",
+                    "company_website": "https://www.berkeleycollege.edu.com",
+                    "company_linkedin_link": "https://www.linkedin.com/school/berkeley-college/",
+                    "company_description": "Founded in 1931, Berkeley College offers career-focused degrees (Associate’s, Bachelor’s, Master’s) and certificate programs at campuses in New York City, New Jersey, and through nationally recognized online programs. Berkeley College is regionally accredited by the Middle States Commission on Higher Education. \n\nBerkeley focuses on real-world career preparation with a wide range of programs in Business, Healthcare, Criminal Justice, Design, and other in-demand career fields. Curricula are developed with input from industry experts and professors have professional experience in the subjects they teach. Students have access to a wide range of on-campus and online support services, including tutoring Career Services, and more.",
+                    "company_size": "1353",
+                    "company_headquarters": "New York, US",
+                    "year_founded": "1931",
+                    "description": null,
+                    "start_date": "2012-06-01",
+                    "end_date": "2014-06-01",
+                    "location": "New York, US",
+                    "main_role": false
+                },
+                {
+                    "company": "Berkeley College",
+                    "position": "Director, Alumni Career Services",
+                    "industry": "Higher Education",
+                    "company_website": "https://www.berkeleycollege.edu.com",
+                    "company_linkedin_link": "https://www.linkedin.com/school/berkeley-college/",
+                    "company_description": "Founded in 1931, Berkeley College offers career-focused degrees (Associate’s, Bachelor’s, Master’s) and certificate programs at campuses in New York City, New Jersey, and through nationally recognized online programs. Berkeley College is regionally accredited by the Middle States Commission on Higher Education. \n\nBerkeley focuses on real-world career preparation with a wide range of programs in Business, Healthcare, Criminal Justice, Design, and other in-demand career fields. Curricula are developed with input from industry experts and professors have professional experience in the subjects they teach. Students have access to a wide range of on-campus and online support services, including tutoring Career Services, and more.",
+                    "company_size": "1353",
+                    "company_headquarters": "New York, US",
+                    "year_founded": "1931",
+                    "description": null,
+                    "start_date": "2009-05-01",
+                    "end_date": "2012-06-01",
+                    "location": "New York, US",
+                    "main_role": false
+                }
+            ],
+            "functions": []
+        },
+  ];
 
   const columns = [
     // { field: "id", headerName: '#', hide: true, width: 50 },
@@ -336,9 +418,6 @@ export const HomeScreen = () => {
         </div>
       ),
     },
-    { field: 'location', headerName: 'Location', width: 150 },
-    { field: 'connected_with', headerName: 'Connections', width: 150 },
-    { field: 'connection_strength', headerName: 'Connection Strength', width: 120 }, 
     {
       field: 'position',
       headerName: 'Position',
@@ -355,8 +434,29 @@ export const HomeScreen = () => {
       // }, // Retrieves position from main_role
       width: 150
     },
+    { 
+      field: 'bio', 
+      headerName: 'Bio', 
+      renderCell: (params) => (
+        <div>
+          {params.row.bio !== '' ? params.row.bio : '-'}
+        </div>
+      ),
+      width: 150
+    },
+     { 
+      field: 'summary', 
+      headerName: 'Summary', 
+      renderCell: (params) => (
+        <div>
+          {params.row.summary !== '' ? params.row.summary : '-'}
+        </div>
+      ),
+      width: 150
+    },
+    
     // { field: 'col5', headerName: 'Function', width: 150 },
-    // { field: 'col6', headerName: 'Seniority', width: 150 },
+    // { field: 'col6', headerName: 'Seniority', width: 150 },    
     { 
       field: 'company', 
       headerName: 'Company', 
@@ -365,7 +465,8 @@ export const HomeScreen = () => {
           {params.row.main_role ? params.row.main_role.company : 'N/A'}
         </div>
       ),
-      width: 150 },
+      width: 150
+    },
     { 
       field: 'industry', 
       headerName: 'Industry', 
@@ -375,6 +476,9 @@ export const HomeScreen = () => {
         </div>
       ),
       width: 150 },
+      { field: 'location', headerName: 'Location', width: 150 },
+    { field: 'connected_with', headerName: 'Connections', width: 150 },
+    { field: 'connection_strength', headerName: 'Connection Strength', width: 120 }, 
   ];
   
   const handleRowClick = (params) => {
@@ -413,22 +517,22 @@ export const HomeScreen = () => {
   
         {/* Data Table */}
         <div className={styles.dataGridContainer}>
-          {loadingData ? (
+          {/* {loadingData ? (
             // Show loading indicator while loading data
             <LinearProgress />
             // <CircularProgress size={80} />
-          ) : filterValues.filteredData.length > 0 ? (
+          ) : filterValues.filteredData.length > 0 ? ( */}
             // Show the DataGrid if there is data
             <DataGrid
               getRowId={(row) => row.url}
               style={{ borderRadius: '10px' }}
-              rows={filterValues.filteredData}
+              rows={rows}//{filterValues.filteredData}
               columns={columns}
               checkboxSelection
               disableRowSelectionOnClick
               disableSelectionOnClick
               disableDensitySelector
-              getRowHeight={() => 'auto'}
+              getRowHeight={() => 'auto'}              
               onRowClick={handleRowClick}
               slots={{ toolbar: GridToolbar }}
               slotProps={{
@@ -450,10 +554,10 @@ export const HomeScreen = () => {
                 },
               }}
             />
-          ) : (
+          {/* ) : (
             // Show no data message if there is no data
             <p className={styles.noDataMessage}>No results. Try adjusting the filters!</p>
-          )}
+          )} */}
         </div>
       </div>
   

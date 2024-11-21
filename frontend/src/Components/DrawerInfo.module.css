@@ -3,8 +3,16 @@
     padding: 0 
 }
 
-h4 {
-    padding-bottom: 5px;
+.topPad {
+    padding-top: 5px;
+}
+
+.title {
+    font-weight: bold;
+}
+
+.small {
+    font-size: 14px;
 }
 
 .drawerContainer{
