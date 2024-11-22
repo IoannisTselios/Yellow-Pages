@@ -78,68 +78,77 @@ const DrawerInfo = ({ selectedRow }) => {
         <div className={styles.gridContainer}>
           <div>
             <h4>Bio</h4>
-            <p style={{ paddingTop: 16 }}>{selectedRow.bio}</p>
+            <p style={{ marginTop: 16 }}>{selectedRow.bio}</p>
           </div>
           <div>
             <h4>Summary</h4>
-            <p style={{ paddingTop: 16 }}>{selectedRow.summary}</p>
+            <p style={{ marginTop: 16 }} className={styles.description}>{selectedRow.summary}</p>
           </div>
         </div>
 
         <Divider sx={{ bgcolor: '#404040' }}/>
 
         <h4 style={{ paddingTop: 16, margin: 0 }}>Current Positions</h4>
-        { selectedRow.main_role ? 
-          <div className={styles.gridContainer}>
-            <div>
-              <p className={styles.title}>{selectedRow.main_role.position}</p>
-              {/* <p>{selectedRow.main_role.start_date}</p> */}
-              <p className={styles.topPad + ' ' + styles.small}>since {formatDate(selectedRow.main_role.start_date)}</p>
-              <p className={styles.topPad}>{selectedRow.main_role.description}</p>
-            </div>
-            <div>
-              <p><a className={styles.title + ' ' + { textDecoration: 'none' }} href={selectedRow.main_role.company_website} target="_blank">{selectedRow.main_role.company}</a> - {selectedRow.main_role.industry}</p>
-              <p className={styles.topPad + ' ' + styles.small}>{selectedRow.main_role.location.split(',')[0]} - {selectedRow.main_role.company_size} people - since {selectedRow.main_role.year_founded}</p>
-              <p className={styles.topPad}><a href={selectedRow.main_role.company_linkedin_link} target="_blank">LinkedIn</a></p>
-              <p className={styles.topPad}>{selectedRow.main_role.company_description}</p>
-            </div>
-          </div>  
-          : <p className={styles.gridContainer}>There are no current roles</p>
-        }      
+        {!selectedRow.main_role && (!selectedRow.other_roles || selectedRow.other_roles.length === 0) ? (
+          <p className={styles.gridContainer}>There are no current roles</p>
+        ) : (
+          <>
+          {selectedRow.main_role && (
+            <div className={styles.gridContainer}>
+              <div>
+                <p className={styles.title}>{selectedRow.main_role.position}</p>
+                {/* <p>{selectedRow.main_role.start_date}</p> */}
+                <p className={styles.topPad + ' ' + styles.small}>since {formatDate(selectedRow.main_role.start_date)}</p>
+                <p className={styles.topPad}>{selectedRow.main_role.description}</p>
+              </div>
+              <div>
+                <p><a style={{ textDecoration: 'none' }} className={styles.title} href={selectedRow.main_role.company_website} target="_blank" rel="noopener noreferrer">{selectedRow.main_role.company}</a> - {selectedRow.main_role.industry}</p>
+                <p className={styles.topPad + ' ' + styles.small}>{selectedRow.main_role.location.split(',')[0]} - {selectedRow.main_role.company_size} people - since {selectedRow.main_role.year_founded}</p>
+                <p className={styles.topPad + ' ' + styles.small}><a style={{ textDecoration: 'none' }} href={selectedRow.main_role.company_linkedin_link} target="_blank" rel="noopener noreferrer">LinkedIn</a></p>
+                <p className={styles.topPad + ' ' + styles.description}>{selectedRow.main_role.company_description}</p>
+              </div>
+            </div>  
+          )}     
 
-        {selectedRow.other_roles.map((role, index) => (
-          <div key={index} className={styles.gridContainer}>
-            <div>
-              <p className={styles.title}>{role.position}</p>
-              {/* <p>{role.start_date}</p> */}
-              <p className={styles.topPad + ' ' + styles.small}>since {formatDate(role.start_date)}</p>
-              <p className={styles.topPad}>{role.description}</p>
-            </div>
-            <div>
-              <p><span className={styles.title}>{role.company}</span> - {role.industry}</p>
-              <p className={styles.topPad + ' ' + styles.small}>{role.location.split(',')[0]} - {role.company_size} people - since {role.year_founded}</p>
-              <p className={styles.topPad}>{role.company_description}</p>
-            </div>
-          </div>        
-        ))}
+          {selectedRow.other_roles && selectedRow.other_roles.map((role, index) => (
+            <div key={index} className={styles.gridContainer}>
+              <div>
+                <p className={styles.title}>{role.position}</p>
+                {/* <p>{role.start_date}</p> */}
+                <p className={styles.topPad + ' ' + styles.small}>since {formatDate(role.start_date)}</p>
+                <p className={styles.topPad}>{role.description}</p>
+              </div>
+              <div>
+                <p><a style={{ textDecoration: 'none' }} className={styles.title} href={role.company_website} target="_blank" rel="noopener noreferrer">{role.company}</a> - {role.industry}</p>
+                <p className={styles.topPad + ' ' + styles.small}>{role.location.split(',')[0]} - {role.company_size} people - since {role.year_founded}</p>
+                <p className={styles.topPad + ' ' + styles.description}>{role.company_description}</p>
+              </div>
+            </div>        
+          ))}
+          </>
+        )}
 
         <Divider sx={{ bgcolor: '#404040' }}/>
 
         <h4 style={{ paddingTop: 16, margin: 0 }}>Past Positions</h4>
-        {selectedRow.past_roles.map((past_role, index) => (
-          <div key={index} className={styles.gridContainer}>
-            <div>
-              <p className={styles.title}>{past_role.position}</p>
-              <p className={styles.topPad + ' ' + styles.small}>{formatDate(past_role.start_date)} - {formatDate(past_role.end_date)}</p>
-              <p>{past_role.description}</p>
-            </div>
-            <div>
-              <p><span className={styles.title}>{past_role.company}</span> - {past_role.industry}</p>
-              <p className={styles.topPad + ' ' + styles.small}>{past_role.location.split(',')[0]} - {past_role.company_size} people - since {past_role.year_founded}</p>
-              <p className={styles.topPad}>{past_role.company_description}</p>
-            </div>
-          </div>        
-        ))}
+        { !selectedRow.past_roles || selectedRow.past_roles.length === 0 ? 
+          (<p className={styles.gridContainer}>There are no past roles</p> )
+          :
+          (selectedRow.past_roles.map((past_role, index) => (
+            <div key={index} className={styles.gridContainer}>
+              <div>
+                <p className={styles.title}>{past_role.position}</p>
+                <p className={styles.topPad + ' ' + styles.small}>{formatDate(past_role.start_date)} - {formatDate(past_role.end_date)}</p>
+                <p>{past_role.description}</p>
+              </div>
+              <div>
+                <p><a style={{ textDecoration: 'none' }} className={styles.title} href={past_role.company_website} target="_blank" rel="noopener noreferrer">{past_role.company}</a> - {past_role.industry}</p>
+                <p className={styles.topPad + ' ' + styles.small}>{past_role.location.split(',')[0]} - {past_role.company_size} people - since {past_role.year_founded}</p>
+                <p className={styles.topPad + ' ' + styles.description}>{past_role.company_description}</p>
+              </div>
+            </div>        
+          ))) 
+        }
 
       </div> 
     </Box>

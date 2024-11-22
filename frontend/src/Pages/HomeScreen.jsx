@@ -8,7 +8,7 @@ import { useFilters } from "../Components/FiltersContext";
 
 import { Navigate, useNavigate } from 'react-router-dom';
 import { DataGrid } from '@mui/x-data-grid';
-import { Button, Drawer, IconButton, LinearProgress, Tooltip } from '@mui/material';
+import { Drawer, IconButton, Tooltip } from '@mui/material';
 import ExitToAppRoundedIcon from '@mui/icons-material/ExitToAppRounded'; 
 
 export const HomeScreen = () => {
@@ -229,16 +229,7 @@ export const HomeScreen = () => {
   connected_with: ["Markus", "Konstantina", "Emily", "Sofia"],
   bio: "",
   summary: "Specializes in front-end development and creating user-friendly interfaces. Passionate about mentoring junior developers.",
-  main_role: {
-    position: "Lead Frontend Developer",
-    start_date: "2020-05-15", // YYYY-MM-DD
-    company: "Tech Solutions Inc.",
-    industry: "Software Development",
-    company_size: "201-500",
-    company_description: "Dotdash's vibrant brands help over 100 million users each month find answers, solve problems, and get inspired. Dotdash is among the largest and fastest growing publishers online, and has won over 80 awards in the last year alone, including Digiday's 2020 Publisher of the Year. Dotdash brands include Verywell, Investopedia, The Balance, The Spruce, Simply Recipes, Serious Eats, Byrdie, Brides, MyDomaine, Lifewire, TripSavvy, Liquor.com, TreeHugger and Thoughtco.\n",
-    year_founded: 2010,
-    location: "San Francisco, CA"
-  },
+  main_role: null,
   other_roles: [
     {
       position: "Frontend Developer",

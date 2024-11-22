@@ -116,7 +116,7 @@ export const Filters = ({setLoadingData, locations, positions, functions, indust
     }
 
     if (params.selectedCompanySize.length === 2) {
-      if(getStart(companySizes[params.selectedCompanySize[0]]) == '10000+'){
+      if(getStart(companySizes[params.selectedCompanySize[0]]) === '10000+'){
         console.log("Start +++");
       } else {
         queryParams.append("main_company_size_min", getStart(companySizes[params.selectedCompanySize[0]]));
@@ -125,7 +125,7 @@ export const Filters = ({setLoadingData, locations, positions, functions, indust
       console.log(getStart(companySizes[params.selectedCompanySize[0]]));
       console.log(getEnd(companySizes[params.selectedCompanySize[1]]));
 
-      if(getEnd(companySizes[params.selectedCompanySize[1]]) == '10000+'){
+      if(getEnd(companySizes[params.selectedCompanySize[1]]) === '10000+'){
         console.log("End +++");
       } else {
         queryParams.append("main_company_size_max", getEnd(companySizes[params.selectedCompanySize[1]]));
