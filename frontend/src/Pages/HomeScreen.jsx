@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import styles from './HomeScreen.module.css';
 import DrawerInfo from '../Components/DrawerInfo'; 
 import CustomToolbar from '../Components/CustomToolbar';
+import TruncatedTextCell from '../Components/TruncatedTextCell';
 import { Filters } from "../Components/Filters";
 import { useFilters } from "../Components/FiltersContext";
 
@@ -445,12 +446,9 @@ export const HomeScreen = () => {
       field: 'summary', 
       headerName: 'Summary', 
       renderCell: (params) => (
-        <div>
-          {params.row.summary !== '' ? params.row.summary : '-'}
-        </div>
+        <TruncatedTextCell value={params.row.summary} />
       ),
-      width: 150,
-      // hide: true
+      width: 200
     },    
     // { field: 'col5', headerName: 'Function', width: 150 },
     // { field: 'col6', headerName: 'Seniority', width: 150 },    
@@ -529,8 +527,7 @@ export const HomeScreen = () => {
               checkboxSelection
               disableRowSelectionOnClick
               disableSelectionOnClick
-              // disableDensitySelector
-              getRowHeight={() => 'auto'}              
+              getRowHeight={() => 'auto'}         
               onRowClick={handleRowClick}
               slots={{ toolbar: CustomToolbar }}
               slotProps={{
