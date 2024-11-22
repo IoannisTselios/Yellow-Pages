@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import styles from './Filters.module.css';
 
-import { Box, Button, Tooltip, Slider, Typography } from '@mui/material';
+import { Box, Button, Tooltip, Slider, Typography, Badge } from '@mui/material';
 
 import PersonIcon from '@mui/icons-material/Person';
 import BusinessIcon from '@mui/icons-material/Business';
@@ -116,13 +116,17 @@ export const Filters = ({setLoadingData, locations, positions, functions, indust
     }
 
     if (params.selectedCompanySize.length === 2) {
-      queryParams.append("main_company_size_min", getStart(companySizes[params.selectedCompanySize[0]]));
+      if(getStart(companySizes[params.selectedCompanySize[0]]) == '10000+'){
+        console.log("Start +++");
+      } else {
+        queryParams.append("main_company_size_min", getStart(companySizes[params.selectedCompanySize[0]]));
+      }         
 
       console.log(getStart(companySizes[params.selectedCompanySize[0]]));
       console.log(getEnd(companySizes[params.selectedCompanySize[1]]));
 
       if(getEnd(companySizes[params.selectedCompanySize[1]]) == '10000+'){
-        console.log("+++");
+        console.log("End +++");
       } else {
         queryParams.append("main_company_size_max", getEnd(companySizes[params.selectedCompanySize[1]]));
       }      
@@ -168,7 +172,7 @@ export const Filters = ({setLoadingData, locations, positions, functions, indust
     }
   }
 
-  //Clears filters and filtered results by setting them to ther default values
+  //Clears filters and filtered results by setting them to their default values
   const handleClear = async () => {    
     updateFilterValues('selectedFirstName', "");
     updateFilterValues('selectedLastName', "");
@@ -195,9 +199,45 @@ export const Filters = ({setLoadingData, locations, positions, functions, indust
       <Box sx={{ width: '100%' }}>
         <Box className={styles.tabsContainer}>
           <Tabs value={value} onChange={handleChange} aria-label="icon tabs" /*sx={{ minHeight: '48px', flexGrow: 1 }} */>
-            <Tab icon={<PersonIcon />} iconPosition="start" label="Person" className={styles.tab} />
-            <Tab icon={<BusinessIcon />} iconPosition="start" label="Company" className={styles.tab}/>
-            <Tab icon={<HubIcon />} iconPosition="start" label="General" className={styles.tab} />
+            <Tab
+              icon={
+                <Badge
+                  color="secondary"
+                  variant="dot"
+                  invisible={false}
+                >
+                  <PersonIcon />
+                </Badge>
+              }
+              iconPosition="start"
+              label="Person"
+            />
+            <Tab
+              icon={
+                <Badge
+                  color="secondary"
+                  variant="dot"
+                  invisible={false}
+                >
+                  <BusinessIcon />
+                </Badge>
+              }
+              iconPosition="start"
+              label="Company"
+            />
+            <Tab
+              icon={
+                <Badge
+                  color="secondary"
+                  variant="dot"
+                  invisible={false}
+                >
+                  <HubIcon />
+                </Badge>
+              }
+              iconPosition="start"
+              label="General"
+            />
           </Tabs>
           <div>
             <Button variant="outlined" color="primary" onClick={handleClear} sx={{ marginRight: '16px', borderWidth: '2px', '&:hover': { borderColor: '#fdb73e' } }}>Clear Filters</Button>
