@@ -1,16 +1,14 @@
 import React, { useEffect, useState } from "react";
 import styles from './HomeScreen.module.css';
 import DrawerInfo from '../Components/DrawerInfo'; 
-
-import { Navigate, useNavigate } from 'react-router-dom';
-import { DataGrid, GridToolbar } from '@mui/x-data-grid';
-
-import { Button, CircularProgress, Drawer, IconButton, LinearProgress, Tooltip } from '@mui/material';
-
-import ExitToAppRoundedIcon from '@mui/icons-material/ExitToAppRounded'; 
-
+import CustomToolbar from '../Components/CustomToolbar';
 import { Filters } from "../Components/Filters";
 import { useFilters } from "../Components/FiltersContext";
+
+import { Navigate, useNavigate } from 'react-router-dom';
+import { DataGrid } from '@mui/x-data-grid';
+import { Button, Drawer, IconButton, LinearProgress, Tooltip } from '@mui/material';
+import ExitToAppRoundedIcon from '@mui/icons-material/ExitToAppRounded'; 
 
 export const HomeScreen = () => {
   const { filterValues, updateFilterValues } = useFilters();
@@ -426,7 +424,6 @@ export const HomeScreen = () => {
           {params.row.main_role ? params.row.main_role.position : 'N/A'}
         </div>
       ),
-
       // I do not know why the below is not working...
       // valueGetter: (params) => {
       //   console.log('ValueGetter Params:', params);
@@ -444,7 +441,7 @@ export const HomeScreen = () => {
       ),
       width: 150
     },
-     { 
+    { 
       field: 'summary', 
       headerName: 'Summary', 
       renderCell: (params) => (
@@ -452,9 +449,9 @@ export const HomeScreen = () => {
           {params.row.summary !== '' ? params.row.summary : '-'}
         </div>
       ),
-      width: 150
-    },
-    
+      width: 150,
+      // hide: true
+    },    
     // { field: 'col5', headerName: 'Function', width: 150 },
     // { field: 'col6', headerName: 'Seniority', width: 150 },    
     { 
@@ -475,8 +472,9 @@ export const HomeScreen = () => {
           {params.row.main_role ? params.row.main_role.industry : 'N/A'}
         </div>
       ),
-      width: 150 },
-      { field: 'location', headerName: 'Location', width: 150 },
+      width: 150 
+    },
+    { field: 'location', headerName: 'Location', width: 150 },
     { field: 'connected_with', headerName: 'Connections', width: 150 },
     { field: 'connection_strength', headerName: 'Connection Strength', width: 120 }, 
   ];
@@ -531,14 +529,21 @@ export const HomeScreen = () => {
               checkboxSelection
               disableRowSelectionOnClick
               disableSelectionOnClick
-              disableDensitySelector
+              // disableDensitySelector
               getRowHeight={() => 'auto'}              
               onRowClick={handleRowClick}
-              slots={{ toolbar: GridToolbar }}
+              slots={{ toolbar: CustomToolbar }}
               slotProps={{
                 toolbar: {
-                  printOptions: { disableToolbarButton: true }
-                }
+                  printOptions: { disableToolbarButton: true }, // Disable Export print button
+                },
+              }}
+              initialState={{
+                columns: {
+                  columnVisibilityModel: {
+                    summary: false, //The Summary column starts as hidden
+                  },
+                },
               }}
               sx={{
                 "& .MuiDataGrid-columnHeaderTitle": {
