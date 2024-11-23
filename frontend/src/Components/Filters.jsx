@@ -200,6 +200,41 @@ export const Filters = ({setLoadingData, locations, positions, past_positions, f
     updateFilterValues('filteredData', []);    
   };
 
+  // Helper function to determine if filters are active for a specific tab
+  const isTabActive = (tab) => {
+    switch (tab) {
+      case "person":
+        return (
+          filterValues.selectedFirstName ||
+          filterValues.selectedLastName ||
+          filterValues.selectedLocation.length > 0 ||
+          filterValues.selectedPosition.length > 0 ||
+          filterValues.selectedPastPosition.length > 0 ||
+          filterValues.selectedFunction.length > 0 ||
+          filterValues.includePastFunction
+        );
+      case "company":
+        return (
+          filterValues.selectedCompanyName ||
+          filterValues.selectedCompanyIndustry.length > 0 ||
+          filterValues.includePastIndustry ||
+          filterValues.includePastCompanies ||
+          filterValues.selectedCompanyHeadquarters.length > 0 ||
+          filterValues.selectedCompanySize[0] !== 0 ||
+          filterValues.selectedCompanySize[1] !== 7 ||
+          filterValues.selectedCompanyYear[0] !== 1800 ||
+          filterValues.selectedCompanyYear[1] !== 2024
+        );
+      case "general":
+        return (
+          filterValues.selectedKeyword ||
+          filterValues.selectedConnections.length > 0
+        );
+      default:
+        return false;
+    }
+  };
+
   return (
       <Box sx={{ width: '100%' }}>
         <Box className={styles.tabsContainer}>
@@ -209,7 +244,7 @@ export const Filters = ({setLoadingData, locations, positions, past_positions, f
                 <Badge
                   color="secondary"
                   variant="dot"
-                  invisible={false}
+                  invisible={!isTabActive("person")}
                 >
                   <PersonIcon />
                 </Badge>
@@ -222,7 +257,7 @@ export const Filters = ({setLoadingData, locations, positions, past_positions, f
                 <Badge
                   color="secondary"
                   variant="dot"
-                  invisible={false}
+                  invisible={!isTabActive("company")}
                 >
                   <BusinessIcon />
                 </Badge>
@@ -235,7 +270,7 @@ export const Filters = ({setLoadingData, locations, positions, past_positions, f
                 <Badge
                   color="secondary"
                   variant="dot"
-                  invisible={false}
+                  invisible={!isTabActive("general")}
                 >
                   <HubIcon />
                 </Badge>
