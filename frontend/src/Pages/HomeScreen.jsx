@@ -495,6 +495,7 @@ export const HomeScreen = () => {
             setLoadingData={setLoadingData}
             locations={locations}
             positions={positions}
+            past_positions={positions}
             functions={functions}
             industries={industries}
             hqs={headquarters}

@@ -43,7 +43,7 @@ const companySizes = [
   '10000+',
 ];
 
-export const Filters = ({setLoadingData, locations, positions, functions, industries, hqs, connections}) => {
+export const Filters = ({setLoadingData, locations, positions, past_positions, functions, industries, hqs, connections}) => {
   const { filterValues, updateFilterValues } = useFilters();  
 
   //Controlling the tabs for the filters
@@ -84,6 +84,10 @@ export const Filters = ({setLoadingData, locations, positions, functions, indust
       queryParams.append("current_position", params.selectedPosition.join(","));
     }
 
+    if (params.selectedPastPosition.length > 0) {
+      queryParams.append("past_position", params.selectedPastPosition.join(","));
+    }
+
     if (params.selectedKeyword) {
       queryParams.append("keyword", params.selectedKeyword);
     }
@@ -122,8 +126,8 @@ export const Filters = ({setLoadingData, locations, positions, functions, indust
         queryParams.append("main_company_size_min", getStart(companySizes[params.selectedCompanySize[0]]));
       }         
 
-      console.log(getStart(companySizes[params.selectedCompanySize[0]]));
-      console.log(getEnd(companySizes[params.selectedCompanySize[1]]));
+      // console.log(getStart(companySizes[params.selectedCompanySize[0]]));
+      // console.log(getEnd(companySizes[params.selectedCompanySize[1]]));
 
       if(getEnd(companySizes[params.selectedCompanySize[1]]) === '10000+'){
         console.log("End +++");
@@ -178,6 +182,7 @@ export const Filters = ({setLoadingData, locations, positions, functions, indust
     updateFilterValues('selectedLastName', "");
     updateFilterValues('selectedLocation', []);
     updateFilterValues('selectedPosition', []);
+    updateFilterValues('selectedPastPosition', []);
     updateFilterValues('selectedFunction', []);
     updateFilterValues('includePastFunction', false);
 
@@ -303,6 +308,24 @@ export const Filters = ({setLoadingData, locations, positions, functions, indust
                   <TextField
                     {...params}
                     label="Position"
+                    // placeholder="Favorites"
+                  />
+                )}
+              />
+
+              <Autocomplete className={styles.filter}
+                multiple
+                limitTags={2}
+                options={past_positions}
+                getOptionLabel={(option) => option}
+                // defaultValue={[top100Films[13]]}
+                // filterSelectedOptions
+                value={filterValues.selectedPastPosition}
+                onChange={(event, value) => updateFilterValues('selectedPastPosition', value)}  // Update state on change
+                renderInput={(params) => (
+                  <TextField
+                    {...params}
+                    label="Past Position"
                     // placeholder="Favorites"
                   />
                 )}

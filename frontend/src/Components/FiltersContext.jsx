@@ -8,6 +8,7 @@ export const FiltersProvider = ({ children }) => {
     selectedLastName: "",
     selectedLocation: [],
     selectedPosition: [],
+    selectedPastPosition: [],
     selectedFunction: [],
     includePastFunction: false,  
     // selectedSeniority: "",
