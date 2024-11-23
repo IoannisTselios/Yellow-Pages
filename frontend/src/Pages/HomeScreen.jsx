@@ -393,7 +393,6 @@ export const HomeScreen = () => {
     { 
       field: 'first_name', 
       headerName: 'Name', 
-      width: 150, 
       renderCell: (params) => (
         <div>
           <div>{params.value + ' ' + params.row.last_name}</div>
@@ -407,6 +406,7 @@ export const HomeScreen = () => {
           </a>
         </div>
       ),
+      flex: 1
     },
     {
       field: 'position',
@@ -416,12 +416,7 @@ export const HomeScreen = () => {
           {params.row.main_role ? params.row.main_role.position : 'N/A'}
         </div>
       ),
-      // I do not know why the below is not working...
-      // valueGetter: (params) => {
-      //   console.log('ValueGetter Params:', params);
-      //   return params?.row?.main_role ? params.row.main_role.position : 'N/A'
-      // }, // Retrieves position from main_role
-      width: 150
+      flex: 1
     },
     { 
       field: 'bio', 
@@ -431,7 +426,7 @@ export const HomeScreen = () => {
           {params.row.bio !== '' ? params.row.bio : '-'}
         </div>
       ),
-      width: 150
+      flex: 1
     },
     { 
       field: 'summary', 
@@ -439,10 +434,8 @@ export const HomeScreen = () => {
       renderCell: (params) => (
         <TruncatedTextCell value={params.row.summary} />
       ),
-      width: 200
-    },    
-    // { field: 'col5', headerName: 'Function', width: 150 },
-    // { field: 'col6', headerName: 'Seniority', width: 150 },    
+      flex: 1
+    },        
     { 
       field: 'company', 
       headerName: 'Company', 
@@ -451,7 +444,7 @@ export const HomeScreen = () => {
           {params.row.main_role ? params.row.main_role.company : 'N/A'}
         </div>
       ),
-      width: 150
+      flex: 1
     },
     { 
       field: 'industry', 
@@ -461,11 +454,11 @@ export const HomeScreen = () => {
           {params.row.main_role ? params.row.main_role.industry : 'N/A'}
         </div>
       ),
-      width: 150 
+      flex: 1 
     },
-    { field: 'location', headerName: 'Location', width: 150 },
-    { field: 'connected_with', headerName: 'Connections', width: 150 },
-    { field: 'connection_strength', headerName: 'Connection Strength', width: 120 }, 
+    { field: 'location', headerName: 'Location', flex: 1 },
+    { field: 'connected_with', headerName: 'Connections', flex: 1 },
+    { field: 'connection_strength', headerName: 'Connection Strength', flex: 1 }, 
   ];
   
   const handleRowClick = (params) => {
@@ -508,7 +501,6 @@ export const HomeScreen = () => {
           {loadingData ? (
             // Show loading indicator while loading data
             <LinearProgress />
-            // <CircularProgress size={80} />
           ) : filterValues.filteredData.length > 0 ? (
             // Show the DataGrid if there is data
             <DataGrid
@@ -549,7 +541,7 @@ export const HomeScreen = () => {
               }}
             />
           ) : (
-           // Show no data message if there is no data
+           // Show no data message if there are no data
            <p className={styles.noDataMessage}>No results. Try adjusting the filters!</p>
           )}
         </div>
