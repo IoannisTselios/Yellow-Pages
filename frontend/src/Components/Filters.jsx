@@ -38,8 +38,8 @@ const companySizes = [
   '50-200',
   '200-500',
   '500-1000',
-  '1,000-5000',
-  '5,000-10000',
+  '1000-5000',
+  '5000-10000',
   '10000+',
 ];
 
@@ -120,20 +120,19 @@ export const Filters = ({setLoadingData, locations, positions, past_positions, f
     }
 
     if (params.selectedCompanySize.length === 2) {
-      if(getStart(companySizes[params.selectedCompanySize[0]]) === '10000+'){
-        console.log("Start +++");
-      } else {
+      // Determine the minimum company size
+      // If lower limit is infinite (10000+), set the minimum company size to 10,000
+      if(params.selectedCompanySize[0] === 7){ 
+        queryParams.append("main_company_size_min", 10000);
+      } else { // Otherwise, use the starting value of the selected company size range
         queryParams.append("main_company_size_min", getStart(companySizes[params.selectedCompanySize[0]]));
       }         
 
-      // console.log(getStart(companySizes[params.selectedCompanySize[0]]));
-      // console.log(getEnd(companySizes[params.selectedCompanySize[1]]));
-
-      if(getEnd(companySizes[params.selectedCompanySize[1]]) === '10000+'){
-        console.log("End +++");
-      } else {
+      // Determine the maximum company size
+      //If upper limit is not infinite (10000+), set the maximum company size 
+      if((params.selectedCompanySize[1]) !== 7){ 
         queryParams.append("main_company_size_max", getEnd(companySizes[params.selectedCompanySize[1]]));
-      }      
+      }     
     }
 
     if (params.selectedCompanyYear.length === 2) {
