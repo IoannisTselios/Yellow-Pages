@@ -104,11 +104,22 @@ def get_interaction_data():
 
 def calculate_employment_overlap():
     """
-    Calculate overlapping employment periods for employees within the same company.
+    Calculate overlapping employment periods for employees within the same company,
+    and identify overlaps for Dreamcraft employees.
+
     Returns:
-        DataFrame: A DataFrame with overlapping employment data.
+        tuple: Two DataFrames:
+            - overlap_df: A DataFrame with all overlapping employment data.
+            - dreamcraft_overlaps: A DataFrame with overlaps involving Dreamcraft employees.
     """
-    from roles.models import Role
+    from roles.models import Role, Company
+
+    # Get the Dreamcraft company name
+    try:
+        dreamcraft_company = Company.objects.get(name__icontains="Dreamcraft")
+        dreamcraft_company_name = dreamcraft_company.name
+    except Company.DoesNotExist:
+        raise ValueError("Dreamcraft company not found in the database.")
 
     # Dictionary to store employment periods by company
     employment_by_company = defaultdict(list)
@@ -117,15 +128,20 @@ def calculate_employment_overlap():
     roles = Role.objects.select_related('connection', 'company')
 
     # Organize roles by company
+    dreamcraft_employees = set()
+
     for role in roles:
         employee_name = f"{role.connection.first_name} {role.connection.last_name}"
-        print(f"Employee name: {employee_name}")
         start_date = role.start_date
         end_date = role.end_date or datetime.today().date()  # Use today's date for ongoing roles
         company_name = role.company.name
 
         # Append employee and their role period to the company's employment list
         employment_by_company[company_name].append((employee_name, start_date, end_date))
+
+        # Collect Dreamcraft employees
+        if company_name == dreamcraft_company_name:
+            dreamcraft_employees.add(employee_name)
 
     # List to store unique overlap data
     overlap_data = []
@@ -154,16 +170,156 @@ def calculate_employment_overlap():
 
     # Convert overlap data to DataFrame
     overlap_df = pd.DataFrame(overlap_data, columns=['name1', 'name2', 'company', 'worked_for'])
-    return overlap_df
+
+    # Filter for Dreamcraft employee overlaps
+    dreamcraft_overlaps = overlap_df[
+        (overlap_df['name1'].isin(dreamcraft_employees)) |
+        (overlap_df['name2'].isin(dreamcraft_employees))
+    ]
+
+    return overlap_df, dreamcraft_overlaps
 
 
+def aggregate_and_filter_employment_overlap(overlap_df, threshold=360):
+    """
+    Aggregates overlapping employment data, filters unrealistic entries,
+    and separates realistic entries for further use.
+
+    Args:
+        overlap_df (DataFrame): The DataFrame containing overlapping employment data.
+        threshold (int): Maximum realistic employment duration in months. Default is 360.
+
+    Returns:
+        tuple: Three DataFrames:
+            - aggregated_df: Aggregated overlapping employment data.
+            - realistic_entries: Entries with total worked_for below or equal to the threshold.
+            - unrealistic_entries: Entries with total worked_for exceeding the threshold.
+    """
+    # Step 1: Aggregate total 'worked_for' duration for each unique name pair
+    aggregated_df = overlap_df.groupby(['name1', 'name2'], as_index=False)['worked_for'].sum()
+
+    # Step 2: Filter out unrealistic entries where worked_for exceeds the threshold
+    realistic_entries = aggregated_df[aggregated_df['worked_for'] <= threshold]
+    unrealistic_entries = aggregated_df[aggregated_df['worked_for'] > threshold]
+
+    # Step 3: Return the results as DataFrames
+    return aggregated_df, realistic_entries, unrealistic_entries
+
+
+def filter_dreamcraft_overlaps(realistic_entries, dreamcraft_employees):
+    """
+    Filters overlapping employment data for Dreamcraft employees.
+
+    Args:
+        realistic_entries (DataFrame): The DataFrame containing filtered realistic employment overlaps.
+        dreamcraft_employees (set): A set of names of Dreamcraft employees.
+
+    Returns:
+        DataFrame: A DataFrame containing overlaps involving Dreamcraft employees.
+    """
+    # Filter rows where either 'name1' or 'name2' is in the Dreamcraft employees set
+    dreamcraft_overlaps = realistic_entries[
+        (realistic_entries['name1'].isin(dreamcraft_employees)) |
+        (realistic_entries['name2'].isin(dreamcraft_employees))
+    ]
+
+    return dreamcraft_overlaps
+
+
+def calculate_connection_strength(comments_df, overlap_df, W_comments=0.4, W_overlap=0.6):
+    """
+    Calculates the connection strength metric based on comments and work overlap data.
+
+    Args:
+        comments_df (DataFrame): DataFrame containing comment interactions with columns 
+                                 ['employee', 'user', 'normalized_interaction_count'].
+        overlap_df (DataFrame): DataFrame containing work overlap data with columns 
+                                ['name1', 'name2', 'worked_for'].
+        W_comments (float): Weight for comment interactions. Default is 0.4.
+        W_overlap (float): Weight for work overlap. Default is 0.6.
+
+    Returns:
+        DataFrame: DataFrame containing the connection strength metric with columns 
+                   ['employee', 'user', 'connection_strength'].
+    """
+    # Step 1: Normalize work overlap duration
+    max_overlap = overlap_df['worked_for'].max()
+    overlap_df['overlap_score'] = overlap_df['worked_for'] / max_overlap
+
+    # Step 2: Prepare overlap data to allow both 'name1' and 'name2' as employees
+    overlap_df1 = overlap_df[['name1', 'name2', 'overlap_score']].rename(columns={'name1': 'employee', 'name2': 'user'})
+    overlap_df2 = overlap_df[['name2', 'name1', 'overlap_score']].rename(columns={'name2': 'employee', 'name1': 'user'})
+    combined_overlap_df = pd.concat([overlap_df1, overlap_df2], ignore_index=True)
+
+    # Step 3: Merge comments data with the combined overlap data on employee and user names
+    connections_df = pd.merge(comments_df, combined_overlap_df, on=['employee', 'user'], how='outer')
+
+    # Fill NaN values in scores with 0 (no comments or no work overlap)
+    connections_df['normalized_interaction_count'].fillna(0, inplace=True)
+    connections_df['overlap_score'].fillna(0, inplace=True)
+
+    # Step 4: Calculate the Connection Strength Metric
+    connections_df['connection_strength'] = (
+        W_comments * connections_df['normalized_interaction_count'] +
+        W_overlap * connections_df['overlap_score']
+    )
+
+    # Step 5: Return the final DataFrame
+    return connections_df[['employee', 'user', 'connection_strength']]
+
+
+def process_dreamcraft_connection_strength():
+    """
+    Orchestrates the process of calculating the connection strength metric for Dreamcraft employees.
+    
+    Steps:
+        1. Read HTML comments and parse interaction data.
+        2. Calculate employment overlaps and filter for Dreamcraft employees.
+        3. Aggregate and filter realistic employment overlaps.
+        4. Compute connection strength metric based on interactions and overlaps.
+    
+    Returns:
+        DataFrame: Final DataFrame containing connection strength metrics.
+    """
+    # Step 1: Read and parse interaction data from HTML comments
+    print("Step 1: Reading and parsing HTML comments...")
+    comments_df = get_interaction_data()
+    print(f"Parsed {len(comments_df)} interactions.")
+
+    # Step 2: Calculate employment overlaps and filter Dreamcraft overlaps
+    print("Step 2: Calculating employment overlaps...")
+    overlap_df, dreamcraft_overlaps = calculate_employment_overlap()
+    print(f"Calculated {len(overlap_df)} total overlaps, {len(dreamcraft_overlaps)} involve Dreamcraft employees.")
+
+    # Step 3: Aggregate and filter realistic overlaps
+    print("Step 3: Aggregating and filtering realistic overlaps...")
+    aggregated_df, realistic_entries, _ = aggregate_and_filter_employment_overlap(overlap_df)
+    dreamcraft_employees = set(dreamcraft_overlaps['name1']).union(set(dreamcraft_overlaps['name2']))
+    filtered_dreamcraft_overlaps = filter_dreamcraft_overlaps(realistic_entries, dreamcraft_employees)
+    print(f"Filtered {len(filtered_dreamcraft_overlaps)} realistic overlaps involving Dreamcraft employees.")
+
+    # Step 4: Calculate connection strength metric
+    print("Step 4: Calculating connection strength metric...")
+    connection_strength_df = calculate_connection_strength(comments_df, filtered_dreamcraft_overlaps)
+    print(f"Calculated connection strength for {len(connection_strength_df)} connections.")
+
+    # Return the final DataFrame
+    return connection_strength_df
+
+
+if __name__ == "__main__":
+    # Run the entire process and save the results
+    connection_strength_df = process_dreamcraft_connection_strength()
+
+    # Save to a CSV file
+    connection_strength_df.to_csv("dreamcraft_connection_strength.csv", index=False)
+    print("Connection strength metric saved to 'dreamcraft_connection_strength.csv'.")
+
+    # Optionally, preview the results
+    print(connection_strength_df.head())
 
 # ----------
 
-
-
-def strength_metric_calculation(connection):
-    return 0
 
 def save_connections_from_dataframe(df):
     """
