@@ -4,7 +4,7 @@ const FiltersContext = createContext();
 
 export const FiltersProvider = ({ children }) => {
   const [filterValues, setFilterValues] = useState({
-    selectedFirstName: "",//null,
+    selectedFirstName: "",
     selectedLastName: "",
     selectedLocation: [],
     selectedPosition: [],
@@ -24,7 +24,18 @@ export const FiltersProvider = ({ children }) => {
     selectedKeyword: "",
     selectedConnections: [],
 
-    filteredData: []
+    // save the url of the connections endpoint
+    requestURL: '',
+
+    // the result of the get_connection_list that gets passed to the table
+    filteredData: [],
+
+    // State for pagination
+    rowCount: 0,
+    paginationModel: {
+      pageSize: 25,
+      page: 0,
+    }
   });
 
   const updateFilterValues = (key, value) => {

@@ -121,6 +121,7 @@ const DrawerInfo = ({ selectedRow }) => {
               <div>
                 <p><a style={{ textDecoration: 'none' }} className={styles.title} href={role.company_website} target="_blank" rel="noopener noreferrer">{role.company}</a> - {role.industry}</p>
                 <p className={styles.topPad + ' ' + styles.small}>{role.location.split(',')[0]} - {role.company_size} people - since {role.year_founded}</p>
+                <p className={styles.topPad + ' ' + styles.small}><a style={{ textDecoration: 'none' }} href={role.company_linkedin_link} target="_blank" rel="noopener noreferrer">LinkedIn</a></p>
                 <p className={styles.topPad + ' ' + styles.description}>{role.company_description}</p>
               </div>
             </div>        
@@ -144,6 +145,7 @@ const DrawerInfo = ({ selectedRow }) => {
               <div>
                 <p><a style={{ textDecoration: 'none' }} className={styles.title} href={past_role.company_website} target="_blank" rel="noopener noreferrer">{past_role.company}</a> - {past_role.industry}</p>
                 <p className={styles.topPad + ' ' + styles.small}>{past_role.location.split(',')[0]} - {past_role.company_size} people - since {past_role.year_founded}</p>
+                <p className={styles.topPad + ' ' + styles.small}><a style={{ textDecoration: 'none' }} href={past_role.company_linkedin_link} target="_blank" rel="noopener noreferrer">LinkedIn</a></p>
                 <p className={styles.topPad + ' ' + styles.description}>{past_role.company_description}</p>
               </div>
             </div>        

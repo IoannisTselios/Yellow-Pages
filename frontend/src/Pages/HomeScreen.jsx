@@ -33,7 +33,6 @@ export const HomeScreen = () => {
   const [headquarters, setHeadquarters] = useState([]);
   const [connections, setConnections] = useState([]);
 
-
   useEffect(() => {
     (async () => {
       try {
@@ -165,6 +164,40 @@ export const HomeScreen = () => {
     })();
   }, [loading])
 
+  const refetchData = async () => {
+    try {
+      const queryParams = new URLSearchParams();
+      queryParams.append("page", filterValues.paginationModel.page + 1); // always ask for the first page when the filters are applied
+      queryParams.append("page_size", filterValues.paginationModel.pageSize); 
+
+      const myURL = `${filterValues.requestURL}&${queryParams.toString()}`
+      console.log('Refetching MYURL', myURL)
+
+      const response = await fetch(myURL, {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        credentials: 'include',
+      });
+
+      if (!response.ok) {
+        throw new Error('Data refetch failed');
+      }
+
+      const data = await response.json();
+      updateFilterValues('filteredData', data.results);
+      
+      
+      console.log('Data fetch successful:', data);
+    } catch (error) {
+      console.error('Error during data refetch:', error);
+    }
+  };
+
+  useEffect(() => {
+    refetchData();
+  }, [filterValues.paginationModel]) 
+
   const handleLogout = async () => {
     try {
       const logout = await fetch('http://localhost:80/api/logout', {
@@ -193,31 +226,6 @@ export const HomeScreen = () => {
   if (loading) {
     return <div>Loading...</div>; // Placeholder while waiting for authentication check
   }
-
-  // const getData = async () => {
-  //   try {
-  //     const response = await fetch('http://localhost:80/api/get_connection_list/', {
-  //       headers: {
-  //         'Content-Type': 'application/json',
-  //       },
-  //       credentials: 'include',
-  //     });
-
-  //     if (!response.ok) {
-  //       throw new Error('Data fetch failed');
-  //     }
-
-  //     const data = await response.json();
-  //     setDataRows(data.results);
-      
-  //     console.log('Data fetch successful:', data);
-  //     console.log('here', data.results)
-  //     console.log('this shit', dataRows)
-
-  //   } catch (error) {
-  //     console.error('Error during data fetch:', error);
-  //   }
-  // };
 
 //   const rows = [
 //     {
@@ -474,6 +482,10 @@ export const HomeScreen = () => {
     setOpenDrawer(true);
   };
 
+  const handlePaginationModelChange = (newModel) => {
+    updateFilterValues('paginationModel', newModel); // Update the pagination model
+  };
+
   return (
     <div>
       <div className={styles.header}>
@@ -521,6 +533,13 @@ export const HomeScreen = () => {
               disableSelectionOnClick
               getRowHeight={() => 'auto'}         
               onRowClick={handleRowClick}
+
+              pagination
+              paginationMode="server"
+              // pageSizeOptions={[5, 10, 25, 50]}
+              rowCount={filterValues.rowCount}
+              paginationModel={filterValues.paginationModel}
+              onPaginationModelChange={handlePaginationModelChange}
               slots={{ toolbar: CustomToolbar }}
               slotProps={{
                 toolbar: {
