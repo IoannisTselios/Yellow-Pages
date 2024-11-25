@@ -21,7 +21,7 @@ class PositionMetadataView(APIView):
         # Query unique positions
         positions = Role.objects.annotate(lower_position=Lower('position')) \
             .filter(lower_position__isnull=False, lower_position__gt='') \
-            .values_list('lower_position', flat=True).distinct()
+            .values_list('lower_position', flat=True).distinct().order_by('position')
 
         # Prepare the data
         metadata = {
