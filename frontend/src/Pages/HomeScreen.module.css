@@ -37,8 +37,10 @@
 }
 
 .dataGridContainer {
-    flex: 2; /* 2/3 height for the DataGrid */
+    /* flex: 2; 2/3 height for the DataGrid */
     margin: 12px;
+    overflow-y: auto;
+    /* height: 400px */
     /* background-color: red;  */
 }
 
