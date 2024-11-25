@@ -537,9 +537,12 @@ export const Filters = ({setLoadingData, setLoadingTable, locations, positions, 
               </Box>
 
               <Box className={styles.filter}>
-                <Typography id="company-size-slider" gutterBottom>
-                  Company Size: {getStart(companySizes[filterValues.selectedCompanySize[0]])} - {getEnd(companySizes[filterValues.selectedCompanySize[1]])}
-                </Typography>
+              <Typography id="company-size-slider" gutterBottom>
+                Company Size: 
+                {filterValues.selectedCompanySize[0] === 7
+                  ? " 10000+"
+                  : ` ${getStart(companySizes[filterValues.selectedCompanySize[0]])} - ${getEnd(companySizes[filterValues.selectedCompanySize[1]])}`}
+              </Typography>
                 <Slider
                   value={filterValues.selectedCompanySize}
                   min={0}
@@ -547,7 +550,7 @@ export const Filters = ({setLoadingData, setLoadingTable, locations, positions, 
                   step={1}
                   marks={companySizes.map((size, index) => ({
                     value: index,
-                    label: index === 0 ? "1" : (index === companySizes.length - 1 ? "10,000+" : '') 
+                    // label: index === 0 ? "1" : (index === companySizes.length - 1 ? "10,000+" : '') 
                     // label: index === 0 || index === companySizes.length - 1 ? size : '', // Show label only for the first and last marks
                   }))}
                   // valueLabelFormat={valueLabelFormat}
