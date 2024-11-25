@@ -44,17 +44,17 @@ function formatDate(dateString) {
 
 const DrawerInfo = ({ selectedRow }) => {
   return (
-    <Box sx={{ width: 700, color: '#fff' }} role="presentation">
+    <Box sx={{ width: 800, color: '#fff' }} role="presentation">
       <div className={styles.drawerContainer}>
 
         <div className={styles.profile}>
-          <h3 style={{ margin: 0 }}>{selectedRow.first_name + ' ' + selectedRow.last_name}</h3>
+          <h2 style={{ margin: 0 }}>{selectedRow.first_name + ' ' + selectedRow.last_name}</h2>
           <p style={{ margin: 0 }}>{selectedRow.location}</p>
           <a 
             href={selectedRow.url} 
             target="_blank" 
             rel="noopener noreferrer" 
-            style={{ fontSize: '0.8em', color: '#B3B3B3' }}
+            style={{ fontSize: '13px', color: '#B3B3B3' }}
             >
             LinkedIn Profile
           </a>
@@ -75,20 +75,23 @@ const DrawerInfo = ({ selectedRow }) => {
 
         <Divider sx={{ bgcolor: '#404040' }}/>
 
-        <div className={styles.gridContainer}>
+        <div className={styles.gridContainerBioSummary}>
           <div>
-            <h4>Bio</h4>
+            <h2>Bio</h2>
             <p style={{ marginTop: 16 }}>{selectedRow.bio}</p>
           </div>
+
+          <Divider orientation="vertical" sx={{ bgcolor: '#404040', height: '100%', width: '1px' }} />
+
           <div>
-            <h4>Summary</h4>
+            <h2>Summary</h2>
             <p style={{ marginTop: 16 }} className={styles.description}>{selectedRow.summary}</p>
           </div>
         </div>
 
         <Divider sx={{ bgcolor: '#404040' }}/>
 
-        <h4 style={{ paddingTop: 16, margin: 0 }}>Current Positions</h4>
+        <h2 style={{ paddingTop: 16, margin: 0 }}>Current Positions</h2>
         {!selectedRow.main_role && (!selectedRow.other_roles || selectedRow.other_roles.length === 0) ? (
           <p className={styles.gridContainer}>There are no current roles</p>
         ) : (
@@ -104,7 +107,7 @@ const DrawerInfo = ({ selectedRow }) => {
               <div>
                 <p><a style={{ textDecoration: 'none' }} className={styles.title} href={selectedRow.main_role.company_website} target="_blank" rel="noopener noreferrer">{selectedRow.main_role.company}</a> - {selectedRow.main_role.industry}</p>
                 <p className={styles.topPad + ' ' + styles.small}>{selectedRow.main_role.location.split(',')[0]} - {selectedRow.main_role.company_size} people - since {selectedRow.main_role.year_founded}</p>
-                <p className={styles.topPad + ' ' + styles.small}><a style={{ textDecoration: 'none' }} href={selectedRow.main_role.company_linkedin_link} target="_blank" rel="noopener noreferrer">LinkedIn</a></p>
+                <p className={styles.topPad + ' ' + styles.small}><a style={{ fontSize: '13px', color: '#B3B3B3' }} href={selectedRow.main_role.company_linkedin_link} target="_blank" rel="noopener noreferrer">Company LinkedIn</a></p>
                 <p className={styles.topPad + ' ' + styles.description}>{selectedRow.main_role.company_description}</p>
               </div>
             </div>  
@@ -121,7 +124,7 @@ const DrawerInfo = ({ selectedRow }) => {
               <div>
                 <p><a style={{ textDecoration: 'none' }} className={styles.title} href={role.company_website} target="_blank" rel="noopener noreferrer">{role.company}</a> - {role.industry}</p>
                 <p className={styles.topPad + ' ' + styles.small}>{role.location.split(',')[0]} - {role.company_size} people - since {role.year_founded}</p>
-                <p className={styles.topPad + ' ' + styles.small}><a style={{ textDecoration: 'none' }} href={role.company_linkedin_link} target="_blank" rel="noopener noreferrer">LinkedIn</a></p>
+                <p className={styles.topPad + ' ' + styles.small}><a style={{ fontSize: '13px', color: '#B3B3B3' }} href={role.company_linkedin_link} target="_blank" rel="noopener noreferrer">Company LinkedIn</a></p>
                 <p className={styles.topPad + ' ' + styles.description}>{role.company_description}</p>
               </div>
             </div>        
@@ -131,7 +134,7 @@ const DrawerInfo = ({ selectedRow }) => {
 
         <Divider sx={{ bgcolor: '#404040' }}/>
 
-        <h4 style={{ paddingTop: 16, margin: 0 }}>Past Positions</h4>
+        <h2 style={{ paddingTop: 16, margin: 0 }}>Past Positions</h2>
         { !selectedRow.past_roles || selectedRow.past_roles.length === 0 ? 
           (<p className={styles.gridContainer}>There are no past roles</p> )
           :
@@ -145,7 +148,7 @@ const DrawerInfo = ({ selectedRow }) => {
               <div>
                 <p><a style={{ textDecoration: 'none' }} className={styles.title} href={past_role.company_website} target="_blank" rel="noopener noreferrer">{past_role.company}</a> - {past_role.industry}</p>
                 <p className={styles.topPad + ' ' + styles.small}>{past_role.location.split(',')[0]} - {past_role.company_size} people - since {past_role.year_founded}</p>
-                <p className={styles.topPad + ' ' + styles.small}><a style={{ textDecoration: 'none' }} href={past_role.company_linkedin_link} target="_blank" rel="noopener noreferrer">LinkedIn</a></p>
+                <p className={styles.topPad + ' ' + styles.small}><a style={{ fontSize: '13px', color: '#B3B3B3' }} href={past_role.company_linkedin_link} target="_blank" rel="noopener noreferrer">Company LinkedIn</a></p>
                 <p className={styles.topPad + ' ' + styles.description}>{past_role.company_description}</p>
               </div>
             </div>        
