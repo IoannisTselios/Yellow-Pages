@@ -33,7 +33,7 @@ export const FiltersProvider = ({ children }) => {
     // State for pagination
     rowCount: 0,
     paginationModel: {
-      pageSize: 10,
+      pageSize: 15,
       page: 0,
     }
   });

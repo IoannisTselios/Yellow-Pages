@@ -144,7 +144,7 @@ export const Filters = ({setLoadingData, setLoadingTable, locations, positions, 
 
     // add the requested page at the end so that we save the general url and call it for another page
     queryParams.append("page", 1); // always ask for the first page when the filters are applied
-    queryParams.append("page_size", 10); // always ask for 25 results per page when the filters are applied
+    queryParams.append("page_size", 15); // always ask for 15 results per page when the filters are applied
 
     return `${baseURL}?${queryParams.toString()}`;
   };
@@ -338,6 +338,11 @@ export const Filters = ({setLoadingData, setLoadingTable, locations, positions, 
                 getOptionLabel={(option) => option}
                 value={filterValues.selectedLocation}
                 onChange={(event, value) => updateFilterValues('selectedLocation', value)}
+                filterOptions={(options, state) =>
+                  options.filter((option) =>
+                    option.toLowerCase().startsWith(state.inputValue.toLowerCase())
+                  )
+                }
                 renderInput={(params) => (
                   <TextField
                     {...params}
@@ -494,6 +499,11 @@ export const Filters = ({setLoadingData, setLoadingTable, locations, positions, 
                 getOptionLabel={(option) => option}
                 value={filterValues.selectedCompanyHeadquarters}
                 onChange={(event, value) => updateFilterValues('selectedCompanyHeadquarters', value)}
+                filterOptions={(options, state) =>
+                  options.filter((option) =>
+                    option.toLowerCase().startsWith(state.inputValue.toLowerCase())
+                  )
+                }
                 renderInput={(params) => (
                   <TextField
                     {...params}

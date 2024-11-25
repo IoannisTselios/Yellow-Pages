@@ -545,7 +545,7 @@ export const HomeScreen = () => {
               loading={loadingTable}
               pagination
               paginationMode="server"
-              pageSizeOptions={[5, 10, 25]}
+              pageSizeOptions={[15, 20, 25]}
               rowCount={filterValues.rowCount}
               paginationModel={filterValues.paginationModel}
               onPaginationModelChange={handlePaginationModelChange}
