@@ -13,8 +13,35 @@ import Autocomplete from '@mui/material/Autocomplete';
 import TextField from '@mui/material/TextField';
 import Switch from '@mui/material/Switch';
 
+// import { VariableSizeList } from 'react-window';
+
 import { useFilters } from "../Components/FiltersContext";
 
+// const LISTBOX_PADDING = 8; // Adjust as needed
+
+// function renderRow({ data, index, style }) {
+//   const item = data[index];
+//   return <div style={style}>{item.label}</div>;
+// }
+
+// function ListboxComponent(props) {
+//   const { children, ...other } = props;
+//   const items = React.Children.toArray(children);
+//   const itemSize = 36; // Height of each item
+
+//   return (
+//     <VariableSizeList
+//       height={Math.min(8, items.length) * itemSize + 2 * LISTBOX_PADDING}
+//       width="100%"
+//       itemCount={items.length}
+//       itemSize={() => itemSize}
+//       itemData={items}
+//       {...other}
+//     >
+//       {renderRow}
+//     </VariableSizeList>
+//   );
+// }
 
 function CustomTabPanel(props) {
     const { children, value, index, ...other } = props;
@@ -43,7 +70,7 @@ const companySizes = [
   '10000+',
 ];
 
-export const Filters = ({setLoadingData, setLoadingTable, locations, positions, past_positions, functions, industries, hqs, connections}) => {
+export const Filters = ({setLoadingData, setLoadingTable, locations, positions, functions, industries, hqs, connections}) => {
   const { filterValues, updateFilterValues } = useFilters();  
 
   //Controlling the tabs for the filters
@@ -251,6 +278,42 @@ export const Filters = ({setLoadingData, setLoadingTable, locations, positions, 
     }
   };
 
+  const [inputPosValue, setInputPosValue] = useState("");
+  const [inputPastPosValue, setInputPastPosValue] = useState("");
+  const [filteredPosOptions, setFilteredPosOptions] = useState([]);
+  const [filteredPastPosOptions, setFilteredPastPosOptions] = useState([]);
+
+
+  const handleInputChange = (event, value) => {
+    setInputPosValue(value);
+
+    // Show options only if input has 3 or more characters
+    if (value.length >= 3) {
+      setFilteredPosOptions(
+        positions.filter((option) =>
+          option.toLowerCase().includes(value.toLowerCase())
+        )
+      );
+    } else {
+      setFilteredPosOptions([]);
+    }
+  };
+
+  const handlePastInputChange = (event, value) => {
+    setInputPastPosValue(value);
+
+    // Show options only if input has 3 or more characters
+    if (value.length >= 3) {
+      setFilteredPastPosOptions(
+        positions.filter((option) =>
+          option.toLowerCase().includes(value.toLowerCase())
+        )
+      );
+    } else {
+      setFilteredPastPosOptions([]);
+    }
+  };
+
   return (
       <Box sx={{ width: '100%' }}>
         <Box className={styles.tabsContainer}>
@@ -304,19 +367,7 @@ export const Filters = ({setLoadingData, setLoadingTable, locations, positions, 
           {/* Person Tab */}
           <CustomTabPanel value={value} index={0} >
             <div className={styles.filtersContainer}>
-               {/* <Autocomplete className={styles.filter}
-                limitTags={2}
-                options={top100Films}
-                getOptionLabel={(option) => option.title}
-                value={filterValues.selectedName}
-                onChange={(event, value) => updateFilterValues('selectedName', value)}  // Update state on change
-                renderInput={(params) => (
-                  <TextField
-                    {...params}
-                    label="Name"
-                  />
-                )}
-              /> */}
+
               <TextField className={styles.filter}
                 variant="outlined"
                 label="First Name"
@@ -349,17 +400,16 @@ export const Filters = ({setLoadingData, setLoadingTable, locations, positions, 
               <Autocomplete className={styles.filter}
                 multiple
                 limitTags={2}
-                options={positions}
+                options={filteredPosOptions} // Use filtered options here
                 getOptionLabel={(option) => option}
-                // defaultValue={[top100Films[13]]}
-                // filterSelectedOptions
                 value={filterValues.selectedPosition}
-                onChange={(event, value) => updateFilterValues('selectedPosition', value)}  // Update state on change
+                onChange={(event, value) => updateFilterValues("selectedPosition", value)}
+                onInputChange={handleInputChange} // Handle input change
+                noOptionsText={inputPosValue.length < 3 ? 'Start typing to view options' : 'No options'}
                 renderInput={(params) => (
                   <TextField
                     {...params}
                     label="Position"
-                    // placeholder="Favorites"
                   />
                 )}
               />
@@ -367,17 +417,16 @@ export const Filters = ({setLoadingData, setLoadingTable, locations, positions, 
               <Autocomplete className={styles.filter}
                 multiple
                 limitTags={2}
-                options={past_positions}
+                options={filteredPastPosOptions} // Use filtered options here
                 getOptionLabel={(option) => option}
-                // defaultValue={[top100Films[13]]}
-                // filterSelectedOptions
                 value={filterValues.selectedPastPosition}
-                onChange={(event, value) => updateFilterValues('selectedPastPosition', value)}  // Update state on change
+                onChange={(event, value) => updateFilterValues("selectedPastPosition", value)}
+                onInputChange={handlePastInputChange} // Handle input change
+                noOptionsText={inputPastPosValue.length < 3 ? 'Start typing to view options' : 'No options'}
                 renderInput={(params) => (
                   <TextField
                     {...params}
                     label="Past Position"
-                    // placeholder="Favorites"
                   />
                 )}
               />
