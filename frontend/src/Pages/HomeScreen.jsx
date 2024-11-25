@@ -12,6 +12,7 @@ import { Drawer, LinearProgress, IconButton, Tooltip } from '@mui/material';
 import ExitToAppRoundedIcon from '@mui/icons-material/ExitToAppRounded'; 
 
 export const HomeScreen = () => {
+  const [dataGridHeight, setDataGridHeight] = useState(0); //Sets the DataGrid height to the viewport height
   const { filterValues, updateFilterValues } = useFilters();
 
   const [loadingData, setLoadingData] = useState(false);  //Loading while the endpoint is getting the filtered data
@@ -34,6 +35,19 @@ export const HomeScreen = () => {
   const [industries, setIndustries] = useState([]);
   const [headquarters, setHeadquarters] = useState([]);
   const [connections, setConnections] = useState([]);
+
+  // Set the DataGrid height to the full viewport height
+  useEffect(() => {
+    const calculateHeight = () => {
+        const viewportHeight = window.innerHeight;
+        const adjustedHeight = viewportHeight - 24; // Subtract top and bottom margin (12px each)
+        setDataGridHeight(adjustedHeight);
+    };
+
+    calculateHeight(); // Initial calculation
+    window.addEventListener('resize', calculateHeight); // Handle browser resize
+    return () => window.removeEventListener('resize', calculateHeight);
+  }, []);
 
   useEffect(() => {
     (async () => {
@@ -512,7 +526,7 @@ export const HomeScreen = () => {
         </div>
   
         {/* Data Table */}
-        <div className={styles.dataGridContainer}>
+        <div className={styles.dataGridContainer} style={{ height: `${dataGridHeight}px` }}>
           {loadingData ? (
             // Show loading indicator while loading data
             <LinearProgress />
@@ -531,7 +545,7 @@ export const HomeScreen = () => {
               loading={loadingTable}
               pagination
               paginationMode="server"
-              pageSizeOptions={[5, 10, 25]}
+              pageSizeOptions={[15, 20, 25]}
               rowCount={filterValues.rowCount}
               paginationModel={filterValues.paginationModel}
               onPaginationModelChange={handlePaginationModelChange}
