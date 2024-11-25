@@ -43,7 +43,7 @@ const companySizes = [
   '10000+',
 ];
 
-export const Filters = ({setLoadingData, locations, positions, past_positions, functions, industries, hqs, connections}) => {
+export const Filters = ({setLoadingData, setLoadingTable, locations, positions, past_positions, functions, industries, hqs, connections}) => {
   const { filterValues, updateFilterValues } = useFilters();  
 
   //Controlling the tabs for the filters
@@ -156,6 +156,7 @@ export const Filters = ({setLoadingData, locations, positions, past_positions, f
     console.log('MY ENDPOINT', my_endpoint)
 
     setLoadingData(true);  //Loading set to true before the fetch request
+    setLoadingTable(true);  //Loading table set to true before the fetch request
 
     // initialize paging before request
     const pagModel = {page: 0, pageSize: filterValues.paginationModel.pageSize}
@@ -187,6 +188,7 @@ export const Filters = ({setLoadingData, locations, positions, past_positions, f
       console.error('Error during filtering:', error);
     } finally {
       setLoadingData(false);  //Loading set to false when the fetch is done or an error occurs
+      setLoadingTable(false);  //Loading table set to false when the fetch is done or an error occurs
     }
   }
 
