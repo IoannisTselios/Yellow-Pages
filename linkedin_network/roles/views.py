@@ -2,6 +2,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.exceptions import AuthenticationFailed
 from django.db.models.functions import Lower
+from django.db.models import Case, When, Value, CharField
 from .models import Role, Function
 from .serializers import PositionSerializer, FunctionSerializer
 import jwt
@@ -19,9 +20,17 @@ class PositionMetadataView(APIView):
             raise AuthenticationFailed('Unauthenticated!')
 
         # Query unique positions
-        positions = Role.objects.annotate(lower_position=Lower('position')) \
-            .filter(lower_position__isnull=False, lower_position__gt='') \
-            .values_list('lower_position', flat=True).distinct().order_by('position')
+        positions = Role.objects.annotate(
+                lower_position=Lower('position'),
+                is_alphabetic=Case(
+                    When(lower_position__regex=r'^[a-zA-Z]', then=Value('A')),
+                    default=Value('Z'),
+                    output_field=CharField()
+                )
+            ).filter(
+                lower_position__isnull=False,
+                lower_position__gt=''
+            ).values_list('lower_position', flat=True).distinct().order_by('is_alphabetic', 'lower_position')
 
         # Prepare the data
         metadata = {
