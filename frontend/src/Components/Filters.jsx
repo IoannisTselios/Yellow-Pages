@@ -38,8 +38,8 @@ const companySizes = [
   '50-200',
   '200-500',
   '500-1000',
-  '1,000-5000',
-  '5,000-10000',
+  '1000-5000',
+  '5000-10000',
   '10000+',
 ];
 
@@ -120,20 +120,19 @@ export const Filters = ({setLoadingData, locations, positions, past_positions, f
     }
 
     if (params.selectedCompanySize.length === 2) {
-      if(getStart(companySizes[params.selectedCompanySize[0]]) === '10000+'){
-        console.log("Start +++");
-      } else {
+      // Determine the minimum company size
+      // If lower limit is infinite (10000+), set the minimum company size to 10,000
+      if(params.selectedCompanySize[0] === 7){ 
+        queryParams.append("main_company_size_min", 10000);
+      } else { // Otherwise, use the starting value of the selected company size range
         queryParams.append("main_company_size_min", getStart(companySizes[params.selectedCompanySize[0]]));
       }         
 
-      // console.log(getStart(companySizes[params.selectedCompanySize[0]]));
-      // console.log(getEnd(companySizes[params.selectedCompanySize[1]]));
-
-      if(getEnd(companySizes[params.selectedCompanySize[1]]) === '10000+'){
-        console.log("End +++");
-      } else {
+      // Determine the maximum company size
+      //If upper limit is not infinite (10000+), set the maximum company size 
+      if((params.selectedCompanySize[1]) !== 7){ 
         queryParams.append("main_company_size_max", getEnd(companySizes[params.selectedCompanySize[1]]));
-      }      
+      }     
     }
 
     if (params.selectedCompanyYear.length === 2) {
@@ -215,6 +214,41 @@ export const Filters = ({setLoadingData, locations, positions, past_positions, f
     updateFilterValues('filteredData', []);    
   };
 
+  // Helper function to determine if filters are active for a specific tab
+  const isTabActive = (tab) => {
+    switch (tab) {
+      case "person":
+        return (
+          filterValues.selectedFirstName ||
+          filterValues.selectedLastName ||
+          filterValues.selectedLocation.length > 0 ||
+          filterValues.selectedPosition.length > 0 ||
+          filterValues.selectedPastPosition.length > 0 ||
+          filterValues.selectedFunction.length > 0 ||
+          filterValues.includePastFunction
+        );
+      case "company":
+        return (
+          filterValues.selectedCompanyName ||
+          filterValues.selectedCompanyIndustry.length > 0 ||
+          filterValues.includePastIndustry ||
+          filterValues.includePastCompanies ||
+          filterValues.selectedCompanyHeadquarters.length > 0 ||
+          filterValues.selectedCompanySize[0] !== 0 ||
+          filterValues.selectedCompanySize[1] !== 7 ||
+          filterValues.selectedCompanyYear[0] !== 1800 ||
+          filterValues.selectedCompanyYear[1] !== 2024
+        );
+      case "general":
+        return (
+          filterValues.selectedKeyword ||
+          filterValues.selectedConnections.length > 0
+        );
+      default:
+        return false;
+    }
+  };
+
   return (
       <Box sx={{ width: '100%' }}>
         <Box className={styles.tabsContainer}>
@@ -224,7 +258,7 @@ export const Filters = ({setLoadingData, locations, positions, past_positions, f
                 <Badge
                   color="secondary"
                   variant="dot"
-                  invisible={false}
+                  invisible={!isTabActive("person")}
                 >
                   <PersonIcon />
                 </Badge>
@@ -237,7 +271,7 @@ export const Filters = ({setLoadingData, locations, positions, past_positions, f
                 <Badge
                   color="secondary"
                   variant="dot"
-                  invisible={false}
+                  invisible={!isTabActive("company")}
                 >
                   <BusinessIcon />
                 </Badge>
@@ -250,7 +284,7 @@ export const Filters = ({setLoadingData, locations, positions, past_positions, f
                 <Badge
                   color="secondary"
                   variant="dot"
-                  invisible={false}
+                  invisible={!isTabActive("general")}
                 >
                   <HubIcon />
                 </Badge>
