@@ -132,9 +132,9 @@ export const Filters = ({setLoadingData, setLoadingTable, locations, positions, 
       queryParams.append("main_industry", params.selectedCompanyIndustry.join(","));
     }
 
-    // if (params.selectedCompanyHeadquarters.length > 0) {
-    //   queryParams.append("company_location", params.selectedCompanyHeadquarters.join(","));
-    // }
+    if (params.selectedCompanyHeadquarters.length > 0) {
+      queryParams.append("headquarters", params.selectedCompanyHeadquarters.join(","));
+    }
 
     if (params.includePastFunction && params.selectedFunction.length > 0) {
       queryParams.append("function", params.selectedFunction.join(","));

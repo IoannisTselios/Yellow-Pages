@@ -574,6 +574,9 @@ export const HomeScreen = () => {
                 "& .MuiDataGrid-cell:focus, .MuiDataGrid-cell:focus-within": {
                   outline: "none",
                 },
+                '&.MuiDataGrid-root--densityStandard .MuiDataGrid-cell': { 
+                  py: '12px' 
+                },
               }}
             />
           ) : (
