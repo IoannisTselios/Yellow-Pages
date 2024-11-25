@@ -57,7 +57,7 @@ export default function LoginScreen() {
 
       <div className={styles.leftSide}> 
         <div className={styles.appName}>Yellow Pages</div>
-        <div className={styles.motto}>Our motto goes here</div>
+        <div className={styles.motto}>Turning Connections into Opportunities.</div>
       </div>
 
       <div className={styles.rightSide}> 
