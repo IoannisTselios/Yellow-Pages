@@ -144,7 +144,7 @@ export const Filters = ({setLoadingData, locations, positions, past_positions, f
 
     // add the requested page at the end so that we save the general url and call it for another page
     queryParams.append("page", 1); // always ask for the first page when the filters are applied
-    queryParams.append("page_size", 25); // always ask for 25 results per page when the filters are applied
+    queryParams.append("page_size", 10); // always ask for 25 results per page when the filters are applied
 
     return `${baseURL}?${queryParams.toString()}`;
   };

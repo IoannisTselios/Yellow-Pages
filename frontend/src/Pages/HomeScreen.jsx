@@ -430,9 +430,7 @@ export const HomeScreen = () => {
       field: 'bio', 
       headerName: 'Bio', 
       renderCell: (params) => (
-        <div>
-          {params.row.bio !== '' ? params.row.bio : '-'}
-        </div>
+        <TruncatedTextCell value={params.row.bio} />
       ),
       flex: 1
     },
@@ -528,7 +526,7 @@ export const HomeScreen = () => {
 
               pagination
               paginationMode="server"
-              // pageSizeOptions={[5, 10, 25, 50]}
+              pageSizeOptions={[5, 10, 25]}
               rowCount={filterValues.rowCount}
               paginationModel={filterValues.paginationModel}
               onPaginationModelChange={handlePaginationModelChange}
