@@ -23,6 +23,8 @@ export const HomeScreen = () => {
   // const [name, setName] = useState('');
   const [dataRows, setDataRows] = useState([]);
 
+  const [loadingTable, setLoadingTable] = useState(false);
+
   const navigate = useNavigate();
 
   // saving the values of the filters
@@ -186,6 +188,7 @@ export const HomeScreen = () => {
 
       const data = await response.json();
       updateFilterValues('filteredData', data.results);
+      setLoadingTable(false);
       
       
       console.log('Data fetch successful:', data);
@@ -195,6 +198,7 @@ export const HomeScreen = () => {
   };
 
   useEffect(() => {
+    setLoadingTable(true);
     refetchData();
   }, [filterValues.paginationModel]) 
 
@@ -496,6 +500,7 @@ export const HomeScreen = () => {
         <div className={styles.filtersContainer}>
           <Filters
             setLoadingData={setLoadingData}
+            setLoadingTable={setLoadingTable}
             locations={locations}
             positions={positions}
             past_positions={positions}
@@ -523,7 +528,7 @@ export const HomeScreen = () => {
               disableSelectionOnClick
               getRowHeight={() => 'auto'}         
               onRowClick={handleRowClick}
-
+              loading={loadingTable}
               pagination
               paginationMode="server"
               pageSizeOptions={[5, 10, 25]}
