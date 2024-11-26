@@ -2,8 +2,10 @@ services:
   web:
     build: . # Build from the Dockerfile located in linkedin_network
     command: >
-      sh -c "python manage.py migrate &&
-             python manage.py runserver 0.0.0.0:8000"
+      sh -c "
+      python manage.py migrate &&
+      python manage.py process_strength &&
+      python manage.py runserver 0.0.0.0:8000"
     volumes:
       - .:/usr/src/app # Mount the local project folder into the container
     ports:
@@ -12,7 +14,7 @@ services:
       - .env.prod # Load environment variables from the .env.dev file
     depends_on:
       - db # Ensure the database starts before the web service
-      
+
   db:
     image: postgres:13 # Use PostgreSQL as the database
     volumes:
@@ -21,5 +23,6 @@ services:
       - POSTGRES_USER=${SQL_USER}
       - POSTGRES_PASSWORD=${SQL_PASSWORD}
       - POSTGRES_DB=${SQL_DATABASE}
+
 volumes:
   postgres_data:
