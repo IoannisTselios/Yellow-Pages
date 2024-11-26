@@ -268,18 +268,66 @@ def calculate_connection_strength(comments_df, overlap_df, W_comments=0.4, W_ove
     return connections_df[['employee', 'user', 'connection_strength']]
 
 
+def replace_names_with_urls(connection_strength_df):
+    from django.contrib.auth import get_user_model
+    """
+    Replaces employee and user names in the connection_strength_df with their LinkedIn URLs.
+
+    Args:
+        connection_strength_df (DataFrame): DataFrame containing 'employee' and 'user' columns.
+
+    Returns:
+        DataFrame: Updated DataFrame with names replaced by LinkedIn URLs.
+    """
+    User = get_user_model()
+
+    # Fetch all users with their names and URLs
+    user_data = User.objects.values('first_name', 'last_name', 'url')
+
+    # Create a mapping of "First Last" -> URL
+    name_to_url = {
+        f"{user['first_name']} {user['last_name']}": user['url']
+        for user in user_data
+    }
+
+    # Replace 'employee' and 'user' names with their corresponding URLs
+    connection_strength_df['employee'] = connection_strength_df['employee'].map(name_to_url)
+    connection_strength_df['user'] = connection_strength_df['user'].map(name_to_url)
+
+    return connection_strength_df
+
+
+def update_user_connection_strength(connection_strength_df):
+    """
+    Updates the connection_strength field in the Connection model
+    for the user's URL in existing connections.
+
+    Args:
+        connection_strength_df (DataFrame): DataFrame containing LinkedIn URLs
+                                             and connection_strength values.
+    """
+    from connections.models import Connection
+    for _, row in connection_strength_df.iterrows():
+        # Extract employee (URL), user (URL), and connection_strength
+        user_url = row['user']
+        strength_value = row['connection_strength']
+
+        # Update only if the connection exists for the user
+        try:
+            connection = Connection.objects.get(url=user_url)
+            connection.connection_strength = strength_value
+            connection.save()
+            print(f"Updated connection_strength for {user_url}")
+        except Connection.DoesNotExist:
+            print(f"Connection not found for {user_url}. Skipping update.")
+
+
 def process_dreamcraft_connection_strength():
     """
     Orchestrates the process of calculating the connection strength metric for Dreamcraft employees.
-    
-    Steps:
-        1. Read HTML comments and parse interaction data.
-        2. Calculate employment overlaps and filter for Dreamcraft employees.
-        3. Aggregate and filter realistic employment overlaps.
-        4. Compute connection strength metric based on interactions and overlaps.
-    
+
     Returns:
-        DataFrame: Final DataFrame containing connection strength metrics.
+        DataFrame: Final DataFrame containing connection strength metrics with LinkedIn URLs.
     """
     # Step 1: Read and parse interaction data from HTML comments
     print("Step 1: Reading and parsing HTML comments...")
@@ -303,20 +351,23 @@ def process_dreamcraft_connection_strength():
     connection_strength_df = calculate_connection_strength(comments_df, filtered_dreamcraft_overlaps)
     print(f"Calculated connection strength for {len(connection_strength_df)} connections.")
 
+    # Step 5: Replace names with LinkedIn URLs
+    print("Step 5: Replacing names with LinkedIn URLs...")
+    connection_strength_df = replace_names_with_urls(connection_strength_df)
+    print("Replaced names with LinkedIn URLs.")
+
     # Return the final DataFrame
     return connection_strength_df
 
 
 if __name__ == "__main__":
-    # Run the entire process and save the results
+    # Step 1: Run the process to compute connection strengths
     connection_strength_df = process_dreamcraft_connection_strength()
 
-    # Save to a CSV file
-    connection_strength_df.to_csv("dreamcraft_connection_strength.csv", index=False)
-    print("Connection strength metric saved to 'dreamcraft_connection_strength.csv'.")
+    # Step 2: Update the database with the computed strengths
+    update_user_connection_strength(connection_strength_df)
 
-    # Optionally, preview the results
-    print(connection_strength_df.head())
+    print("Connection strengths updated for existing user connections.")
 
 # ----------
 

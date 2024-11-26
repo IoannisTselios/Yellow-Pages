@@ -2,8 +2,6 @@ from django.db import models
 from django.core.exceptions import ValidationError
 from django.conf import settings 
 
-from .utils import strength_metric_calculation
-
 class Connection(models.Model):
     first_name = models.CharField(max_length=50)
     last_name = models.CharField(max_length=50)
