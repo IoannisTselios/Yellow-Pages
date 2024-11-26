@@ -59,7 +59,7 @@ def parse_interactions_from_html(user_html_content):
                     first_last_name = full_name
 
                 # Record interaction only if target is not the employee themselves
-                print(f"Name: {employee_name}")
+                # print(f"Name: {employee_name}")
                 if first_last_name != employee_name:
                     interaction_data[(employee_name, first_last_name)] += 1
 
@@ -317,9 +317,9 @@ def update_user_connection_strength(connection_strength_df):
             connection = Connection.objects.get(url=user_url)
             connection.connection_strength = strength_value
             connection.save()
-            print(f"Updated connection_strength for {user_url}")
+            # print(f"Updated connection_strength for {user_url}")
         except Connection.DoesNotExist:
-            print(f"Connection not found for {user_url}. Skipping update.")
+            # print(f"Connection not found for {user_url}. Skipping update.")
 
 
 def process_dreamcraft_connection_strength():
@@ -332,29 +332,29 @@ def process_dreamcraft_connection_strength():
     # Step 1: Read and parse interaction data from HTML comments
     print("Step 1: Reading and parsing HTML comments...")
     comments_df = get_interaction_data()
-    print(f"Parsed {len(comments_df)} interactions.")
+    # print(f"Parsed {len(comments_df)} interactions.")
 
     # Step 2: Calculate employment overlaps and filter Dreamcraft overlaps
     print("Step 2: Calculating employment overlaps...")
     overlap_df, dreamcraft_overlaps = calculate_employment_overlap()
-    print(f"Calculated {len(overlap_df)} total overlaps, {len(dreamcraft_overlaps)} involve Dreamcraft employees.")
+    # print(f"Calculated {len(overlap_df)} total overlaps, {len(dreamcraft_overlaps)} involve Dreamcraft employees.")
 
     # Step 3: Aggregate and filter realistic overlaps
     print("Step 3: Aggregating and filtering realistic overlaps...")
     aggregated_df, realistic_entries, _ = aggregate_and_filter_employment_overlap(overlap_df)
     dreamcraft_employees = set(dreamcraft_overlaps['name1']).union(set(dreamcraft_overlaps['name2']))
     filtered_dreamcraft_overlaps = filter_dreamcraft_overlaps(realistic_entries, dreamcraft_employees)
-    print(f"Filtered {len(filtered_dreamcraft_overlaps)} realistic overlaps involving Dreamcraft employees.")
+    # print(f"Filtered {len(filtered_dreamcraft_overlaps)} realistic overlaps involving Dreamcraft employees.")
 
     # Step 4: Calculate connection strength metric
     print("Step 4: Calculating connection strength metric...")
     connection_strength_df = calculate_connection_strength(comments_df, filtered_dreamcraft_overlaps)
-    print(f"Calculated connection strength for {len(connection_strength_df)} connections.")
+    # print(f"Calculated connection strength for {len(connection_strength_df)} connections.")
 
     # Step 5: Replace names with LinkedIn URLs
     print("Step 5: Replacing names with LinkedIn URLs...")
     connection_strength_df = replace_names_with_urls(connection_strength_df)
-    print("Replaced names with LinkedIn URLs.")
+    # print("Replaced names with LinkedIn URLs.")
 
     # Return the final DataFrame
     return connection_strength_df
