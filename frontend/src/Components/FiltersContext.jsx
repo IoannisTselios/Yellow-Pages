@@ -35,7 +35,9 @@ export const FiltersProvider = ({ children }) => {
     paginationModel: {
       pageSize: 15,
       page: 0,
-    }
+    },
+
+    expertise: false
   });
 
   const updateFilterValues = (key, value) => {

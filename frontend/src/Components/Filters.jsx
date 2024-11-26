@@ -90,6 +90,24 @@ export const Filters = ({setLoadingData, setLoadingTable, locations, positions, 
       return value.split('-')[0]
   }
 
+  const determineExpertise = () => {
+    console.log('ppp', filterValues.selectedPosition)
+    console.log('ppp', filterValues.selectedCompanyName)
+    console.log('ppp', filterValues.selectedCompanyIndustry)
+    console.log('ppp', filterValues.selectedFunction)
+    if (filterValues.selectedPosition.length > 0) {
+      return "position_months";
+    } else if (filterValues.selectedCompanyName) {
+      return "company_months";
+    } else if (filterValues.selectedCompanyIndustry.length > 0) {
+      return "industry_months";
+    } else if (filterValues.selectedFunction.length > 0) {
+      return "function_months";
+    }
+
+    return '';
+  }
+
   const generateEndpoint = (params) => {
     const baseURL = "http://localhost:80/api/get_connection_list/";
 
@@ -165,6 +183,11 @@ export const Filters = ({setLoadingData, setLoadingTable, locations, positions, 
     if (params.selectedCompanyYear.length === 2) {
       queryParams.append("main_company_year_min", params.selectedCompanyYear[0]);
       queryParams.append("main_company_year_max", params.selectedCompanyYear[1]);
+    }
+
+    const sort_param = determineExpertise();
+    if (params.expertise && sort_param != '') {
+      queryParams.append("sort_by", sort_param);
     }
 
     updateFilterValues('requestURL', `${baseURL}?${queryParams.toString()}`);

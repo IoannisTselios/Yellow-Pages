@@ -5,7 +5,7 @@ import CustomToolbar from '../Components/CustomToolbar';
 import TruncatedTextCell from '../Components/TruncatedTextCell';
 import { Filters } from "../Components/Filters";
 import { useFilters } from "../Components/FiltersContext";
-
+import Switch from '@mui/material/Switch';
 import { Navigate, useNavigate } from 'react-router-dom';
 import { DataGrid } from '@mui/x-data-grid';
 import { Drawer, LinearProgress, IconButton, Tooltip } from '@mui/material';
@@ -511,18 +511,33 @@ export const HomeScreen = () => {
       <div className={styles.mainContent}>
 
         {/* Filters */}
-        <div className={styles.filtersContainer}>
-          <Filters
-            setLoadingData={setLoadingData}
-            setLoadingTable={setLoadingTable}
-            locations={locations}
-            positions={positions}
-            // past_positions={positions}
-            functions={functions}
-            industries={industries}
-            hqs={headquarters}
-            connections={connections}
-          />
+        <div style={{display: 'flex'}}>
+          <div className={styles.filtersContainer}>
+            <Filters
+              setLoadingData={setLoadingData}
+              setLoadingTable={setLoadingTable}
+              locations={locations}
+              positions={positions}
+              // past_positions={positions}
+              functions={functions}
+              industries={industries}
+              hqs={headquarters}
+              connections={connections}
+            />
+          </div>
+          <div className={styles.sortContainer}>
+            <div className={styles.sortTitle}>
+              SORTING
+            </div>
+            <div style={{padding: '16px'}}>
+              <p>Sort by Years of Experience</p>
+              <Switch
+                color="secondary"
+                checked={filterValues.expertise} // Bind the switch to state
+                onChange={(event) => updateFilterValues('expertise', !filterValues.expertise)} // Update state on toggle
+              />
+            </div>
+          </div>
         </div>
   
         {/* Data Table */}
