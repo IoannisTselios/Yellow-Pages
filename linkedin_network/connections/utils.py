@@ -319,6 +319,7 @@ def update_user_connection_strength(connection_strength_df):
             connection.save()
             # print(f"Updated connection_strength for {user_url}")
         except Connection.DoesNotExist:
+            pass
             # print(f"Connection not found for {user_url}. Skipping update.")
 
 
