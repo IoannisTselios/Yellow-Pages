@@ -41,6 +41,8 @@ class User(AbstractUser):
     password=models.CharField(max_length=255)
     username = None
 
+    linkedin_comments = models.FileField(upload_to='linkedin_comments/', null=True, blank=True)  # HTML FILE
+
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = []
 
