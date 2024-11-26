@@ -39,51 +39,40 @@ def parse_interactions_from_html(user_html_content):
     Args:
         user_html_content (dict): A dictionary with user emails as keys and HTML content as values.
     Returns:
-        DataFrame: A DataFrame with columns ['employee', 'user', 'normalized_interaction_count'].
+        DataFrame: A DataFrame with columns ['url1', 'url2', 'normalized_interaction_count'].
     """
     interaction_data = defaultdict(int)
 
     for employee_name, html_content in user_html_content.items():
         soup = BeautifulSoup(html_content, 'html.parser')
 
+        # Extract URL for the employee
+        employee_url = next(
+            (a['href'] for a in soup.find_all('a', href=True) if employee_name in a.get_text(strip=True)), None
+        )
+        if not employee_url:
+            continue
+
         # General comment interactions
         user_elements = soup.find_all('div', class_='update-components-actor__meta')
         for user_element in user_elements:
-            name_span = user_element.find('span', class_='update-components-actor__name')
-            if name_span:
-                full_name = name_span.get_text(strip=True)
-                name_parts = full_name.split()
-                if len(name_parts) >= 2:
-                    first_last_name = f"{name_parts[0]} {name_parts[-1]}"
-                else:
-                    first_last_name = full_name
-
-                # Record interaction only if target is not the employee themselves
-                # print(f"Name: {employee_name}")
-                if first_last_name != employee_name:
-                    interaction_data[(employee_name, first_last_name)] += 1
-
-        # Reply-specific interactions
-        reply_elements = soup.find_all('span', class_='update-components-header__text-view')
-        for reply_element in reply_elements:
-            if employee_name in reply_element.get_text():
-                target_name_tag = reply_element.find_all('a')[-1]
-                if target_name_tag:
-                    target_name = target_name_tag.get_text(strip=True)
-                    if target_name != employee_name:
-                        interaction_data[(employee_name, target_name)] += 1
+            url_tag = user_element.find('a', href=True)
+            if url_tag:
+                user_url = url_tag['href']
+                if user_url != employee_url:  # Avoid self-interactions
+                    interaction_data[(employee_url, user_url)] += 1
 
     # Normalize interaction data
     normalized_interaction_data = []
-    for (employee, target), count in interaction_data.items():
+    for (url1, url2), count in interaction_data.items():
         # Filter to calculate average only for this employee's interactions
-        employee_interactions = [count for (e, _), count in interaction_data.items() if e == employee]
+        employee_interactions = [count for (e, _), count in interaction_data.items() if e == url1]
         avg_interactions = sum(employee_interactions) / len(employee_interactions) if employee_interactions else 0
         normalized_count = count / avg_interactions if avg_interactions > 0 else 0
-        normalized_interaction_data.append((employee, target, normalized_count))
+        normalized_interaction_data.append((url1, url2, normalized_count))
 
     # Create and return DataFrame
-    comments_df = pd.DataFrame(normalized_interaction_data, columns=['employee', 'user', 'normalized_interaction_count'])
+    comments_df = pd.DataFrame(normalized_interaction_data, columns=['url1', 'url2', 'normalized_interaction_count'])
     return comments_df
 
 
@@ -109,7 +98,7 @@ def calculate_employment_overlap():
 
     Returns:
         tuple: Two DataFrames:
-            - overlap_df: A DataFrame with all overlapping employment data.
+            - overlap_df: A DataFrame with all overlapping employment data using URLs.
             - dreamcraft_overlaps: A DataFrame with overlaps involving Dreamcraft employees.
     """
     from roles.models import Role, Company
@@ -117,7 +106,6 @@ def calculate_employment_overlap():
     # Get the Dreamcraft company name
     try:
         dreamcraft_company = Company.objects.get(name__icontains="Dreamcraft")
-        dreamcraft_company_name = dreamcraft_company.name
     except Company.DoesNotExist:
         raise ValueError("Dreamcraft company not found in the database.")
 
@@ -127,33 +115,31 @@ def calculate_employment_overlap():
     # Fetch all roles from the database
     roles = Role.objects.select_related('connection', 'company')
 
-    # Organize roles by company
+    # Organize roles by company using URLs
     dreamcraft_employees = set()
 
     for role in roles:
-        employee_name = f"{role.connection.first_name} {role.connection.last_name}"
+        employee_url = role.connection.url
         start_date = role.start_date
         end_date = role.end_date or datetime.today().date()  # Use today's date for ongoing roles
         company_name = role.company.name
 
         # Append employee and their role period to the company's employment list
-        employment_by_company[company_name].append((employee_name, start_date, end_date))
+        employment_by_company[company_name].append((employee_url, start_date, end_date))
 
         # Collect Dreamcraft employees
-        if company_name == dreamcraft_company_name:
-            dreamcraft_employees.add(employee_name)
+        if company_name == dreamcraft_company.name:
+            dreamcraft_employees.add(employee_url)
 
     # List to store unique overlap data
     overlap_data = []
 
     # Check for overlapping employment periods within each company
     for company, employments in employment_by_company.items():
-        for i, (emp1, start1, end1) in enumerate(employments):
-            for j, (emp2, start2, end2) in enumerate(employments):
-                # Ensure emp1 and emp2 are not the same and only calculate once for each unique pair
-                if i < j and emp1 != emp2:
-                    # Sort the pair to ensure uniqueness (name1, name2) == (name2, name1)
-                    name_pair = tuple(sorted((emp1, emp2)))
+        for i, (url1, start1, end1) in enumerate(employments):
+            for j, (url2, start2, end2) in enumerate(employments):
+                # Ensure url1 and url2 are not the same and only calculate once for each unique pair
+                if i < j and url1 != url2:
                     overlap_start = max(start1, start2)
                     overlap_end = min(end1, end2)
                     
@@ -162,19 +148,19 @@ def calculate_employment_overlap():
                         overlap_duration = (overlap_end.year - overlap_start.year) * 12 + (overlap_end.month - overlap_start.month)
                         if overlap_duration > 0:
                             overlap_data.append({
-                                "name1": name_pair[0],
-                                "name2": name_pair[1],
+                                "url1": url1,
+                                "url2": url2,
                                 "company": company,
                                 "worked_for": overlap_duration
                             })
 
     # Convert overlap data to DataFrame
-    overlap_df = pd.DataFrame(overlap_data, columns=['name1', 'name2', 'company', 'worked_for'])
+    overlap_df = pd.DataFrame(overlap_data, columns=['url1', 'url2', 'company', 'worked_for'])
 
     # Filter for Dreamcraft employee overlaps
     dreamcraft_overlaps = overlap_df[
-        (overlap_df['name1'].isin(dreamcraft_employees)) |
-        (overlap_df['name2'].isin(dreamcraft_employees))
+        (overlap_df['url1'].isin(dreamcraft_employees)) |
+        (overlap_df['url2'].isin(dreamcraft_employees))
     ]
 
     return overlap_df, dreamcraft_overlaps
@@ -232,40 +218,35 @@ def calculate_connection_strength(comments_df, overlap_df, W_comments=0.4, W_ove
 
     Args:
         comments_df (DataFrame): DataFrame containing comment interactions with columns 
-                                 ['employee', 'user', 'normalized_interaction_count'].
+                                 ['url1', 'url2', 'normalized_interaction_count'].
         overlap_df (DataFrame): DataFrame containing work overlap data with columns 
-                                ['name1', 'name2', 'worked_for'].
+                                ['url1', 'url2', 'worked_for'].
         W_comments (float): Weight for comment interactions. Default is 0.4.
         W_overlap (float): Weight for work overlap. Default is 0.6.
 
     Returns:
         DataFrame: DataFrame containing the connection strength metric with columns 
-                   ['employee', 'user', 'connection_strength'].
+                   ['url1', 'url2', 'connection_strength'].
     """
     # Step 1: Normalize work overlap duration
     max_overlap = overlap_df['worked_for'].max()
     overlap_df['overlap_score'] = overlap_df['worked_for'] / max_overlap
 
-    # Step 2: Prepare overlap data to allow both 'name1' and 'name2' as employees
-    overlap_df1 = overlap_df[['name1', 'name2', 'overlap_score']].rename(columns={'name1': 'employee', 'name2': 'user'})
-    overlap_df2 = overlap_df[['name2', 'name1', 'overlap_score']].rename(columns={'name2': 'employee', 'name1': 'user'})
-    combined_overlap_df = pd.concat([overlap_df1, overlap_df2], ignore_index=True)
-
-    # Step 3: Merge comments data with the combined overlap data on employee and user names
-    connections_df = pd.merge(comments_df, combined_overlap_df, on=['employee', 'user'], how='outer')
+    # Step 2: Merge comments data with the overlap data on URLs
+    connections_df = pd.merge(comments_df, overlap_df, on=['url1', 'url2'], how='outer')
 
     # Fill NaN values in scores with 0 (no comments or no work overlap)
     connections_df['normalized_interaction_count'].fillna(0, inplace=True)
     connections_df['overlap_score'].fillna(0, inplace=True)
 
-    # Step 4: Calculate the Connection Strength Metric
+    # Step 3: Calculate the Connection Strength Metric
     connections_df['connection_strength'] = (
         W_comments * connections_df['normalized_interaction_count'] +
         W_overlap * connections_df['overlap_score']
     )
 
-    # Step 5: Return the final DataFrame
-    return connections_df[['employee', 'user', 'connection_strength']]
+    # Step 4: Return the final DataFrame
+    return connections_df[['url1', 'url2', 'connection_strength']]
 
 
 def replace_names_with_urls(connection_strength_df):
@@ -309,7 +290,7 @@ def update_user_connection_strength(connection_strength_df):
     from connections.models import Connection
     for _, row in connection_strength_df.iterrows():
         # Extract employee (URL), user (URL), and connection_strength
-        user_url = row['user']
+        user_url = row['url2']
         strength_value = row['connection_strength']
 
         # Update only if the connection exists for the user
@@ -317,10 +298,8 @@ def update_user_connection_strength(connection_strength_df):
             connection = Connection.objects.get(url=user_url)
             connection.connection_strength = strength_value
             connection.save()
-            # print(f"Updated connection_strength for {user_url}")
         except Connection.DoesNotExist:
             pass
-            # print(f"Connection not found for {user_url}. Skipping update.")
 
 
 def process_dreamcraft_connection_strength():
@@ -333,30 +312,27 @@ def process_dreamcraft_connection_strength():
     # Step 1: Read and parse interaction data from HTML comments
     print("Step 1: Reading and parsing HTML comments...")
     comments_df = get_interaction_data()
-    # print(f"Parsed {len(comments_df)} interactions.")
+    print(f"Parsed {len(comments_df)} interactions.")
 
     # Step 2: Calculate employment overlaps and filter Dreamcraft overlaps
     print("Step 2: Calculating employment overlaps...")
     overlap_df, dreamcraft_overlaps = calculate_employment_overlap()
-    # print(f"Calculated {len(overlap_df)} total overlaps, {len(dreamcraft_overlaps)} involve Dreamcraft employees.")
+    print(f"Calculated {len(overlap_df)} total overlaps, {len(dreamcraft_overlaps)} involve Dreamcraft employees.")
 
     # Step 3: Aggregate and filter realistic overlaps
     print("Step 3: Aggregating and filtering realistic overlaps...")
     aggregated_df, realistic_entries, _ = aggregate_and_filter_employment_overlap(overlap_df)
-    dreamcraft_employees = set(dreamcraft_overlaps['name1']).union(set(dreamcraft_overlaps['name2']))
+    dreamcraft_employees = set(dreamcraft_overlaps['url1']).union(set(dreamcraft_overlaps['url2']))
     filtered_dreamcraft_overlaps = filter_dreamcraft_overlaps(realistic_entries, dreamcraft_employees)
-    # print(f"Filtered {len(filtered_dreamcraft_overlaps)} realistic overlaps involving Dreamcraft employees.")
+    print(f"Filtered {len(filtered_dreamcraft_overlaps)} realistic overlaps involving Dreamcraft employees.")
 
     # Step 4: Calculate connection strength metric
     print("Step 4: Calculating connection strength metric...")
     connection_strength_df = calculate_connection_strength(comments_df, filtered_dreamcraft_overlaps)
-    # print(f"Calculated connection strength for {len(connection_strength_df)} connections.")
+    print(f"Calculated connection strength for {len(connection_strength_df)} connections.")
 
-    # Step 5: Replace names with LinkedIn URLs
-    print("Step 5: Replacing names with LinkedIn URLs...")
-    connection_strength_df = replace_names_with_urls(connection_strength_df)
-    # print("Replaced names with LinkedIn URLs.")
-
+    # No Step 5: The URLs are already included throughout the pipeline.
+    
     # Return the final DataFrame
     return connection_strength_df
 
