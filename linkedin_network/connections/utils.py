@@ -109,6 +109,7 @@ def calculate_employment_overlap():
     dreamcraft_employees = set(
         User.objects.filter(url__isnull=False).exclude(url="").values_list('url', flat=True)
     )
+    print(dreamcraft_employees)
 
     # Dictionary to store employment periods by company
     employment_by_company = defaultdict(list)
