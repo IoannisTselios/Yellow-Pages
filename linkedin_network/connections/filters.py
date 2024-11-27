@@ -1,6 +1,7 @@
 from django_filters import rest_framework as filters
 from django.db.models import Q
 from .models import Connection
+import re
 
 class ConnectionFilter(filters.FilterSet):
     # filtering first name - exact match
@@ -177,7 +178,8 @@ class ConnectionFilter(filters.FilterSet):
         positions = value.split(',')
         query = Q()
         for position in positions:
-            query |= Q(role__main_role=True, role__position__icontains=position.strip())
+            escaped_position = re.escape(position.strip())
+            query |= Q(role__main_role=True, role__position__iregex=fr'\y{escaped_position}\y')
         return queryset.filter(query).distinct()
 
     # multi-filtering enabled
@@ -185,7 +187,8 @@ class ConnectionFilter(filters.FilterSet):
         positions = value.split(',')
         query = Q()
         for position in positions:
-            query |= Q(role__main_role=False, role__end_date__isnull=False, role__position__icontains=position.strip())
+            escaped_position = re.escape(position.strip())
+            query |= Q(role__main_role=False, role__end_date__isnull=False,  role__position__iregex=fr'\y{escaped_position}\y')
         return queryset.filter(query).distinct()
 
     # multi-filtering enabled
@@ -193,7 +196,8 @@ class ConnectionFilter(filters.FilterSet):
         positions = value.split(',')
         query = Q()
         for position in positions:
-            query |= Q(role__end_date__isnull=True, role__position__icontains=position.strip())
+            escaped_position = re.escape(position.strip())
+            query |= Q(role__end_date__isnull=True, role__position__iregex=fr'\y{escaped_position}\y')
         return queryset.filter(query).distinct()
 
     # multi-filtering enabled
@@ -201,7 +205,8 @@ class ConnectionFilter(filters.FilterSet):
         positions = value.split(',')
         query = Q()
         for position in positions:
-            query |= Q(role__position__icontains=position.strip())
+            escaped_position = re.escape(position.strip())
+            query |= Q(role__position__iregex=fr'\y{escaped_position}\y')
         return queryset.filter(query).distinct()
     
     # multi-filtering enabled
