@@ -525,7 +525,7 @@ export const HomeScreen = () => {
               connections={connections}
             />
           </div>
-          <div className={styles.sortContainer}>
+          {/* <div className={styles.sortContainer}>
             <div className={styles.sortTitle}>
               SORTING
             </div>
@@ -537,7 +537,7 @@ export const HomeScreen = () => {
                 onChange={(event) => updateFilterValues('expertise', !filterValues.expertise)} // Update state on toggle
               />
             </div>
-          </div>
+          </div> */}
         </div>
   
         {/* Data Table */}
