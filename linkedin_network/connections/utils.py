@@ -101,13 +101,25 @@ def calculate_employment_overlap():
             - overlap_df: A DataFrame with all overlapping employment data using URLs.
             - dreamcraft_overlaps: A DataFrame with overlaps involving Dreamcraft employees.
     """
-    from roles.models import Role, Company
+    from roles.models import Role
+    from django.contrib.auth import get_user_model
 
-    # Get the Dreamcraft company name
-    try:
-        dreamcraft_company = Company.objects.get(name__icontains="Dreamcraft")
-    except Company.DoesNotExist:
-        raise ValueError("Dreamcraft company not found in the database.")
+    # Hardcoded Dreamcraft employee names
+    dreamcraft_employee_names = [
+        "Nico Blier-Silvestri", "Andreas Sachse", "Carsten Gjoertler Salling",
+        "Daniel Nyvang Székely Mariussen", "Frederik Pheiffer", "Heidi Lee",
+        "Hendrik Sippel", "Julie Lindegaard Larsen", "Lasse Surland",
+        "Line S. Aasen", "Mads Esmarch Hansen"
+    ]
+
+    # Fetch Dreamcraft employee URLs
+    User = get_user_model()
+    dreamcraft_employees = set()
+    for full_name in dreamcraft_employee_names:
+        first_name, last_name = full_name.split(" ", 1)
+        user = User.objects.filter(first_name=first_name, last_name=last_name).first()
+        if user and user.url:
+            dreamcraft_employees.add(user.url)
 
     # Dictionary to store employment periods by company
     employment_by_company = defaultdict(list)
@@ -116,8 +128,6 @@ def calculate_employment_overlap():
     roles = Role.objects.select_related('connection', 'company')
 
     # Organize roles by company using URLs
-    dreamcraft_employees = set()
-
     for role in roles:
         employee_url = role.connection.url
         start_date = role.start_date
@@ -126,10 +136,6 @@ def calculate_employment_overlap():
 
         # Append employee and their role period to the company's employment list
         employment_by_company[company_name].append((employee_url, start_date, end_date))
-
-        # Collect Dreamcraft employees
-        if company_name == dreamcraft_company.name:
-            dreamcraft_employees.add(employee_url)
 
     # List to store unique overlap data
     overlap_data = []
@@ -182,7 +188,7 @@ def aggregate_and_filter_employment_overlap(overlap_df, threshold=360):
             - unrealistic_entries: Entries with total worked_for exceeding the threshold.
     """
     # Step 1: Aggregate total 'worked_for' duration for each unique name pair
-    aggregated_df = overlap_df.groupby(['name1', 'name2'], as_index=False)['worked_for'].sum()
+    aggregated_df = overlap_df.groupby(['url1', 'url2'], as_index=False)['worked_for'].sum()
 
     # Step 2: Filter out unrealistic entries where worked_for exceeds the threshold
     realistic_entries = aggregated_df[aggregated_df['worked_for'] <= threshold]
@@ -205,8 +211,8 @@ def filter_dreamcraft_overlaps(realistic_entries, dreamcraft_employees):
     """
     # Filter rows where either 'name1' or 'name2' is in the Dreamcraft employees set
     dreamcraft_overlaps = realistic_entries[
-        (realistic_entries['name1'].isin(dreamcraft_employees)) |
-        (realistic_entries['name2'].isin(dreamcraft_employees))
+        (realistic_entries['url1'].isin(dreamcraft_employees)) |
+        (realistic_entries['url2'].isin(dreamcraft_employees))
     ]
 
     return dreamcraft_overlaps
