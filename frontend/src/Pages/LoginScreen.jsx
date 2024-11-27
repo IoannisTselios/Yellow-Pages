@@ -19,7 +19,7 @@ export default function LoginScreen() {
 
     try {
       // Send POST request to the backend
-      const response = await fetch('http://13.48.244.239:80/api/login', { //'http://13.48.244.239:80/api/login', {
+      const response = await fetch('http://localhost:80/api/login', { //'http://localhost:80/api/login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
