@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import styles from './Filters.module.css';
 
-import { Box, Button, Tooltip, Slider, Typography, Badge } from '@mui/material';
+import { Box, Button, Tooltip, Slider, Typography, Badge, Input } from '@mui/material';
 
 import PersonIcon from '@mui/icons-material/Person';
 import BusinessIcon from '@mui/icons-material/Business';
@@ -12,6 +12,7 @@ import Tab from '@mui/material/Tab';
 import Autocomplete from '@mui/material/Autocomplete';
 import TextField from '@mui/material/TextField';
 import Switch from '@mui/material/Switch';
+import MuiInput from '@mui/material/Input';
 
 // import { VariableSizeList } from 'react-window';
 
@@ -182,9 +183,16 @@ export const Filters = ({setLoadingData, setLoadingTable, locations, positions, 
       }     
     }
 
-    if (params.selectedCompanyYear.length === 2) {
-      queryParams.append("main_company_year_min", params.selectedCompanyYear[0]);
-      queryParams.append("main_company_year_max", params.selectedCompanyYear[1]);
+    // if (params.selectedCompanyYear.length === 2) {
+    //   queryParams.append("main_company_year_min", params.selectedCompanyYear[0]);
+    //   queryParams.append("main_company_year_max", params.selectedCompanyYear[1]);
+    // }
+
+    if (params.selectedCompanyYearStart > 0) {
+      queryParams.append("main_company_year_min", params.selectedCompanyYearStart);
+    }
+    if (params.selectedCompanyYearEnd > 0) {
+      queryParams.append("main_company_year_max", params.selectedCompanyYearEnd);
     }
 
     const sort_param = determineExpertise();
@@ -261,7 +269,8 @@ export const Filters = ({setLoadingData, setLoadingTable, locations, positions, 
     updateFilterValues('includePastIndustry', false);
     updateFilterValues('selectedCompanyHeadquarters', []);
     updateFilterValues('selectedCompanySize', [0, 7]);
-    updateFilterValues('selectedCompanyYear', [1800, 2024]);
+    updateFilterValues('selectedCompanyYearStart', 1400);
+    updateFilterValues('selectedCompanyYearEnd', 2024);
 
     updateFilterValues('selectedKeyword', "");
     updateFilterValues('selectedConnections', []);    
@@ -291,8 +300,8 @@ export const Filters = ({setLoadingData, setLoadingTable, locations, positions, 
           filterValues.selectedCompanyHeadquarters.length > 0 ||
           filterValues.selectedCompanySize[0] !== 0 ||
           filterValues.selectedCompanySize[1] !== 7 ||
-          filterValues.selectedCompanyYear[0] !== 1800 ||
-          filterValues.selectedCompanyYear[1] !== 2024
+          filterValues.selectedCompanyYearStart !== 1400 ||
+          filterValues.selectedCompanyYearEnd !== 2024
         );
       case "general":
         return (
@@ -614,27 +623,59 @@ export const Filters = ({setLoadingData, setLoadingTable, locations, positions, 
                 )}
               />
 
-              {/* <LocalizationProvider dateAdapter={AdapterDayjs}>
-                <DemoContainer components={['DatePicker']}>
-                  <DatePicker className={styles.filterSmall} label={'Year From'} views={['year']} />
-                  <DatePicker className={styles.filterSmall} label={'Year To'} views={['year']} />
-                </DemoContainer>
-              </LocalizationProvider> */}
-
               <Box className={styles.filter}>
-                <Typography id="company-year-slider" gutterBottom>
-                  Year Founded: {filterValues.selectedCompanyYear[0]} - {filterValues.selectedCompanyYear[1]}
-                </Typography>
+                <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                  <Typography id="company-year-slider" gutterBottom sx={{ marginRight: 2 }}>
+                    Year Founded:
+                  </Typography>
+                  <div style={{display: 'flex', alignItems: 'center' }}>
+
+                  <Input
+                    value={filterValues.selectedCompanyYearStart}
+                    size="small"
+                    onChange={(event) => {
+                      const value = event.target.value === "" ? "" : Number(event.target.value);
+                      updateFilterValues("selectedCompanyYearStart", value);
+                    }}
+                    onBlur={(event) => {
+                      let value = Number(event.target.value);
+                      if (isNaN(value) || value < 1400) {
+                        value = 1400; // Enforce minimum year
+                      }
+                      updateFilterValues("selectedCompanyYearStart", value);
+                    }}
+                    sx={{ width: 50, marginRight: 1 }}
+                  />
+                  <Typography sx={{ marginRight: 1 }}> - </Typography>
+                  <Input
+                    value={filterValues.selectedCompanyYearEnd}
+                    size="small"
+                    onChange={(event) => {
+                      const value = event.target.value === "" ? "" : Number(event.target.value);
+                      updateFilterValues("selectedCompanyYearEnd", value);
+                    }}
+                    onBlur={(event) => {
+                      let value = event.target.value === "" ? 1400 : Number(event.target.value);
+                      if (isNaN(value) || value > 2024) {
+                        value = 2024; // Enforce maximum year
+                      }
+                      updateFilterValues("selectedCompanyYearEnd", value);
+                    }}
+                    sx={{ width: 50 }}
+                  />
+                  </div>
+                </Box>
                 <Slider className={styles.filter}
-                  value={filterValues.selectedCompanyYear}
-                  defaultValue={[2014, 2024]}
-                  // valueLabelDisplay="on"
+                  value={[filterValues.selectedCompanyYearStart, filterValues.selectedCompanyYearEnd]}
+                  defaultValue={[2000, 2024]}
                   aria-labelledby="company-year-slider"
                   step={1}
-                  // marks
-                  min={1800}
+                  min={1400}
                   max={2024}
-                  onChange={(event, value) => updateFilterValues('selectedCompanyYear', value)}
+                  onChange={(event, value) => {
+                    updateFilterValues('selectedCompanyYearStart', value[0])
+                    updateFilterValues('selectedCompanyYearEnd', value[1])
+                  }}
                 />
               </Box>
 

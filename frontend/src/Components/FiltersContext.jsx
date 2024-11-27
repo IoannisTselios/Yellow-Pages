@@ -20,7 +20,8 @@ export const FiltersProvider = ({ children }) => {
     includePastIndustry: false,
     selectedCompanyHeadquarters: [],
     selectedCompanySize: [0, 7],
-    selectedCompanyYear: [1800, 2024],
+    selectedCompanyYearStart: 1400,
+    selectedCompanyYearEnd: 2024,  
 
     selectedKeyword: "",
     selectedConnections: [],
