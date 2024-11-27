@@ -21,13 +21,13 @@ class CompanyMetadataView(APIView):
         # Query unique industries and headquarters
         industries = Company.objects.annotate(lower_industry=Lower('industry')) \
             .filter(lower_industry__isnull=False, lower_industry__gt='') \
-            .values_list('lower_industry', flat=True).distinct()
+            .values_list('lower_industry', flat=True).distinct().order_by('industry')
         headquarter_country = Company.objects.filter(
                 headquarter_country__isnull=False, 
                 headquarter_country__gt='',
             ).exclude(
                 headquarter_country__in=["Unknown", "Not Found"]
-            ).values_list('headquarter_country', flat=True).distinct()
+            ).values_list('headquarter_country', flat=True).distinct().order_by('headquarter_country')
 
         # Prepare the data
         metadata = {

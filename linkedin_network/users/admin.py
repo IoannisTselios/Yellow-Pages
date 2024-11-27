@@ -10,7 +10,7 @@ class UserAdmin(BaseUserAdmin):
     # Fieldsets for creating and updating users
     fieldsets = (
         (None, {'fields': ('email', 'password')}),
-        ('Personal info', {'fields': ('first_name', 'last_name', 'position', 'url')}),
+        ('Personal info', {'fields': ('first_name', 'last_name', 'position', 'url', 'linkedin_comments')}),
         ('Permissions', {'fields': ('is_staff', 'is_superuser', 'is_active')}),
     )
     
@@ -18,7 +18,7 @@ class UserAdmin(BaseUserAdmin):
     add_fieldsets = (
         (None, {
             'classes': ('wide',),
-            'fields': ('email', 'password1', 'password2', 'first_name', 'last_name', 'position', 'url', 'is_staff', 'is_superuser'),
+            'fields': ('email', 'password1', 'password2', 'first_name', 'last_name', 'position', 'url', 'linkedin_comments', 'is_staff', 'is_superuser'),
         }),
     )
 
