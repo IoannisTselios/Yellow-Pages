@@ -91,10 +91,6 @@ export const Filters = ({setLoadingData, setLoadingTable, locations, positions, 
   }
 
   const determineExpertise = () => {
-    console.log('ppp', filterValues.selectedPosition)
-    console.log('ppp', filterValues.selectedCompanyName)
-    console.log('ppp', filterValues.selectedCompanyIndustry)
-    console.log('ppp', filterValues.selectedFunction)
     if (filterValues.selectedPosition.length > 0) {
       return "position_months";
     } else if (filterValues.selectedCompanyName) {
@@ -124,13 +120,19 @@ export const Filters = ({setLoadingData, setLoadingTable, locations, positions, 
       queryParams.append("location", params.selectedLocation.join(","));
     }
 
-    if (params.selectedPosition.length > 0) {
-      queryParams.append("main_position", params.selectedPosition.join(","));
-      queryParams.append("current_position", params.selectedPosition.join(","));
-    }
+    // if (params.selectedPosition.length > 0) {
+    //   queryParams.append("main_position", params.selectedPosition.join(","));
+    //   queryParams.append("current_position", params.selectedPosition.join(","));
+    // }
 
-    if (params.selectedPastPosition.length > 0) {
-      queryParams.append("past_position", params.selectedPastPosition.join(","));
+    // if (params.includePastPosition) {
+    //   queryParams.append("past_position", params.selectedPastPosition.join(","));
+    // }
+    if (params.includePastPosition && params.selectedPosition.length > 0) {
+      queryParams.append("position", params.selectedPosition.join(","));
+    } else if (params.selectedPosition.length > 0) {
+      queryParams.append("main_position", params.selectedPosition.join(","));
+      queryParams.append("current_position", params.selectedPosition.join(",")); //TODO: check if current contains main
     }
 
     if (params.selectedKeyword) {
@@ -248,7 +250,8 @@ export const Filters = ({setLoadingData, setLoadingTable, locations, positions, 
     updateFilterValues('selectedLastName', "");
     updateFilterValues('selectedLocation', []);
     updateFilterValues('selectedPosition', []);
-    updateFilterValues('selectedPastPosition', []);
+    // updateFilterValues('selectedPastPosition', []);
+    updateFilterValues('includePastPosition', false);
     updateFilterValues('selectedFunction', []);
     updateFilterValues('includePastFunction', false);
 
@@ -275,7 +278,7 @@ export const Filters = ({setLoadingData, setLoadingTable, locations, positions, 
           filterValues.selectedLastName ||
           filterValues.selectedLocation.length > 0 ||
           filterValues.selectedPosition.length > 0 ||
-          filterValues.selectedPastPosition.length > 0 ||
+          filterValues.includePastPosition ||
           filterValues.selectedFunction.length > 0 ||
           filterValues.includePastFunction
         );
@@ -306,19 +309,33 @@ export const Filters = ({setLoadingData, setLoadingTable, locations, positions, 
   const [filteredPosOptions, setFilteredPosOptions] = useState([]);
   const [filteredPastPosOptions, setFilteredPastPosOptions] = useState([]);
 
-
   const handleInputChange = (event, value) => {
-    setInputPosValue(value);
-
+    console.log(value)
+    console.log(inputPosValue)
     // Show options only if input has 3 or more characters
     if (value.length >= 3) {
-      setFilteredPosOptions(
-        positions.filter((option) =>
-          option.toLowerCase().includes(value.toLowerCase())
-        )
+      const lowercasedValue = value.toLowerCase();
+
+      const startsWithOptions = positions.filter((option) =>
+        option.toLowerCase().startsWith(lowercasedValue)
       );
+
+      const exactMatchOptions = positions.filter(
+        (option) =>
+          !startsWithOptions.includes(option) &&
+          option.toLowerCase().includes(` ${lowercasedValue} `)
+      );
+
+      const containsOptions = positions.filter(
+        (option) =>
+          !startsWithOptions.includes(option) &&
+          !exactMatchOptions.includes(option) &&
+          option.toLowerCase().includes(lowercasedValue)
+      );
+
+      setFilteredPosOptions([...startsWithOptions, ...exactMatchOptions, ...containsOptions]);
     } else {
-      setFilteredPosOptions([]);
+      setFilteredPosOptions([]); // Reset to empty list if input is cleared
     }
   };
 
@@ -425,25 +442,36 @@ export const Filters = ({setLoadingData, setLoadingTable, locations, positions, 
                 )}
               />
 
-              <Autocomplete className={styles.filter}
-                multiple
-                freeSolo
-                limitTags={2}
-                options={filteredPosOptions} // Use filtered options here
-                getOptionLabel={(option) => option}
-                value={filterValues.selectedPosition}
-                onChange={(event, value) => updateFilterValues("selectedPosition", value)}
-                onInputChange={handleInputChange} // Handle input change
-                noOptionsText={inputPosValue.length < 3 ? 'Start typing to view options' : 'No options'}
-                renderInput={(params) => (
-                  <TextField
-                    {...params}
-                    label="Position"
+              <div style={{ display: 'flex'}}>
+                <Autocomplete className={styles.filter}
+                  multiple
+                  freeSolo
+                  limitTags={2}
+                  options={filteredPosOptions} // Use filtered options here
+                  getOptionLabel={(option) => option}
+                  value={filterValues.selectedPosition}
+                  onChange={(event, value) => updateFilterValues("selectedPosition", value)}
+                  onInputChange={handleInputChange} // Handle input change
+                  // onBlur={() => setInputPosValue('')} 
+                  // noOptionsText={inputPosValue.length < 3 ? 'Start typing to view options' : 'No options'}
+                  renderInput={(params) => (
+                    <TextField
+                      {...params}
+                      label="Position"
+                    />
+                  )}
+                />
+                <Tooltip title="Include Past Positions" placement="top">
+                  <Switch
+                    color="secondary"
+                    checked={filterValues.includePastPosition} // Bind the switch to state
+                    onChange={(event) => updateFilterValues('includePastPosition', !filterValues.includePastPosition)} // Update state on toggle
+                    sx={{ transform: 'rotate(-90deg)', alignSelf: 'center'}} 
                   />
-                )}
-              />
+                </Tooltip>
+              </div>
 
-              <Autocomplete className={styles.filter}
+              {/* <Autocomplete className={styles.filter}
                 multiple
                 freeSolo
                 limitTags={2}
@@ -459,7 +487,7 @@ export const Filters = ({setLoadingData, setLoadingTable, locations, positions, 
                     label="Past Position"
                   />
                 )}
-              />
+              /> */}
 
               <div style={{ display: 'flex'}}>
                 <Autocomplete className={styles.filter}
