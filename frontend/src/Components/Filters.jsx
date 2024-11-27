@@ -427,6 +427,7 @@ export const Filters = ({setLoadingData, setLoadingTable, locations, positions, 
 
               <Autocomplete className={styles.filter}
                 multiple
+                freeSolo
                 limitTags={2}
                 options={filteredPosOptions} // Use filtered options here
                 getOptionLabel={(option) => option}
@@ -444,6 +445,7 @@ export const Filters = ({setLoadingData, setLoadingTable, locations, positions, 
 
               <Autocomplete className={styles.filter}
                 multiple
+                freeSolo
                 limitTags={2}
                 options={filteredPastPosOptions} // Use filtered options here
                 getOptionLabel={(option) => option}
