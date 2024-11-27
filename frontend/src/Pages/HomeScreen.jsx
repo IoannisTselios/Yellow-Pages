@@ -483,7 +483,7 @@ export const HomeScreen = () => {
     { field: 'location', headerName: 'Location', flex: 1 },
     { field: 'connected_with', headerName: 'Connections', flex: 1 },
     { field: 'connection_strength', headerName: 'Connection Strength', flex: 1 }, 
-  ];
+  ].map(column => ({ ...column, sortable: false, filterable: false }));;
   
   const handleRowClick = (params) => {
     console.log(params.row)

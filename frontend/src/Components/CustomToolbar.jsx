@@ -4,14 +4,18 @@ import { Box } from '@mui/material';
 
 const CustomToolbar = (props) => {
   return (
-    <GridToolbarContainer sx={{ paddingBottom: '4px' }}>
-      <GridToolbarColumnsButton />
+    <GridToolbarContainer sx={{ padding: '8px' }}>
+      <GridToolbarColumnsButton 
+        slotProps={{
+          button: { variant: 'outlined', sx: { borderRadius: '10px' } }, 
+        }}
+      />
       <Box sx={{ flexGrow: 1 }} />
       <GridToolbarExport
         printOptions={props.printOptions}
         slotProps={{
           tooltip: { title: 'Export selected rows' },
-          button: { variant: 'outlined' },
+          button: { variant: 'outlined', sx: { borderRadius: '10px' } },
         }}
       />
     </GridToolbarContainer>
