@@ -104,22 +104,11 @@ def calculate_employment_overlap():
     from roles.models import Role
     from django.contrib.auth import get_user_model
 
-    # Hardcoded Dreamcraft employee names
-    dreamcraft_employee_names = [
-        "Nico Blier-Silvestri", "Andreas Sachse", "Carsten Gjoertler Salling",
-        "Daniel Nyvang Székely Mariussen", "Frederik Pheiffer", "Heidi Lee",
-        "Hendrik Sippel", "Julie Lindegaard Larsen", "Lasse Surland",
-        "Line S. Aasen", "Mads Esmarch Hansen"
-    ]
-
-    # Fetch Dreamcraft employee URLs
+    # Fetch Dreamcraft employee URLs dynamically
     User = get_user_model()
-    dreamcraft_employees = set()
-    for full_name in dreamcraft_employee_names:
-        first_name, last_name = full_name.split(" ", 1)
-        user = User.objects.filter(first_name=first_name, last_name=last_name).first()
-        if user and user.url:
-            dreamcraft_employees.add(user.url)
+    dreamcraft_employees = set(
+        User.objects.filter(url__isnull=False).exclude(url="").values_list('url', flat=True)
+    )
 
     # Dictionary to store employment periods by company
     employment_by_company = defaultdict(list)
