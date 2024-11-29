@@ -47,7 +47,6 @@ class ConnectionFilter(filters.FilterSet):
     # filtering on connection w users - exact match
     connected_with = filters.CharFilter(method='filter_by_connected_with', label='Connected With')
 
-
     # filtering for main company size
     main_company_size_min = filters.NumberFilter(method='filter_by_main_company_size', label='Main Company Size Min')
     main_company_size_max = filters.NumberFilter(method='filter_by_main_company_size', label='Main Company Size Max')
@@ -66,10 +65,37 @@ class ConnectionFilter(filters.FilterSet):
     # Filtering by current function
     current_function = filters.CharFilter(method='filter_by_current_function', label='Current Function')
 
+    #sorting flag
+    sort_by = filters.CharFilter(method='sort_by_fields', label='Sort By')
+
 
     class Meta:
         model = Connection
         fields = []
+
+    def sort_by_fields(self, queryset, name, value):
+        """
+        Sort the queryset based on the `sort_by` parameter.
+        Sort by connection strength in descending order.
+        """
+        # Parse the `sort_by` parameter (e.g., "connection_strength,-another_field")
+        sort_fields = value.split(',')
+
+        # Supported sorting fields
+        supported_sorting_fields = {
+            'strength': '-connection_strength',  # Descending order for connection strength
+        }
+
+        # Apply sorting
+        ordering = [
+            supported_sorting_fields[field.lstrip('-')]
+            for field in sort_fields if field.lstrip('-') in supported_sorting_fields
+        ]
+        if ordering:
+            queryset = queryset.order_by(*ordering)
+
+        return queryset
+
 
     # only single filter enabled - one name at a time
     def filter_by_first_name(self, queryset, name, value):
