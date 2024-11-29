@@ -36,19 +36,8 @@
     /* background-color: rgb(93, 122, 94); */
 }
 
-.dataGridContainer {
-    /* flex: 2; 2/3 height for the DataGrid */
+.optionsContainer{
     margin: 12px;
-    overflow-y: auto;
-    /* height: 400px */
-    /* background-color: red;  */
-}
-
-.noDataMessage {
-    display: flex;
-    justify-content: center;
-    color: #797979;
-    font-size: 1.125rem; 
 }
 
 .filtersContainer {
@@ -60,14 +49,29 @@
     border-color: #515151;
     border-width: 1px;
     border-radius: 10px;
-    margin-top: 12px;
+    /* margin-top: 12px; */
     margin-right: 12px;
     margin-left: 12px;
     background-color: #121212; 
     color: #B3B3B3;
 }
 
-.sortContainer {
+.noDataMessage {
+    display: flex;
+    justify-content: center;
+    color: #797979;
+    font-size: 1.125rem; 
+}
+
+.dataGridContainer {
+    /* flex: 2; 2/3 height for the DataGrid */
+    margin: 12px;
+    overflow-y: auto;
+    /* height: 400px */
+    /* background-color: red;  */
+}
+
+/* .sortContainer {
     flex-grow: 1;
     border-style: solid;
     border-color: #515151;
@@ -85,5 +89,5 @@
     padding: 24px;
     border-bottom: 1px solid #515151;
     height: 73px;
-}
+} */
 

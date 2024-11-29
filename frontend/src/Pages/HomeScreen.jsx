@@ -8,7 +8,7 @@ import { useFilters } from "../Components/FiltersContext";
 import Switch from '@mui/material/Switch';
 import { Navigate, useNavigate } from 'react-router-dom';
 import { DataGrid } from '@mui/x-data-grid';
-import { Drawer, LinearProgress, IconButton, Tooltip } from '@mui/material';
+import { Drawer, LinearProgress, IconButton, Tooltip, ToggleButtonGroup, ToggleButton } from '@mui/material';
 import ExitToAppRoundedIcon from '@mui/icons-material/ExitToAppRounded'; 
 
 export const HomeScreen = () => {
@@ -17,6 +17,7 @@ export const HomeScreen = () => {
 
   const [loadingData, setLoadingData] = useState(false);  //Loading while the endpoint is getting the filtered data
 
+  const [option, setOption] = React.useState('web');
   const [redirect, setRedirect] = useState(false);
   const [loading, setLoading] = useState(true); // Loading state for conditional rendering
   const [selectedRow, setSelectedRow] = useState(null);
@@ -495,6 +496,10 @@ export const HomeScreen = () => {
     updateFilterValues('paginationModel', newModel); // Update the pagination model
   };
 
+  const handleOptionsChange = (event, newOption) => {
+    setOption(newOption);
+  };
+
   return (
     <div>
       <div className={styles.header}>
@@ -507,24 +512,37 @@ export const HomeScreen = () => {
         </Tooltip>
       </div>
       <div className={styles.underline}></div>
-  
+       
       <div className={styles.mainContent}>
 
+        {/* Options */}
+        <div className={styles.optionsContainer}>
+          <ToggleButtonGroup
+            color="secondary"
+            value={option}
+            exclusive
+            onChange={handleOptionsChange}
+            aria-label="Platform"
+          >
+            <ToggleButton value="web">Filter</ToggleButton>
+            <ToggleButton value="android">Search</ToggleButton>
+          </ToggleButtonGroup>
+        </div>        
+
         {/* Filters */}
-        <div style={{display: 'flex'}}>
-          <div className={styles.filtersContainer}>
-            <Filters
-              setLoadingData={setLoadingData}
-              setLoadingTable={setLoadingTable}
-              locations={locations}
-              positions={positions}
-              // past_positions={positions}
-              functions={functions}
-              industries={industries}
-              hqs={headquarters}
-              connections={connections}
-            />
-          </div>
+        <div className={styles.filtersContainer}>
+          <Filters
+            setLoadingData={setLoadingData}
+            setLoadingTable={setLoadingTable}
+            locations={locations}
+            positions={positions}
+            // past_positions={positions}
+            functions={functions}
+            industries={industries}
+            hqs={headquarters}
+            connections={connections}
+          />
+        </div>
           {/* <div className={styles.sortContainer}>
             <div className={styles.sortTitle}>
               SORTING
@@ -538,7 +556,6 @@ export const HomeScreen = () => {
               />
             </div>
           </div> */}
-        </div>
   
         {/* Data Table */}
         <div className={styles.dataGridContainer} style={{ height: `${dataGridHeight}px` }}>
