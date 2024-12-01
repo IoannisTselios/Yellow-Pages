@@ -286,7 +286,7 @@ def update_user_connection_strength(connection_strength_df):
     from connections.models import Connection
     for _, row in connection_strength_df.iterrows():
         # Extract employee (URL), user (URL), and connection_strength
-        user_url = row['url2']
+        user_url = row['url1']
         strength_value = row['connection_strength']
 
         # Update only if the connection exists for the user
@@ -294,8 +294,9 @@ def update_user_connection_strength(connection_strength_df):
             connection = Connection.objects.get(url=user_url)
             connection.connection_strength = strength_value
             connection.save()
+            print("Found and updated connection strength for", user_url)
         except Connection.DoesNotExist:
-            pass
+            print("Connection not found for", user_url)
 
 
 def process_dreamcraft_connection_strength():
