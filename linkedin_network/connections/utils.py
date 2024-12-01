@@ -20,7 +20,7 @@ def read_html_content_for_all_users():
     # Fetch all users with a valid linkedin_comments file
     users_with_html = User.objects.filter(linkedin_comments__isnull=False).exclude(linkedin_comments="")
 
-    for user in users_with_html:
+    for idx, user in enumerate(users_with_html, start=1):
         html_file_path = user.linkedin_comments.path  # Full path to the HTML file
 
         # Ensure the file exists
@@ -28,10 +28,13 @@ def read_html_content_for_all_users():
             with open(html_file_path, 'r', encoding='utf-8') as html_file:
                 content = html_file.read()
                 user_html_content[f"{user.first_name} {user.last_name}"] = content  # Use user name as the key
+            # Print the file path along with the user name
+            print(f"{idx}: Processing employee: {user.first_name} {user.last_name}, HTML Path: {html_file_path}")
         else:
-            print(f"File not found: {html_file_path}")
+            print(f"{idx}: Processing employee: {user.first_name} {user.last_name} (File not found: {html_file_path})")
 
     return user_html_content
+
 
 def parse_interactions_from_html(user_html_content):
     """
