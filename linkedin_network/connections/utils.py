@@ -102,14 +102,29 @@ def calculate_employment_overlap():
             - dreamcraft_overlaps: A DataFrame with overlaps involving Dreamcraft employees.
     """
     from roles.models import Role
-    from django.contrib.auth import get_user_model
+    import pandas as pd
+    from collections import defaultdict
+    from datetime import datetime
 
-    # Fetch Dreamcraft employee URLs dynamically
-    User = get_user_model()
-    dreamcraft_employees = set(
-        User.objects.filter(url__isnull=False).exclude(url="").values_list('url', flat=True)
-    )
-    print(dreamcraft_employees)
+    # Hardcoded Dreamcraft employee URLs
+    dreamcraft_employees = {
+        "https://www.linkedin.com/in/lasse-surland-20655439",
+        "https://www.linkedin.com/in/andreassachse",
+        "https://www.linkedin.com/in/frederikpheiffer",
+        "https://www.linkedin.com/in/mads-esmarch-hansen-8a29b9151",
+        "https://www.linkedin.com/in/almaholst",
+        "https://www.linkedin.com/in/julielindegaardlarsen",
+        "https://www.linkedin.com/in/heidi-h-lee",
+        "https://www.linkedin.com/in/linesaasen",
+        "https://www.linkedin.com/in/ryan-bagherpour-8370b61b1",
+        "https://www.linkedin.com/in/artemisdoumeni",
+        "https://www.linkedin.com/in/hendrik-sippel",
+        "https://www.linkedin.com/in/ryan-arman-8370b61b1",
+        "https://www.linkedin.com/in/danielnyvang",
+        "https://www.linkedin.com/in/nicoblier",
+        "https://www.linkedin.com/in/jeffreyhaas",
+        "https://www.linkedin.com/in/carstensalling",
+    }
 
     # Dictionary to store employment periods by company
     employment_by_company = defaultdict(list)
