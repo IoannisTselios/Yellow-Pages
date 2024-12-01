@@ -64,7 +64,8 @@ def parse_interactions_from_html(user_html_content):
     interaction_data = defaultdict(int)
 
     # Step 1: Calculate interactions using names
-    for idx, (employee_name, (html_content, _)) in enumerate(zip(employee_urls.keys(), user_html_content.items()), start=1):
+    for idx, (html_content) in enumerate(user_html_content.values(), start=1):
+        employee_name = list(employee_urls.keys())[idx - 1]  # Get the name based on the index
         print(f"{idx}: Processing employee: {employee_name}")
         # Your processing code here
         soup = BeautifulSoup(html_content, 'html.parser')
@@ -82,7 +83,7 @@ def parse_interactions_from_html(user_html_content):
                     first_last_name = full_name
 
                 # Record interaction only if target is not the employee themselves
-                print(employee_name, first_last_name)
+                print(first_last_name)
                 if first_last_name != employee_name:
                     interaction_data[(employee_name, first_last_name)] += 1
 
@@ -115,7 +116,7 @@ def parse_interactions_from_html(user_html_content):
     # Drop rows where URL mapping failed (target might not be an employee)
     comments_df = comments_df.dropna(subset=['url1', 'url2'])
 
-    return comments_df
+    return comments_df[['url1', 'url2', 'normalized_interaction_count']]
 
 
 def get_interaction_data():
