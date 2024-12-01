@@ -1,22 +1,22 @@
 import React, { useState } from "react";
 import styles from './Filters.module.css';
 
-import { Box, Button, Tooltip, Slider, Typography, Badge, Input } from '@mui/material';
-
 import PersonIcon from '@mui/icons-material/Person';
 import BusinessIcon from '@mui/icons-material/Business';
 import HubIcon from '@mui/icons-material/Hub'; 
 
+import { Box, Button, Tooltip, Slider, Typography, Badge, Input } from '@mui/material';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import Autocomplete from '@mui/material/Autocomplete';
 import TextField from '@mui/material/TextField';
 import Switch from '@mui/material/Switch';
-import MuiInput from '@mui/material/Input';
-
-// import { VariableSizeList } from 'react-window';
 
 import { useFilters } from "../Components/FiltersContext";
+
+// import MuiInput from '@mui/material/Input';
+
+// import { VariableSizeList } from 'react-window';
 
 // const LISTBOX_PADDING = 8; // Adjust as needed
 
@@ -45,9 +45,9 @@ import { useFilters } from "../Components/FiltersContext";
 // }
 
 function CustomTabPanel(props) {
-    const { children, value, index, ...other } = props;
+  const { children, value, index, ...other } = props;
 
-    return (
+  return (
     <div
         role="tabpanel"
         hidden={value !== index}
@@ -57,7 +57,7 @@ function CustomTabPanel(props) {
     >
         {value === index && <Box sx={{ padding: '16px' }}>{children}</Box>}
     </div>
-    );
+  );
 }
 
 const companySizes = [
