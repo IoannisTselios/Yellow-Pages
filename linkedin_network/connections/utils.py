@@ -12,13 +12,13 @@ User = get_user_model()
 
 def read_html_content_for_all_users():
     """
-    Reads the HTML content for all users who have a linkedin_comments file.
+    Reads the HTML content for all users who have a valid linkedin_comments file.
     Returns a dictionary with user emails as keys and HTML content as values.
     """
     user_html_content = {}
 
-    # Fetch all users with a linked linkedin_comments file
-    users_with_html = User.objects.filter(linkedin_comments__isnull=False)
+    # Fetch all users with a valid linkedin_comments file
+    users_with_html = User.objects.filter(linkedin_comments__isnull=False).exclude(linkedin_comments="")
 
     for user in users_with_html:
         html_file_path = user.linkedin_comments.path  # Full path to the HTML file
@@ -27,7 +27,7 @@ def read_html_content_for_all_users():
         if os.path.exists(html_file_path):
             with open(html_file_path, 'r', encoding='utf-8') as html_file:
                 content = html_file.read()
-                user_html_content[f"{user.first_name} {user.last_name}"] = content  # Use user email as the key
+                user_html_content[f"{user.first_name} {user.last_name}"] = content  # Use user name as the key
         else:
             print(f"File not found: {html_file_path}")
 
@@ -109,6 +109,7 @@ def calculate_employment_overlap():
     dreamcraft_employees = set(
         User.objects.filter(url__isnull=False).exclude(url="").values_list('url', flat=True)
     )
+    print(dreamcraft_employees)
 
     # Dictionary to store employment periods by company
     employment_by_company = defaultdict(list)
@@ -285,7 +286,7 @@ def update_user_connection_strength(connection_strength_df):
     from connections.models import Connection
     for _, row in connection_strength_df.iterrows():
         # Extract employee (URL), user (URL), and connection_strength
-        user_url = row['url2']
+        user_url = row['url1']
         strength_value = row['connection_strength']
 
         # Update only if the connection exists for the user
@@ -293,8 +294,9 @@ def update_user_connection_strength(connection_strength_df):
             connection = Connection.objects.get(url=user_url)
             connection.connection_strength = strength_value
             connection.save()
+            print("Found and updated connection strength for", user_url)
         except Connection.DoesNotExist:
-            pass
+            print("Connection not found for", user_url)
 
 
 def process_dreamcraft_connection_strength():
