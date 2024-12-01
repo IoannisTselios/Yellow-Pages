@@ -43,7 +43,8 @@ def parse_interactions_from_html(user_html_content):
     """
     interaction_data = defaultdict(int)
 
-    for employee_name, html_content in user_html_content.items():
+    for idx, (employee_name, html_content) in enumerate(user_html_content.items(), start=1):
+        print(f"{idx}: Processing employee: {employee_name}")
         soup = BeautifulSoup(html_content, 'html.parser')
 
         # Extract URL for the employee
