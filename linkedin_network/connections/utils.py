@@ -56,7 +56,7 @@ def parse_interactions_from_html(user_html_content):
         "Julie Lindegaard_Larsen": "https://www.linkedin.com/in/julielindegaardlarsen",                # Daniel Nyvang Székely Mariussen
         "Mads Esmarch_Hansen": "https://www.linkedin.com/in/mads-esmarch-hansen-8a29b9151",             # Frederik Pheiffer
         "Nico Blier-Silvestri": "https://www.linkedin.com/in/nicoblier",                    # Heidi Lee
-        "Carsten_Gjoertler Salling": "https://www.linkedin.com/in/carstensalling",                  # Hendrik Sippel
+        "Carsten Gjoertler Salling": "https://www.linkedin.com/in/carstensalling",                  # Hendrik Sippel
         "Daniel Nyvang Szekely Mariussen": "https://www.linkedin.com/in/danielnyvang",                # Julie Lindegaard Larsen
     }
 
@@ -82,6 +82,7 @@ def parse_interactions_from_html(user_html_content):
                     first_last_name = full_name
 
                 # Record interaction only if target is not the employee themselves
+                print(employee_name, first_last_name)
                 if first_last_name != employee_name:
                     interaction_data[(employee_name, first_last_name)] += 1
 
