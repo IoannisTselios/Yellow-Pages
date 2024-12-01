@@ -5,7 +5,7 @@ import PersonIcon from '@mui/icons-material/Person';
 import BusinessIcon from '@mui/icons-material/Business';
 import HubIcon from '@mui/icons-material/Hub'; 
 
-import { Box, Button, Tooltip, Slider, Typography, Badge, Input } from '@mui/material';
+import { Box, Button, Tooltip, Slider, Typography, Badge, Input, FormControl, FormHelperText, Checkbox } from '@mui/material';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import Autocomplete from '@mui/material/Autocomplete';
@@ -452,7 +452,7 @@ export const Filters = ({setLoadingData, setLoadingTable, locations, positions, 
               />
 
               <div style={{ display: 'flex'}}>
-                <Autocomplete className={styles.filter}
+                {/* <Autocomplete className={styles.filter}
                   multiple
                   freeSolo
                   limitTags={2}
@@ -469,7 +469,33 @@ export const Filters = ({setLoadingData, setLoadingTable, locations, positions, 
                       label="Position"
                     />
                   )}
-                />
+                /> */}
+                <FormControl className={styles.filter} fullWidth>
+                  <Autocomplete
+                    multiple
+                    freeSolo
+                    limitTags={2}
+                    options={filteredPosOptions} // Use filtered options here
+                    getOptionLabel={(option) => option}
+                    value={filterValues.selectedPosition}
+                    onChange={(event, value) => updateFilterValues("selectedPosition", value)}
+                    onInputChange={handleInputChange} // Handle input change
+                    renderInput={(params) => (
+                      <TextField
+                        {...params}
+                        label="Position"
+                      />
+                    )}
+                  />
+                  <FormHelperText component="div" style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                    <span>Include Past Positions</span>
+                    <Checkbox
+                      size="small"
+                      checked={true} // Your checkbox state
+                      // onChange={(event) => setIsChecked(event.target.checked)} // Handle checkbox state
+                    />                    
+                  </FormHelperText>
+                </FormControl>
                 <Tooltip title="Include Past Positions" placement="top">
                   <Switch
                     color="secondary"
@@ -522,23 +548,6 @@ export const Filters = ({setLoadingData, setLoadingTable, locations, positions, 
                   />
                 </Tooltip>
               </div>
-
-              {/* Seniority in case we implement it */}
-              {/* <FormControl className={styles.filter}>
-                <InputLabel id="seniority">Seniority</InputLabel>
-                <Select
-                  labelId="seniority-label"
-                  defaultValue = ""
-                  onChange={(event) => updateFilterValues('selectedSeniority', event.target.value)}
-                  value={filterValues.selectedSeniority}
-                  label="Seniority"
-                >
-                  <MenuItem value="">None</MenuItem>
-                  <MenuItem value="entry">Entry</MenuItem>
-                  <MenuItem value="mid">Mid</MenuItem>
-                  <MenuItem value="senior">Senior</MenuItem>
-                </Select>
-              </FormControl> */}
               
             </div>
           </CustomTabPanel>
