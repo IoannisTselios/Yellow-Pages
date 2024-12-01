@@ -5,44 +5,13 @@ import PersonIcon from '@mui/icons-material/Person';
 import BusinessIcon from '@mui/icons-material/Business';
 import HubIcon from '@mui/icons-material/Hub'; 
 
-import { Box, Button, Tooltip, Slider, Typography, Badge, Input, FormControl, FormHelperText, Checkbox } from '@mui/material';
+import { Box, Button, Slider, Typography, Badge, Input, FormControl, FormHelperText, Checkbox } from '@mui/material';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import Autocomplete from '@mui/material/Autocomplete';
 import TextField from '@mui/material/TextField';
-import Switch from '@mui/material/Switch';
 
 import { useFilters } from "../Components/FiltersContext";
-
-// import MuiInput from '@mui/material/Input';
-
-// import { VariableSizeList } from 'react-window';
-
-// const LISTBOX_PADDING = 8; // Adjust as needed
-
-// function renderRow({ data, index, style }) {
-//   const item = data[index];
-//   return <div style={style}>{item.label}</div>;
-// }
-
-// function ListboxComponent(props) {
-//   const { children, ...other } = props;
-//   const items = React.Children.toArray(children);
-//   const itemSize = 36; // Height of each item
-
-//   return (
-//     <VariableSizeList
-//       height={Math.min(8, items.length) * itemSize + 2 * LISTBOX_PADDING}
-//       width="100%"
-//       itemCount={items.length}
-//       itemSize={() => itemSize}
-//       itemData={items}
-//       {...other}
-//     >
-//       {renderRow}
-//     </VariableSizeList>
-//   );
-// }
 
 function CustomTabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -287,16 +256,16 @@ export const Filters = ({setLoadingData, setLoadingTable, locations, positions, 
           filterValues.selectedLastName ||
           filterValues.selectedLocation.length > 0 ||
           filterValues.selectedPosition.length > 0 ||
-          filterValues.includePastPosition ||
-          filterValues.selectedFunction.length > 0 ||
-          filterValues.includePastFunction
+          // filterValues.includePastPosition ||
+          filterValues.selectedFunction.length > 0
+          // || filterValues.includePastFunction
         );
       case "company":
         return (
           filterValues.selectedCompanyName ||
           filterValues.selectedCompanyIndustry.length > 0 ||
-          filterValues.includePastIndustry ||
-          filterValues.includePastCompanies ||
+          // filterValues.includePastIndustry ||
+          // filterValues.includePastCompanies ||
           filterValues.selectedCompanyHeadquarters.length > 0 ||
           filterValues.selectedCompanySize[0] !== 0 ||
           filterValues.selectedCompanySize[1] !== 7 ||
@@ -452,25 +421,7 @@ export const Filters = ({setLoadingData, setLoadingTable, locations, positions, 
               />
 
               <div style={{ display: 'flex'}}>
-                {/* <Autocomplete className={styles.filter}
-                  multiple
-                  freeSolo
-                  limitTags={2}
-                  options={filteredPosOptions} // Use filtered options here
-                  getOptionLabel={(option) => option}
-                  value={filterValues.selectedPosition}
-                  onChange={(event, value) => updateFilterValues("selectedPosition", value)}
-                  onInputChange={handleInputChange} // Handle input change
-                  // onBlur={() => setInputPosValue('')} 
-                  // noOptionsText={inputPosValue.length < 3 ? 'Start typing to view options' : 'No options'}
-                  renderInput={(params) => (
-                    <TextField
-                      {...params}
-                      label="Position"
-                    />
-                  )}
-                /> */}
-                <FormControl className={styles.filter} fullWidth>
+                <FormControl className={styles.filter}> 
                   <Autocomplete
                     multiple
                     freeSolo
@@ -487,66 +438,44 @@ export const Filters = ({setLoadingData, setLoadingTable, locations, positions, 
                       />
                     )}
                   />
-                  <FormHelperText component="div" style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                    <span>Include Past Positions</span>
+                  <FormHelperText component="div" style={{ margin: 0, display: 'flex', alignItems: 'center', width: '100%', justifyContent: 'flex-start' }}>
                     <Checkbox
+                      style={{padding: '8px', marginLeft: '-10px'}}
                       size="small"
-                      checked={true} // Your checkbox state
-                      // onChange={(event) => setIsChecked(event.target.checked)} // Handle checkbox state
-                    />                    
+                      checked={filterValues.includePastPosition} 
+                      onChange={(event) => updateFilterValues('includePastPosition', !filterValues.includePastPosition)} 
+                    />         
+                    <span>Include Past Positions</span>           
                   </FormHelperText>
                 </FormControl>
-                <Tooltip title="Include Past Positions" placement="top">
-                  <Switch
-                    color="secondary"
-                    checked={filterValues.includePastPosition} // Bind the switch to state
-                    onChange={(event) => updateFilterValues('includePastPosition', !filterValues.includePastPosition)} // Update state on toggle
-                    sx={{ transform: 'rotate(-90deg)', alignSelf: 'center'}} 
-                  />
-                </Tooltip>
               </div>
 
-              {/* <Autocomplete className={styles.filter}
-                multiple
-                freeSolo
-                limitTags={2}
-                options={filteredPastPosOptions} // Use filtered options here
-                getOptionLabel={(option) => option}
-                value={filterValues.selectedPastPosition}
-                onChange={(event, value) => updateFilterValues("selectedPastPosition", value)}
-                onInputChange={handlePastInputChange} // Handle input change
-                noOptionsText={inputPastPosValue.length < 3 ? 'Start typing to view options' : 'No options'}
-                renderInput={(params) => (
-                  <TextField
-                    {...params}
-                    label="Past Position"
-                  />
-                )}
-              /> */}
-
               <div style={{ display: 'flex'}}>
-                <Autocomplete className={styles.filter}
-                  multiple
-                  limitTags={2}
-                  options={functions}
-                  getOptionLabel={(option) => option}
-                  value={filterValues.selectedFunction}
-                  onChange={(event, value) => updateFilterValues('selectedFunction', value)}
-                  renderInput={(params) => (
-                    <TextField
-                      {...params}
-                      label="Function"
-                    />
-                  )}
-                />                
-                <Tooltip title="Include Past Functions" placement="top">
-                  <Switch
-                    color="secondary"
-                    checked={filterValues.includePastFunction} // Bind the switch to state
-                    onChange={(event) => updateFilterValues('includePastFunction', !filterValues.includePastFunction)} // Update state on toggle
-                    sx={{ transform: 'rotate(-90deg)', alignSelf: 'center'}} 
-                  />
-                </Tooltip>
+                <FormControl className={styles.filter}> 
+                  <Autocomplete 
+                    multiple
+                    limitTags={2}
+                    options={functions}
+                    getOptionLabel={(option) => option}
+                    value={filterValues.selectedFunction}
+                    onChange={(event, value) => updateFilterValues('selectedFunction', value)}
+                    renderInput={(params) => (
+                      <TextField
+                        {...params}
+                        label="Function"
+                      />
+                    )}
+                  />  
+                  <FormHelperText component="div" style={{ margin: 0, display: 'flex', alignItems: 'center', width: '100%', justifyContent: 'flex-start' }}>
+                    <Checkbox
+                      style={{padding: '8px', marginLeft: '-10px'}}
+                      size="small"
+                      checked={filterValues.includePastFunction}
+                      onChange={(event) => updateFilterValues('includePastFunction', !filterValues.includePastFunction)}
+                    />   
+                    <span>Include Past Functions</span>                 
+                  </FormHelperText>
+                </FormControl>      
               </div>
               
             </div>
@@ -557,38 +486,28 @@ export const Filters = ({setLoadingData, setLoadingTable, locations, positions, 
             <div className={styles.filtersContainer}>
 
               <div style={{ display: 'flex'}}>
-                {/* <Autocomplete className={styles.filter}
-                  multiple
-                  limitTags={2}
-                  options={top100Films}
-                  getOptionLabel={(option) => option.title}
-                  value={filterValues.selectedCompanyName}
-                  onChange={(event, value) => updateFilterValues('selectedCompanyName', value)}  // Update state on change
-                  renderInput={(params) => (
-                    <TextField
-                      {...params}
-                      label="Company Name"
-                    />
-                  )}
-                />   */}
-                <TextField className={styles.filter}
-                  variant="outlined"
-                  label="Company Name"
-                  value={filterValues.selectedCompanyName}
-                  onChange={(event) => updateFilterValues('selectedCompanyName', event.target.value)} 
-                />   
-                <Tooltip title="Include Past Companies" placement="top">
-                  <Switch
-                    color="secondary"
-                    checked={filterValues.includePastCompanies} // Bind the switch to state
-                    onChange={(event) => updateFilterValues('includePastCompanies', !filterValues.includePastCompanies)} // Update state on toggle
-                    sx={{ transform: 'rotate(-90deg)', alignSelf: 'center'}} 
-                  />
-                </Tooltip>
+                <FormControl className={styles.filter}> 
+                  <TextField 
+                    variant="outlined"
+                    label="Company Name"
+                    value={filterValues.selectedCompanyName}
+                    onChange={(event) => updateFilterValues('selectedCompanyName', event.target.value)} 
+                  />   
+                  <FormHelperText component="div" style={{ margin: 0, display: 'flex', alignItems: 'center', width: '100%', justifyContent: 'flex-start' }}>
+                    <Checkbox
+                      style={{padding: '8px', marginLeft: '-10px'}}
+                      size="small"
+                      checked={filterValues.includePastCompanies}
+                      onChange={(event) => updateFilterValues('includePastCompanies', !filterValues.includePastCompanies)}
+                    />   
+                    <span>Include Past Companies</span>                 
+                  </FormHelperText>
+                </FormControl>  
               </div>
 
               <div style={{ display: 'flex'}}>  
-                <Autocomplete className={styles.filter}
+              <FormControl className={styles.filter}> 
+                <Autocomplete
                   multiple
                   limitTags={2}
                   options={industries}
@@ -602,14 +521,16 @@ export const Filters = ({setLoadingData, setLoadingTable, locations, positions, 
                     />
                   )}
                 />
-                <Tooltip title="Include Past Industries" placement="top">
-                  <Switch
-                    color="secondary"
-                    checked={filterValues.includePastIndustry} // Bind the switch to state
-                    onChange={(event) => updateFilterValues('includePastIndustry', !filterValues.includePastIndustry)} // Update state on toggle
-                    sx={{ transform: 'rotate(-90deg)', alignSelf: 'center'}} 
-                  />
-                </Tooltip>
+                <FormHelperText component="div" style={{ margin: 0, display: 'flex', alignItems: 'center', width: '100%', justifyContent: 'flex-start' }}>
+                    <Checkbox
+                      style={{padding: '8px', marginLeft: '-10px'}}
+                      size="small"
+                      checked={filterValues.includePastIndustry}
+                      onChange={(event) => updateFilterValues('includePastIndustry', !filterValues.includePastIndustry)}
+                    />   
+                    <span>Include Past Industries</span>                 
+                  </FormHelperText>
+                </FormControl>                 
               </div>
 
               <Autocomplete className={styles.filter}
@@ -675,6 +596,7 @@ export const Filters = ({setLoadingData, setLoadingTable, locations, positions, 
                   </div>
                 </Box>
                 <Slider className={styles.filter}
+                  size="small"
                   value={[filterValues.selectedCompanyYearStart, filterValues.selectedCompanyYearEnd]}
                   defaultValue={[2000, 2024]}
                   aria-labelledby="company-year-slider"
@@ -696,6 +618,7 @@ export const Filters = ({setLoadingData, setLoadingTable, locations, positions, 
                   : ` ${getStart(companySizes[filterValues.selectedCompanySize[0]])} - ${getEnd(companySizes[filterValues.selectedCompanySize[1]])}`}
               </Typography>
                 <Slider
+                  size="small"
                   value={filterValues.selectedCompanySize}
                   min={0}
                   max={companySizes.length - 1}

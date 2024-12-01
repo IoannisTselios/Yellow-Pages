@@ -22,7 +22,6 @@
 .filter {
   display: inline-block;
   width: 250px;
-  align-self: center;
 }
 
 .filterSmall {
