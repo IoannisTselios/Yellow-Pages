@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import styles from './RegisterScreen.module.css';
-import InputField from '../Components/InputField'; 
+import InputField from '../Components/InputField';
 import Button from '@mui/material/Button';
 import { Link, Navigate } from 'react-router-dom';
 

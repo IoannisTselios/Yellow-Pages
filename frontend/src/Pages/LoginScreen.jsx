@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import styles from './LoginScreen.module.css';
-import InputField from '../Components/InputField'; 
+import InputField from '../Components/InputField';
 import { Link, Navigate } from 'react-router-dom';
 import Button from '@mui/material/Button';
 

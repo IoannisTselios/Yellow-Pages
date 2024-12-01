@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from "react";
 import styles from './HomeScreen.module.css';
 import DrawerInfo from '../Components/DrawerInfo'; 
+import Search from "../Components/Search";
 import CustomToolbar from '../Components/CustomToolbar';
 import TruncatedTextCell from '../Components/TruncatedTextCell';
 import { Filters } from "../Components/Filters";
 import { useFilters } from "../Components/FiltersContext";
-import Switch from '@mui/material/Switch';
+// import Switch from '@mui/material/Switch';
 import { Navigate, useNavigate } from 'react-router-dom';
 import { DataGrid } from '@mui/x-data-grid';
 import { Drawer, LinearProgress, IconButton, Tooltip, ToggleButtonGroup, ToggleButton } from '@mui/material';
@@ -17,7 +18,7 @@ export const HomeScreen = () => {
 
   const [loadingData, setLoadingData] = useState(false);  //Loading while the endpoint is getting the filtered data
 
-  const [option, setOption] = React.useState('web');
+  const [option, setOption] = React.useState('filter');
   const [redirect, setRedirect] = useState(false);
   const [loading, setLoading] = useState(true); // Loading state for conditional rendering
   const [selectedRow, setSelectedRow] = useState(null);
@@ -497,7 +498,9 @@ export const HomeScreen = () => {
   };
 
   const handleOptionsChange = (event, newOption) => {
-    setOption(newOption);
+    if (newOption !== null) {
+      setOption(newOption);
+    }
   };
 
   return (
@@ -524,25 +527,34 @@ export const HomeScreen = () => {
             onChange={handleOptionsChange}
             aria-label="Platform"
           >
-            <ToggleButton value="web">Filter</ToggleButton>
-            <ToggleButton value="android">Search</ToggleButton>
+            <ToggleButton value="filter">Filter</ToggleButton>
+            <ToggleButton value="search">Search</ToggleButton>
           </ToggleButtonGroup>
         </div>        
 
+        {/* Search */}
+        {option === 'search' && (
+          <div className={styles.filtersContainer}>
+            <Search />
+          </div>
+        )}
+
         {/* Filters */}
-        <div className={styles.filtersContainer}>
-          <Filters
-            setLoadingData={setLoadingData}
-            setLoadingTable={setLoadingTable}
-            locations={locations}
-            positions={positions}
-            // past_positions={positions}
-            functions={functions}
-            industries={industries}
-            hqs={headquarters}
-            connections={connections}
-          />
-        </div>
+        {option === 'filter' && (
+          <div className={styles.filtersContainer}>
+            <Filters
+              setLoadingData={setLoadingData}
+              setLoadingTable={setLoadingTable}
+              locations={locations}
+              positions={positions}
+              // past_positions={positions}
+              functions={functions}
+              industries={industries}
+              hqs={headquarters}
+              connections={connections}
+            />
+          </div>
+        )}
           {/* <div className={styles.sortContainer}>
             <div className={styles.sortTitle}>
               SORTING

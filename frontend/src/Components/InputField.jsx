@@ -3,7 +3,7 @@ import { TextField, InputAdornment, IconButton } from '@mui/material';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
 import './InputField.css'; 
 
-export default function InputField({ type, placeholder, value, onChange, autoComplete, accept, error, helperText }) {
+const InputField = ({ type, placeholder, value, onChange, autoComplete, accept, error, helperText }) => {
   const [showPassword, setShowPassword] = useState(false);
 
   const handleClickShowPassword = () => setShowPassword(!showPassword);
@@ -64,4 +64,6 @@ export default function InputField({ type, placeholder, value, onChange, autoCom
       )}
     </div>
   );
-}
+};
+
+export default InputField;
