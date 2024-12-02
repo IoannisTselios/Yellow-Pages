@@ -51,13 +51,13 @@ a:hover {
   }
 
 .description {
-    max-height: 95px;
+    /* max-height: 95px; */
     /* width: 324px; */
-    overflow: hidden;
+    /* overflow: hidden; */
     /* text-overflow: ellipsis; */
     /* transition: max-height 0.3s ease-in-out; */
 }
-
+/* 
 .description:hover {
     max-height: none;
-}
+} */
