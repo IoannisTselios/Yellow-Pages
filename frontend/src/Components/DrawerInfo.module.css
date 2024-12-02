@@ -49,15 +49,3 @@ a:hover {
     padding-top: 16px;
     padding-bottom: 16px;
   }
-
-.description {
-    max-height: 95px;
-    /* width: 324px; */
-    overflow: hidden;
-    /* text-overflow: ellipsis; */
-    /* transition: max-height 0.3s ease-in-out; */
-}
-
-.description:hover {
-    max-height: none;
-}

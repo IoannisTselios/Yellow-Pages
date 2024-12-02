@@ -2,7 +2,7 @@ import React from 'react';
 import { Tooltip } from '@mui/material';
 
 const TruncatedTextCell = ({ value }) => {
-  const displayText = value !== '' ? value : '-';
+  const displayText = value !== '' && value !== 'nan' ? value : '-';
 
   return (
     <Tooltip title={displayText} arrow>

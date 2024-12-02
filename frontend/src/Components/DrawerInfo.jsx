@@ -1,37 +1,7 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Box, Chip, Divider } from '@mui/material';
 import styles from './DrawerInfo.module.css';
-
-// function calculateTimeDifference(startDate, endDate) {
-//     const start = new Date(startDate);
-//     const end = new Date(endDate);
-
-//     // Calculate the difference in months
-//     const yearsDifference = end.getFullYear() - start.getFullYear();
-//     const monthsDifference = end.getMonth() - start.getMonth();
-    
-//     // Total months difference
-//     let totalMonths = yearsDifference * 12 + monthsDifference;
-    
-//     // If the end day is before the start day in the month, subtract 1 from the total months
-//     if (end.getDate() < start.getDate()) {
-//         totalMonths -= 1;
-//     }
-
-//     const years = Math.floor(totalMonths / 12);
-//     const months = totalMonths % 12;
-
-//     // Format the result as "X years and Y months" or just "Y months"
-//     if (years > 0 && months > 0) {
-//         return `${years} year${years > 1 ? 's' : ''} and ${months} month${months > 1 ? 's' : ''}`;
-//     } else if (years > 0) {
-//         return `${years} year${years > 1 ? 's' : ''}`;
-//     } else if (months > 0) {
-//         return `${months} month${months > 1 ? 's' : ''}`;
-//     } else {
-//         return "0 months"; // If there's no difference
-//     }
-// }
+import ShowMoreText from './ShowMoreText';
 
 function formatDate(dateString) {
   if (!dateString) return "Invalid Date";
@@ -43,6 +13,12 @@ function formatDate(dateString) {
 }
 
 const DrawerInfo = ({ selectedRow }) => {
+  const [isExpanded, setIsExpanded] = useState(false);
+
+  const toggleExpanded = () => {
+    setIsExpanded(!isExpanded);
+  };
+
   return (
     <Box sx={{ width: 800, color: '#fff' }} role="presentation">
       <div className={styles.drawerContainer}>
@@ -78,14 +54,30 @@ const DrawerInfo = ({ selectedRow }) => {
         <div className={styles.gridContainerBioSummary}>
           <div>
             <h2>Bio</h2>
-            <p style={{ marginTop: 16 }}>{selectedRow.bio}</p>
+            { selectedRow.bio ? 
+              <ShowMoreText
+                text={selectedRow.bio}
+                limit={200}
+                style={{ marginTop: '16px' }}
+              />
+              : 
+              <p style={{ marginTop: 16, fontStyle: 'italic' }}>No Bio Available</p>
+            }
           </div>
 
           <Divider orientation="vertical" sx={{ bgcolor: '#404040', height: '100%', width: '1px' }} />
 
           <div>
             <h2>Summary</h2>
-            <p style={{ marginTop: 16 }} className={styles.description}>{selectedRow.summary}</p>
+            { selectedRow.summary && !(selectedRow.summary == 'nan') ? 
+              <ShowMoreText
+                text={selectedRow.summary}
+                limit={200}
+                style={{ marginTop: '16px' }}
+              />
+              : 
+              <p style={{ marginTop: 16, fontStyle: 'italic' }}>No Summary Available</p>
+            }
           </div>
         </div>
 
@@ -100,7 +92,6 @@ const DrawerInfo = ({ selectedRow }) => {
             <div className={styles.gridContainer}>
               <div>
                 <p className={styles.title}>{selectedRow.main_role.position}</p>
-                {/* <p>{selectedRow.main_role.start_date}</p> */}
                 <p className={styles.topPad + ' ' + styles.small}>since {formatDate(selectedRow.main_role.start_date)}</p>
                 <p className={styles.topPad}>{selectedRow.main_role.description}</p>
               </div>
@@ -108,7 +99,10 @@ const DrawerInfo = ({ selectedRow }) => {
                 <p><a style={{ textDecoration: 'none' }} className={styles.title} href={selectedRow.main_role.company_website} target="_blank" rel="noopener noreferrer">{selectedRow.main_role.company}</a> - {selectedRow.main_role.industry}</p>
                 <p className={styles.topPad + ' ' + styles.small}>{selectedRow.main_role.location.split(',')[0]} - {selectedRow.main_role.company_size} people - since {selectedRow.main_role.year_founded}</p>
                 <p className={styles.topPad + ' ' + styles.small}><a style={{ fontSize: '13px', color: '#B3B3B3' }} href={selectedRow.main_role.company_linkedin_link} target="_blank" rel="noopener noreferrer">Company LinkedIn</a></p>
-                <p className={styles.topPad + ' ' + styles.description}>{selectedRow.main_role.company_description}</p>
+                <ShowMoreText
+                  text={selectedRow.main_role.company_description}
+                  style={{ paddingTop: '5px' }}
+                />
               </div>
             </div>  
           )}     
@@ -117,7 +111,6 @@ const DrawerInfo = ({ selectedRow }) => {
             <div key={index} className={styles.gridContainer}>
               <div>
                 <p className={styles.title}>{role.position}</p>
-                {/* <p>{role.start_date}</p> */}
                 <p className={styles.topPad + ' ' + styles.small}>since {formatDate(role.start_date)}</p>
                 <p className={styles.topPad}>{role.description}</p>
               </div>
@@ -125,7 +118,10 @@ const DrawerInfo = ({ selectedRow }) => {
                 <p><a style={{ textDecoration: 'none' }} className={styles.title} href={role.company_website} target="_blank" rel="noopener noreferrer">{role.company}</a> - {role.industry}</p>
                 <p className={styles.topPad + ' ' + styles.small}>{role.location.split(',')[0]} - {role.company_size} people - since {role.year_founded}</p>
                 <p className={styles.topPad + ' ' + styles.small}><a style={{ fontSize: '13px', color: '#B3B3B3' }} href={role.company_linkedin_link} target="_blank" rel="noopener noreferrer">Company LinkedIn</a></p>
-                <p className={styles.topPad + ' ' + styles.description}>{role.company_description}</p>
+                <ShowMoreText
+                  text={role.company_description}
+                  style={{ paddingTop: '5px' }}
+                />
               </div>
             </div>        
           ))}
@@ -149,7 +145,10 @@ const DrawerInfo = ({ selectedRow }) => {
                 <p><a style={{ textDecoration: 'none' }} className={styles.title} href={past_role.company_website} target="_blank" rel="noopener noreferrer">{past_role.company}</a> - {past_role.industry}</p>
                 <p className={styles.topPad + ' ' + styles.small}>{past_role.location.split(',')[0]} - {past_role.company_size} people - since {past_role.year_founded}</p>
                 <p className={styles.topPad + ' ' + styles.small}><a style={{ fontSize: '13px', color: '#B3B3B3' }} href={past_role.company_linkedin_link} target="_blank" rel="noopener noreferrer">Company LinkedIn</a></p>
-                <p className={styles.topPad + ' ' + styles.description}>{past_role.company_description}</p>
+                <ShowMoreText
+                  text={past_role.company_description}
+                  style={{ paddingTop: '5px' }}
+                />
               </div>
             </div>        
           ))) 
