@@ -190,7 +190,7 @@ def calculate_employment_overlap():
 
     # Check for overlapping employment periods within each company
     for company, employments in employment_by_company.items():
-        for i, (url1, start1, end1) in enumerate(employments):
+        for i, (url1, start1, end1) in enumerate(dreamcraft_employees):
             for j, (url2, start2, end2) in enumerate(employments):
                 # Ensure url1 and url2 are not the same and only calculate once for each unique pair
                 if i < j and url1 != url2:
