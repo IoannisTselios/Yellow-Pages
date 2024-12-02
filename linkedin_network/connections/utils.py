@@ -227,7 +227,7 @@ def calculate_employment_overlap():
                         start1 if isinstance(start1, datetime.date) else start1.date() if hasattr(start1, 'date') else None,
                         start2 if isinstance(start2, datetime.date) else start2.date() if hasattr(start2, 'date') else None
                     )
-
+                    print("1")
                     # Ensure both end1 and end2 are of type datetime.date before comparison
                     overlap_end = min(
                         end1 if isinstance(end1, datetime.date) else end1.date() if hasattr(end1, 'date') else None,
