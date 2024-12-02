@@ -190,14 +190,19 @@ class ConnectionFilter(filters.FilterSet):
     
     # only single filter enabled - one keyword at a time
     def filter_by_keyword(self, queryset, name, value):
+        keywords = value.split(',')
         """
         Search for the keyword in connection bio, summary, and role description.
         """
-        return queryset.filter(
-            Q(bio__icontains=value) |  # Search in bio
-            Q(summary__icontains=value) |  # Search in summary
-            Q(role__description__icontains=value)  # Search in role description 
-        ).distinct()
+        query = Q()
+        for keyword in keywords:
+            escaped_keyword = re.escape(keyword.strip())
+            query |= (
+                Q(bio__icontains=escaped_keyword) |  # Search in bio
+                Q(summary__icontains=escaped_keyword) |  # Search in summary
+                Q(role__description__icontains=escaped_keyword)  # Search in role description 
+            )
+        return queryset.filter(query).distinct()
     
     # multi-filtering enabled
     def filter_by_main_position(self, queryset, name, value):
