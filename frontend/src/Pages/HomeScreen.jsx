@@ -232,6 +232,9 @@ export const HomeScreen = () => {
         throw new Error('Logout failed');
       }
 
+      // Force a reload of the page to clear everything
+      window.location.reload();
+
       setRedirect(true);
     } catch (error) {
       console.error('Error during logout:', error);
