@@ -214,18 +214,18 @@ def calculate_employment_overlap():
 
     # Check for overlapping employment periods
     for company, employments in employment_by_company.items():
-        # Combine Dreamcraft employments with the current company employments
         if company in dreamcraft_employments:
             dreamcraft_employments_in_company = dreamcraft_employments[company]
         else:
             dreamcraft_employments_in_company = []
 
-        # Compare Dreamcraft employees with everyone else in the company
         for url1, start1, end1 in dreamcraft_employments_in_company:
             for url2, start2, end2 in employments:
                 if url1 != url2:  # Avoid self-comparisons
-                    overlap_start = max(start1, start2)
-                    overlap_end = min(end1, end2)
+                    overlap_start = max(start1 if isinstance(start1, datetime.date) else start1.date(),
+                                        start2 if isinstance(start2, datetime.date) else start2.date())
+                    overlap_end = min(end1 if isinstance(end1, datetime.date) else end1.date(),
+                                    end2 if isinstance(end2, datetime.date) else end2.date())
 
                     if overlap_start <= overlap_end:
                         overlap_duration = (overlap_end.year - overlap_start.year) * 12 + (overlap_end.month - overlap_start.month)
