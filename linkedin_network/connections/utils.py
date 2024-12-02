@@ -6,6 +6,9 @@ import os
 import pandas as pd
 from bs4 import BeautifulSoup
 from collections import defaultdict
+import pandas as pd
+import json
+from datetime import datetime
 
 logger = logging.getLogger(__name__)
 User = get_user_model()
@@ -144,32 +147,53 @@ def calculate_employment_overlap():
             - overlap_df: A DataFrame with all overlapping employment data using URLs.
             - dreamcraft_overlaps: A DataFrame with overlaps involving Dreamcraft employees.
     """
-    from roles.models import Role
     import pandas as pd
     from collections import defaultdict
     from datetime import datetime
+    from roles.models import Role
 
-    # Hardcoded Dreamcraft employee URLs
-    dreamcraft_employees = {
-        "https://www.linkedin.com/in/lasse-surland-20655439",
-        "https://www.linkedin.com/in/andreassachse",
-        "https://www.linkedin.com/in/frederikpheiffer",
-        "https://www.linkedin.com/in/mads-esmarch-hansen-8a29b9151",
-        "https://www.linkedin.com/in/almaholst",
-        "https://www.linkedin.com/in/julielindegaardlarsen",
-        "https://www.linkedin.com/in/heidi-h-lee",
-        "https://www.linkedin.com/in/linesaasen",
-        "https://www.linkedin.com/in/ryan-bagherpour-8370b61b1",
-        "https://www.linkedin.com/in/artemisdoumeni",
-        "https://www.linkedin.com/in/hendrik-sippel",
-        "https://www.linkedin.com/in/ryan-arman-8370b61b1",
-        "https://www.linkedin.com/in/danielnyvang",
-        "https://www.linkedin.com/in/nicoblier",
-        "https://www.linkedin.com/in/jeffreyhaas",
-        "https://www.linkedin.com/in/carstensalling",
-    }
+    # Helper function to parse experience data
+    def parse_experience(experience_str):
+        if pd.isna(experience_str):
+            return []
+        try:
+            return json.loads(experience_str.replace("'", "\""))
+        except json.JSONDecodeError:
+            return []
 
-    # Dictionary to store employment periods by company
+    # Helper function to parse dates
+    def parse_date(year, month):
+        if year is None or month is None:
+            return None
+        try:
+            return datetime(year, month, 1)
+        except ValueError:
+            return None
+
+    # Load the Dreamcraft employee CSV
+    df = pd.read_csv('/home/ec2-user/downloads/linkedin_network/media/dreamcraft_employees.csv')  # Replace with the actual file path
+    df['experience'] = df['experience'].apply(parse_experience)
+
+    # Dictionary to store employment periods by company for Dreamcraft employees
+    dreamcraft_employments = defaultdict(list)
+
+    # Process employees from the CSV
+    for _, row in df.iterrows():
+        employee_url = row['url']
+        experiences = row['experience']
+
+        for job in experiences:
+            company_name = job.get('organisation', {}).get('name', "Unknown")
+            start = job['timePeriod'].get('startedOn', {})
+            end = job['timePeriod'].get('endedOn', {"year": datetime.today().year, "month": datetime.today().month})
+            
+            start_date = parse_date(start.get('year'), start.get('month'))
+            end_date = parse_date(end.get('year'), end.get('month'))
+
+            if start_date and end_date:
+                dreamcraft_employments[company_name].append((employee_url, start_date, end_date))
+
+    # Dictionary to store employment periods by company for all employees
     employment_by_company = defaultdict(list)
 
     # Fetch all roles from the database
@@ -188,16 +212,21 @@ def calculate_employment_overlap():
     # List to store unique overlap data
     overlap_data = []
 
-    # Check for overlapping employment periods within each company
+    # Check for overlapping employment periods
     for company, employments in employment_by_company.items():
-        for i, (url1, start1, end1) in enumerate(dreamcraft_employees):
-            for j, (url2, start2, end2) in enumerate(employments):
-                # Ensure url1 and url2 are not the same and only calculate once for each unique pair
-                if i < j and url1 != url2:
+        # Combine Dreamcraft employments with the current company employments
+        if company in dreamcraft_employments:
+            dreamcraft_employments_in_company = dreamcraft_employments[company]
+        else:
+            dreamcraft_employments_in_company = []
+
+        # Compare Dreamcraft employees with everyone else in the company
+        for url1, start1, end1 in dreamcraft_employments_in_company:
+            for url2, start2, end2 in employments:
+                if url1 != url2:  # Avoid self-comparisons
                     overlap_start = max(start1, start2)
                     overlap_end = min(end1, end2)
-                    
-                    # Calculate overlap duration
+
                     if overlap_start <= overlap_end:
                         overlap_duration = (overlap_end.year - overlap_start.year) * 12 + (overlap_end.month - overlap_start.month)
                         if overlap_duration > 0:
@@ -212,12 +241,14 @@ def calculate_employment_overlap():
     overlap_df = pd.DataFrame(overlap_data, columns=['url1', 'url2', 'company', 'worked_for'])
 
     # Filter for Dreamcraft employee overlaps
+    dreamcraft_urls = set([url for company in dreamcraft_employments for url, _, _ in dreamcraft_employments[company]])
     dreamcraft_overlaps = overlap_df[
-        (overlap_df['url1'].isin(dreamcraft_employees)) |
-        (overlap_df['url2'].isin(dreamcraft_employees))
+        (overlap_df['url1'].isin(dreamcraft_urls)) |
+        (overlap_df['url2'].isin(dreamcraft_urls))
     ]
 
     return overlap_df, dreamcraft_overlaps
+
 
 
 def aggregate_and_filter_employment_overlap(overlap_df, threshold=360):
