@@ -23,7 +23,7 @@ export const FiltersProvider = ({ children }) => {
     selectedCompanyYearStart: 1400,
     selectedCompanyYearEnd: 2024,  
 
-    selectedKeyword: "",
+    selectedKeyword: [],
     selectedConnections: [],
 
     // save the url of the connections endpoint
