@@ -222,12 +222,19 @@ def calculate_employment_overlap():
         for url1, start1, end1 in dreamcraft_employments_in_company:
             for url2, start2, end2 in employments:
                 if url1 != url2:  # Avoid self-comparisons
-                    overlap_start = max(start1 if isinstance(start1, datetime.date) else start1.date(),
-                                        start2 if isinstance(start2, datetime.date) else start2.date())
-                    overlap_end = min(end1 if isinstance(end1, datetime.date) else end1.date(),
-                                    end2 if isinstance(end2, datetime.date) else end2.date())
+                    # Ensure both start1 and start2 are of type datetime.date before comparison
+                    overlap_start = max(
+                        start1 if isinstance(start1, datetime.date) else start1.date() if hasattr(start1, 'date') else None,
+                        start2 if isinstance(start2, datetime.date) else start2.date() if hasattr(start2, 'date') else None
+                    )
 
-                    if overlap_start <= overlap_end:
+                    # Ensure both end1 and end2 are of type datetime.date before comparison
+                    overlap_end = min(
+                        end1 if isinstance(end1, datetime.date) else end1.date() if hasattr(end1, 'date') else None,
+                        end2 if isinstance(end2, datetime.date) else end2.date() if hasattr(end2, 'date') else None
+                    )
+
+                    if overlap_start is not None and overlap_end is not None and overlap_start <= overlap_end:
                         overlap_duration = (overlap_end.year - overlap_start.year) * 12 + (overlap_end.month - overlap_start.month)
                         if overlap_duration > 0:
                             overlap_data.append({
