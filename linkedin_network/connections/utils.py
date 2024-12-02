@@ -161,17 +161,17 @@ def calculate_employment_overlap():
         except json.JSONDecodeError:
             return []
 
-    # Helper function to parse dates
+    # Updated helper function to parse dates
     def parse_date(year, month):
         if year is None or month is None:
             return None
         try:
-            return datetime(year, month, 1)
+            return datetime(year, month, 1).date()  # Ensure consistent date type
         except ValueError:
             return None
 
     # Load the Dreamcraft employee CSV
-    df = pd.read_csv('/home/ec2-user/downloads/linkedin_network/media/dreamcraft_employees.csv')  # Replace with the actual file path
+    df = pd.read_csv('/usr/src/app/media/dreamcraft_employees.csv')  # Replace with the actual file path
     df['experience'] = df['experience'].apply(parse_experience)
 
     # Dictionary to store employment periods by company for Dreamcraft employees
@@ -202,12 +202,12 @@ def calculate_employment_overlap():
     # Organize roles by company using URLs
     for role in roles:
         employee_url = role.connection.url
-        start_date = role.start_date
-        end_date = role.end_date or datetime.today().date()  # Use today's date for ongoing roles
+        start_date = role.start_date.date() if role.start_date else None
+        end_date = role.end_date.date() if role.end_date else datetime.today().date()  # Ensure consistent date type
         company_name = role.company.name
 
-        # Append employee and their role period to the company's employment list
-        employment_by_company[company_name].append((employee_url, start_date, end_date))
+        if start_date and end_date:
+            employment_by_company[company_name].append((employee_url, start_date, end_date))
 
     # List to store unique overlap data
     overlap_data = []
@@ -248,7 +248,6 @@ def calculate_employment_overlap():
     ]
 
     return overlap_df, dreamcraft_overlaps
-
 
 
 def aggregate_and_filter_employment_overlap(overlap_df, threshold=360):
