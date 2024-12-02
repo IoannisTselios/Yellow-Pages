@@ -188,15 +188,33 @@ export const HomeScreen = () => {
       queryParams.append("page", filterValues.paginationModel.page + 1); // always ask for the first page when the filters are applied
       queryParams.append("page_size", filterValues.paginationModel.pageSize); 
 
-      const myURL = `${filterValues.requestURL}&${queryParams.toString()}`
-      console.log('Refetching MYURL', myURL)
+      let myURL = '';
+      let response = {};
+      if (filterValues.mode == 'filter') {
+        myURL = `${filterValues.requestURL}&${queryParams.toString()}`
+        console.log('Refetching MYURL', myURL)
 
-      const response = await fetch(myURL, {
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        credentials: 'include',
-      });
+        response = await fetch(myURL, {
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          credentials: 'include',
+        });
+      } else {
+        myURL = `${filterValues.requestURL}?${queryParams.toString()}`
+        console.log('Refetching MYURL', myURL)
+
+        response = await fetch(myURL, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          credentials: 'include',
+          body: JSON.stringify({
+            prompt: filterValues.prompt,
+          }),
+        });
+      }
 
       if (!response.ok) {
         throw new Error('Data refetch failed');
@@ -538,7 +556,10 @@ export const HomeScreen = () => {
         {/* Search */}
         {option === 'search' && (
           <div className={styles.filtersContainer}>
-            <Search />
+            <Search 
+              setLoadingData={setLoadingData}
+              setLoadingTable={setLoadingTable}
+            />
           </div>
         )}
 

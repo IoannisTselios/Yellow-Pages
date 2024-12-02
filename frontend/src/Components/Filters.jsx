@@ -90,14 +90,6 @@ export const Filters = ({setLoadingData, setLoadingTable, locations, positions, 
       queryParams.append("location", params.selectedLocation.join(","));
     }
 
-    // if (params.selectedPosition.length > 0) {
-    //   queryParams.append("main_position", params.selectedPosition.join(","));
-    //   queryParams.append("current_position", params.selectedPosition.join(","));
-    // }
-
-    // if (params.includePastPosition) {
-    //   queryParams.append("past_position", params.selectedPastPosition.join(","));
-    // }
     if (params.includePastPosition && params.selectedPosition.length > 0) {
       queryParams.append("position", params.selectedPosition.join(","));
     } else if (params.selectedPosition.length > 0) {
@@ -152,11 +144,6 @@ export const Filters = ({setLoadingData, setLoadingTable, locations, positions, 
       }     
     }
 
-    // if (params.selectedCompanyYear.length === 2) {
-    //   queryParams.append("main_company_year_min", params.selectedCompanyYear[0]);
-    //   queryParams.append("main_company_year_max", params.selectedCompanyYear[1]);
-    // }
-
     if (params.selectedCompanyYearStart > 0) {
       queryParams.append("main_company_year_min", params.selectedCompanyYearStart);
     }
@@ -179,6 +166,7 @@ export const Filters = ({setLoadingData, setLoadingTable, locations, positions, 
   };
 
   const handleApply = async () => {
+    updateFilterValues('mode', 'filter')
     console.log('Submitted', filterValues); 
     
     const my_endpoint = generateEndpoint(filterValues);
@@ -209,8 +197,7 @@ export const Filters = ({setLoadingData, setLoadingTable, locations, positions, 
       console.log('THIS DATA', filter_data);
       updateFilterValues('filteredData', filter_data.results);
       await updateFilterValues('rowCount', filter_data.count);
-      const page_size = Math.ceil(filter_data.count / filter_data.total_pages)
-      // await updateFilterValues('pageSize', page_size);
+
       console.log(filterValues)
 
     } catch (error) {

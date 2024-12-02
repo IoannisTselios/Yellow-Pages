@@ -39,7 +39,11 @@ export const FiltersProvider = ({ children }) => {
       page: 0,
     },
 
-    expertise: false
+    expertise: false,
+
+    prompt: '',
+    
+    mode: 'filter'
   });
 
   const updateFilterValues = (key, value) => {
