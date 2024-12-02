@@ -20,7 +20,7 @@ def read_html_content_for_all_users():
     # Fetch all users with a valid linkedin_comments file
     users_with_html = User.objects.filter(linkedin_comments__isnull=False).exclude(linkedin_comments="")
 
-    for user in users_with_html:
+    for idx, user in enumerate(users_with_html, start=1):
         html_file_path = user.linkedin_comments.path  # Full path to the HTML file
 
         # Ensure the file exists
@@ -28,52 +28,95 @@ def read_html_content_for_all_users():
             with open(html_file_path, 'r', encoding='utf-8') as html_file:
                 content = html_file.read()
                 user_html_content[f"{user.first_name} {user.last_name}"] = content  # Use user name as the key
+            # Print the file path along with the user name
+            print(f"{idx}: Processing employee: {user.first_name} {user.last_name}, HTML Path: {html_file_path}")
         else:
-            print(f"File not found: {html_file_path}")
+            print(f"{idx}: Processing employee: {user.first_name} {user.last_name} (File not found: {html_file_path})")
 
     return user_html_content
 
+
 def parse_interactions_from_html(user_html_content):
-    """
-    Parses interaction data from HTML content.
-    Args:
-        user_html_content (dict): A dictionary with user emails as keys and HTML content as values.
-    Returns:
-        DataFrame: A DataFrame with columns ['url1', 'url2', 'normalized_interaction_count'].
-    """
+    import pandas as pd
+    from bs4 import BeautifulSoup
+    from collections import defaultdict
+    import os
+    from connections.models import Connection
+
+    connection_urls = {
+        f"{conn.first_name} {conn.last_name}": conn.url
+        for conn in Connection.objects.all()
+    }
+
+    # Employee names mapped to their URLs
+    employee_urls = {
+        "Frederik Pheiffer": "https://www.linkedin.com/in/frederikpheiffer",              # Nico Blier-Silvestri
+        "Heidi Lee": "https://www.linkedin.com/in/heidi-h-lee",             # Andreas Sachse
+        "Hendrik Sippel": "https://www.linkedin.com/in/hendrik-sippel",       # Carsten Gjoertler Salling
+        "Julie Lindegaard_Larsen": "https://www.linkedin.com/in/julielindegaardlarsen",                # Daniel Nyvang Székely Mariussen
+        "Mads Esmarch_Hansen": "https://www.linkedin.com/in/mads-esmarch-hansen-8a29b9151",             # Frederik Pheiffer
+        "Nico Blier-Silvestri": "https://www.linkedin.com/in/nicoblier",                    # Heidi Lee
+        "Carsten Gjoertler Salling": "https://www.linkedin.com/in/carstensalling",                  # Hendrik Sippel
+        "Daniel Nyvang Szekely Mariussen": "https://www.linkedin.com/in/danielnyvang",                # Julie Lindegaard Larsen
+    }
+
+    # Initialize a dictionary to accumulate interaction data as (employee_name, target_name) pairs
     interaction_data = defaultdict(int)
 
-    for employee_name, html_content in user_html_content.items():
+    # Step 1: Calculate interactions using names
+    for idx, (html_content) in enumerate(user_html_content.values(), start=1):
+        employee_name = list(employee_urls.keys())[idx - 1]  # Get the name based on the index
+        print(f"{idx}: Processing employee: {employee_name}")
+        # Your processing code here
         soup = BeautifulSoup(html_content, 'html.parser')
-
-        # Extract URL for the employee
-        employee_url = next(
-            (a['href'] for a in soup.find_all('a', href=True) if employee_name in a.get_text(strip=True)), None
-        )
-        if not employee_url:
-            continue
 
         # General comment interactions
         user_elements = soup.find_all('div', class_='update-components-actor__meta')
         for user_element in user_elements:
-            url_tag = user_element.find('a', href=True)
-            if url_tag:
-                user_url = url_tag['href']
-                if user_url != employee_url:  # Avoid self-interactions
-                    interaction_data[(employee_url, user_url)] += 1
+            name_span = user_element.find('span', class_='update-components-actor__name')
+            if name_span:
+                full_name = name_span.get_text(strip=True)
+                name_parts = full_name.split()
+                if len(name_parts) >= 2:
+                    first_last_name = f"{name_parts[0]} {name_parts[-1]}"
+                else:
+                    first_last_name = full_name
 
-    # Normalize interaction data
+                # Record interaction only if target is not the employee themselves
+                print(first_last_name)
+                if first_last_name != employee_name:
+                    interaction_data[(employee_name, first_last_name)] += 1
+
+        # Reply-specific interactions
+        reply_elements = soup.find_all('span', class_='update-components-header__text-view')
+        for reply_element in reply_elements:
+            if employee_name in reply_element.get_text():
+                target_name_tag = reply_element.find_all('a')[-1]
+                if target_name_tag:
+                    target_name = target_name_tag.get_text(strip=True)
+                    if target_name != employee_name:
+                        interaction_data[(employee_name, target_name)] += 1
+
+    # Step 2: Normalize interactions using names
     normalized_interaction_data = []
-    for (url1, url2), count in interaction_data.items():
+    for (employee_name, target_name), count in interaction_data.items():
         # Filter to calculate average only for this employee's interactions
-        employee_interactions = [count for (e, _), count in interaction_data.items() if e == url1]
+        employee_interactions = [count for (e, _), count in interaction_data.items() if e == employee_name]
         avg_interactions = sum(employee_interactions) / len(employee_interactions) if employee_interactions else 0
         normalized_count = count / avg_interactions if avg_interactions > 0 else 0
-        normalized_interaction_data.append((url1, url2, normalized_count))
+        normalized_interaction_data.append((employee_name, target_name, normalized_count))
 
-    # Create and return DataFrame
-    comments_df = pd.DataFrame(normalized_interaction_data, columns=['url1', 'url2', 'normalized_interaction_count'])
-    return comments_df
+    # Step 3: Replace names with URLs in the final DataFrame
+    comments_df = pd.DataFrame(normalized_interaction_data, columns=['employee_name', 'target_name', 'normalized_interaction_count'])
+
+    # Add URL columns by mapping from employee_urls
+    comments_df['url1'] = comments_df['employee_name'].map(employee_urls)
+    comments_df['url2'] = comments_df['target_name'].map(connection_urls)
+
+    # Drop rows where URL mapping failed (target might not be an employee)
+    comments_df = comments_df.dropna(subset=['url1', 'url2'])
+
+    return comments_df[['url1', 'url2', 'normalized_interaction_count']]
 
 
 def get_interaction_data():
@@ -102,14 +145,29 @@ def calculate_employment_overlap():
             - dreamcraft_overlaps: A DataFrame with overlaps involving Dreamcraft employees.
     """
     from roles.models import Role
-    from django.contrib.auth import get_user_model
+    import pandas as pd
+    from collections import defaultdict
+    from datetime import datetime
 
-    # Fetch Dreamcraft employee URLs dynamically
-    User = get_user_model()
-    dreamcraft_employees = set(
-        User.objects.filter(url__isnull=False).exclude(url="").values_list('url', flat=True)
-    )
-    print(dreamcraft_employees)
+    # Hardcoded Dreamcraft employee URLs
+    dreamcraft_employees = {
+        "https://www.linkedin.com/in/lasse-surland-20655439",
+        "https://www.linkedin.com/in/andreassachse",
+        "https://www.linkedin.com/in/frederikpheiffer",
+        "https://www.linkedin.com/in/mads-esmarch-hansen-8a29b9151",
+        "https://www.linkedin.com/in/almaholst",
+        "https://www.linkedin.com/in/julielindegaardlarsen",
+        "https://www.linkedin.com/in/heidi-h-lee",
+        "https://www.linkedin.com/in/linesaasen",
+        "https://www.linkedin.com/in/ryan-bagherpour-8370b61b1",
+        "https://www.linkedin.com/in/artemisdoumeni",
+        "https://www.linkedin.com/in/hendrik-sippel",
+        "https://www.linkedin.com/in/ryan-arman-8370b61b1",
+        "https://www.linkedin.com/in/danielnyvang",
+        "https://www.linkedin.com/in/nicoblier",
+        "https://www.linkedin.com/in/jeffreyhaas",
+        "https://www.linkedin.com/in/carstensalling",
+    }
 
     # Dictionary to store employment periods by company
     employment_by_company = defaultdict(list)
