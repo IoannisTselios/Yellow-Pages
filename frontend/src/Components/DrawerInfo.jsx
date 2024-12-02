@@ -54,18 +54,30 @@ const DrawerInfo = ({ selectedRow }) => {
         <div className={styles.gridContainerBioSummary}>
           <div>
             <h2>Bio</h2>
-            <p style={{ marginTop: 16 }}>{selectedRow.bio}</p>
+            { selectedRow.bio ? 
+              <ShowMoreText
+                text={selectedRow.bio}
+                limit={200}
+                style={{ marginTop: '16px' }}
+              />
+              : 
+              <p style={{ marginTop: 16, fontStyle: 'italic' }}>No Bio Available</p>
+            }
           </div>
 
           <Divider orientation="vertical" sx={{ bgcolor: '#404040', height: '100%', width: '1px' }} />
 
           <div>
             <h2>Summary</h2>
-            <ShowMoreText
-              text={selectedRow.summary}
-              limit={200}
-              style={{ marginTop: '16px' }}
-            />
+            { selectedRow.summary && !(selectedRow.summary == 'nan') ? 
+              <ShowMoreText
+                text={selectedRow.summary}
+                limit={200}
+                style={{ marginTop: '16px' }}
+              />
+              : 
+              <p style={{ marginTop: 16, fontStyle: 'italic' }}>No Summary Available</p>
+            }
           </div>
         </div>
 

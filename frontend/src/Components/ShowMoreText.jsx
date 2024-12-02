@@ -5,16 +5,16 @@ const ShowMoreText = ({ text, limit = 180, style }) => {
 
   const toggleExpanded = () => setIsExpanded(!isExpanded);
 
-  const isTextTruncated = text.length > limit;
+  const isTextLong = text.length > limit;
 
   return (
     <p style={{ ...style }}>
-      {isTextTruncated
+      {isTextLong
         ? isExpanded
           ? `${text} `
           : `${text.slice(0, limit)}... `
         : text}
-      {isTextTruncated && (
+      {isTextLong && (
         <span
           onClick={toggleExpanded}
           style={{
