@@ -161,12 +161,12 @@ def calculate_employment_overlap():
         except json.JSONDecodeError:
             return []
 
-    # Updated helper function to parse dates
+    # Helper function to parse dates
     def parse_date(year, month):
         if year is None or month is None:
             return None
         try:
-            return datetime(year, month, 1).date()  # Ensure consistent date type
+            return datetime(year, month, 1)
         except ValueError:
             return None
 
@@ -202,8 +202,8 @@ def calculate_employment_overlap():
     # Organize roles by company using URLs
     for role in roles:
         employee_url = role.connection.url
-        start_date = role.start_date.date() if role.start_date else None
-        end_date = role.end_date.date() if role.end_date else datetime.today().date()  # Ensure consistent date type
+        start_date = role.start_date if role.start_date else None
+        end_date = role.end_date if role.end_date else datetime.today().date()  # Ensure consistent date type
         company_name = role.company.name
 
         if start_date and end_date:
@@ -248,6 +248,7 @@ def calculate_employment_overlap():
     ]
 
     return overlap_df, dreamcraft_overlaps
+
 
 
 def aggregate_and_filter_employment_overlap(overlap_df, threshold=360):
