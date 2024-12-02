@@ -441,7 +441,7 @@ export const HomeScreen = () => {
       headerName: 'Position',
       renderCell: (params) => (
         <div>
-          {params.row.main_role ? params.row.main_role.position : 'N/A'}
+          {params.row.main_role ? params.row.main_role.position : '-'}
         </div>
       ),
       flex: 1
@@ -467,7 +467,7 @@ export const HomeScreen = () => {
       headerName: 'Company', 
       renderCell: (params) => (
         <div>
-          {params.row.main_role ? params.row.main_role.company : 'N/A'}
+          {params.row.main_role ? params.row.main_role.company : '-'}
         </div>
       ),
       flex: 1
@@ -477,7 +477,7 @@ export const HomeScreen = () => {
       headerName: 'Industry', 
       renderCell: (params) => (
         <div>
-          {params.row.main_role ? params.row.main_role.industry : 'N/A'}
+          {params.row.main_role ? params.row.main_role.industry : '-'}
         </div>
       ),
       flex: 1 
