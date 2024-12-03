@@ -19,7 +19,7 @@ const SearchBar = ({setLoadingData, setLoadingTable}) => {
     const pagModel = {page: 0, pageSize: filterValues.paginationModel.pageSize}
     updateFilterValues('paginationModel', pagModel)
 
-    const baseURL = 'http://localhost:80/api/generate_query/';
+    const baseURL = 'http://13.48.244.239:80/api/generate_query/';
     updateFilterValues('requestURL', baseURL);
 
     try {
