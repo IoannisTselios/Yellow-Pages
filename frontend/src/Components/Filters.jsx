@@ -75,7 +75,7 @@ export const Filters = ({setLoadingData, setLoadingTable, locations, positions, 
   }
 
   const generateEndpoint = (params) => {
-    const baseURL = "http://localhost:80/api/get_connection_list/";
+    const baseURL = "http://13.48.244.239:80/api/get_connection_list/";
 
     const queryParams = new URLSearchParams();
 
