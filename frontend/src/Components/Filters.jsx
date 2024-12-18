@@ -277,6 +277,7 @@ export const Filters = ({setLoadingData, setLoadingTable, locations, positions, 
   const handleInputChange = (event, value) => {
     console.log(value)
     console.log(inputPosValue)
+    setInputPosValue(value)
     // Show options only if input has 3 or more characters
     if (value.length >= 3) {
       const lowercasedValue = value.toLowerCase();
@@ -304,19 +305,24 @@ export const Filters = ({setLoadingData, setLoadingTable, locations, positions, 
     }
   };
 
-  const handlePastInputChange = (event, value) => {
-    setInputPastPosValue(value);
-
-    // Show options only if input has 3 or more characters
-    if (value.length >= 3) {
-      setFilteredPastPosOptions(
-        positions.filter((option) =>
-          option.toLowerCase().includes(value.toLowerCase())
-        )
-      );
-    } else {
-      setFilteredPastPosOptions([]);
+  const handlePositionBlur = () => {
+    const trimmedValue = inputPosValue.trim(); // Get the input text and trim whitespace
+    if (trimmedValue) {
+      const updatedValue = [...(filterValues.selectedPosition || []), trimmedValue];
+      updateFilterValues('selectedPosition', updatedValue);
     }
+    setInputPosValue(''); // Clear the input field
+  };
+
+  const [keywordInputValue, setKeywordInputValue] = useState('');
+
+  const handleBlurKeyword = () => {
+    const trimmedValue = keywordInputValue.trim(); // Get the input text and trim whitespace
+    if (trimmedValue) {
+      const updatedValue = [...(filterValues.selectedKeyword || []), trimmedValue];
+      updateFilterValues('selectedKeyword', updatedValue);
+    }
+    setKeywordInputValue(''); // Clear the input field
   };
 
   return (
@@ -417,11 +423,13 @@ export const Filters = ({setLoadingData, setLoadingTable, locations, positions, 
                     getOptionLabel={(option) => option}
                     value={filterValues.selectedPosition}
                     onChange={(event, value) => updateFilterValues("selectedPosition", value)}
+                    inputValue={inputPosValue}
                     onInputChange={handleInputChange} // Handle input change
                     renderInput={(params) => (
                       <TextField
                         {...params}
                         label="Position"
+                        onBlur={handlePositionBlur}
                       />
                     )}
                   />
@@ -636,12 +644,15 @@ export const Filters = ({setLoadingData, setLoadingTable, locations, positions, 
                 options={[]} // No predefined options
                 value={filterValues.selectedKeyword || []} // Fallback to an empty array
                 onChange={(event, value) => updateFilterValues('selectedKeyword', value)}
+                inputValue={keywordInputValue} // Control the input value
+                onInputChange={(event, newInputValue) => setKeywordInputValue(newInputValue)}
                 renderInput={(params) => (
                   <TextField
                     {...params}
                     label="Keywords"
                     placeholder="Type and press Enter"
                     variant="outlined"
+                    onBlur={handleBlurKeyword}
                   />
                 )}
               />
