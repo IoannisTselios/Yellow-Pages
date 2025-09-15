@@ -2,3 +2,7 @@
 *.env
 .env.*
 linkedin_network/.env.prod
+.env
+*.env
+.env.*
+linkedin_network/.env.prod
