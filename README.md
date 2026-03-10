@@ -34,10 +34,3 @@
 
 **Quick restart:** `docker compose up`
 **Shutdown:** `docker compose down`
-
----
-
-## 📁 Folder Structure
- - Frontend
-|
- - Backend - Linkedin_network
